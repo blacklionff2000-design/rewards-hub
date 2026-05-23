@@ -13,17 +13,17 @@
     html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden;background:#070713;color:#fff;font-family:Arial,sans-serif}
     button{cursor:pointer;font-family:inherit}
     button:disabled{opacity:.65;cursor:not-allowed}
-    .rh-app{max-width:480px;min-height:100vh;margin:auto;padding:16px 16px 96px;background:radial-gradient(circle at top left,rgba(124,58,237,.36),transparent 34%),radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),#070713}
+    .rh-app{max-width:480px;min-height:100vh;margin:auto;padding:16px 16px 100px;background:radial-gradient(circle at top left,rgba(124,58,237,.36),transparent 34%),radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),#070713}
     .page{display:none;animation:fadeIn .25s ease}.page.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .hero,.page-head,.profile-card{background:linear-gradient(145deg,#15152b,#24134a);border:1px solid rgba(255,255,255,.08);border-radius:30px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+    .hero,.page-head,.profile-card,.rules-box{background:linear-gradient(145deg,#15152b,#24134a);border:1px solid rgba(255,255,255,.08);border-radius:30px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
     .hero-top{display:flex;align-items:center;justify-content:space-between}.hello{margin:0;color:#b9b9d6;font-size:14px}
     .hero h1{margin:7px 0 0;font-size:28px;letter-spacing:1.5px}
     .logo{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4);box-shadow:0 0 25px rgba(6,182,212,.35)}
     .balance-box{margin-top:18px;padding:24px;border-radius:26px;background:linear-gradient(135deg,#7c3aed,#09b6d8)}
     .balance-box p{margin:0;opacity:.9}.balance-box h2{margin:8px 0;font-size:38px}.balance-box small{color:#eef}
     .quick-grid,.mini-rewards{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .quick-card,.mini-card,.earn-card,.reward-card,.menu-item{border:1px solid rgba(255,255,255,.08);background:#151527;color:white;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+    .quick-card,.mini-card,.earn-card,.reward-card,.menu-item,.history-card{border:1px solid rgba(255,255,255,.08);background:#151527;color:white;box-shadow:0 12px 30px rgba(0,0,0,.25)}
     .quick-card{text-align:left;padding:18px;min-height:120px;border-radius:24px;border:none}
     .quick-card .icon{display:block;font-size:26px;margin-bottom:12px}.quick-card b,.mini-card b{display:block;font-size:16px}
     .quick-card small,.mini-card small{display:block;margin-top:6px;color:#9ea7ff}
@@ -43,8 +43,8 @@
     .profile-card{text-align:center;padding:28px}.avatar{width:80px;height:80px;margin:auto;border-radius:28px;display:grid;place-items:center;font-size:26px;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
     .profile-card h2{margin:14px 0 4px}.profile-card p{margin:0;color:#b9b9d6}.menu-list{margin-top:16px}
     .menu-item{margin-top:10px;padding:17px;border-radius:20px;display:flex;align-items:center;justify-content:space-between}
-    .bottom-nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(448px,calc(100% - 28px));padding:10px;border-radius:28px;background:rgba(18,18,34,.96);backdrop-filter:blur(12px);display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:50}
-    .nav-btn{border:0;border-radius:20px;padding:10px 6px;background:transparent;color:#8585a3;font-size:18px}.nav-btn span{display:block;margin-top:3px;font-size:11px;font-weight:700}
+    .bottom-nav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(448px,calc(100% - 22px));padding:8px;border-radius:26px;background:rgba(18,18,34,.96);backdrop-filter:blur(12px);display:grid;grid-template-columns:repeat(5,1fr);gap:4px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:50}
+    .nav-btn{border:0;border-radius:18px;padding:9px 4px;background:transparent;color:#8585a3;font-size:17px}.nav-btn span{display:block;margin-top:3px;font-size:10px;font-weight:700}
     .nav-btn.active{color:white;background:linear-gradient(135deg,rgba(124,58,237,.9),rgba(6,182,212,.65))}
     .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);padding:18px;align-items:center;justify-content:center}.modal.show{display:flex}
     .modal-box{width:min(440px,100%);max-height:88vh;overflow:auto;background:#121225;border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px;color:white}
@@ -53,6 +53,11 @@
     .modal-box input{width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);outline:none;background:#1a1a2e;color:white}
     .hint{font-size:12px;color:#ffdd7a;margin-top:12px;line-height:1.5}
     .modal-buttons{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.cancel-btn{background:#24243b!important}
+    .history-card{margin-top:12px;padding:16px;border-radius:20px}
+    .history-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+    .history-details{margin-top:8px;color:#b9b9d6;font-size:13px;white-space:pre-line;line-height:1.55}
+    .history-date{margin-top:8px;color:#8585a3;font-size:12px}
+    .rules-box{margin-top:16px}.rules-box h3{margin:0 0 10px}.rules-box p{color:#b9b9d6;line-height:1.6;font-size:14px}.danger{color:#ff9b9b!important;font-weight:700}
   </style>
 </head>
 
@@ -77,6 +82,11 @@
     </div>
 
     <div class="promo-card">
+      <div><p>Official Channel</p><h3>Join our Telegram channel for updates and rewards</h3></div>
+      <button onclick="joinChannel()">Join</button>
+    </div>
+
+    <div class="promo-card">
       <div><p>Free Fire Rewards</p><h3>Diamonds, Weekly, Monthly, Dialog Reload & eZ Cash</h3></div>
       <button onclick="openPage('redeemPage')">Redeem</button>
     </div>
@@ -85,6 +95,12 @@
     <div class="mini-rewards">
       <div class="mini-card"><span>💎</span><b>25 Diamonds</b><small>400 Points</small></div>
       <div class="mini-card"><span>🎟</span><b>Weekly Lite</b><small>500 Points</small></div>
+    </div>
+
+    <div class="rules-box">
+      <h3>⚠️ Important Rules</h3>
+      <p class="danger">If you cheat, use fake accounts, exploit ads, or submit false details, your account will be permanently banned.</p>
+      <p>All redeem requests are manually reviewed. Wrong Free Fire UID, Dialog number, or eZ Cash number may delay or reject your request.</p>
     </div>
   </section>
 
@@ -129,7 +145,7 @@
   </section>
 
   <section class="page" id="redeemPage">
-    <div class="page-head"><h2>Redeem Rewards</h2><p>Select reward and submit correct details.</p></div>
+    <div class="page-head"><h2>Withdraw Rewards</h2><p>Select reward and submit correct details.</p></div>
 
     <div class="category-title">Free Fire Top-Up</div>
     <div class="reward-card" onclick="openRedeemModal('25 Diamonds',400,'Free Fire')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
@@ -146,6 +162,12 @@
     <div class="reward-card" onclick="openRedeemModal('eZ Cash Rs.100',530,'eZ Cash')"><div>💸 eZ Cash Rs.100</div><b>530 Points</b></div>
   </section>
 
+  <section class="page" id="historyPage">
+    <div class="page-head"><h2>Withdraw History</h2><p>Check pending, paid, and rejected requests.</p></div>
+    <button class="primary-btn" onclick="loadWithdrawHistory()" style="width:100%;margin-top:14px;">Refresh History</button>
+    <div id="withdrawHistoryList" style="margin-top:16px;"></div>
+  </section>
+
   <section class="page" id="profilePage">
     <div class="profile-card">
       <div class="avatar" id="avatarText">RH</div>
@@ -155,6 +177,7 @@
     <div class="menu-list">
       <div class="menu-item"><span>💰 Balance</span><b><span id="profilePoints">0</span> Points</b></div>
       <div class="menu-item"><span>🎬 Today Earned</span><b><span id="profileTodayPoints">0</span> Points</b></div>
+      <div class="menu-item" onclick="joinChannel()"><span>📢 Telegram Channel</span><b>@RewardsHubSL</b></div>
       <div class="menu-item" onclick="copyReferral()"><span>👥 Referral Link</span><b>Copy</b></div>
       <div class="menu-item" onclick="showRules()"><span>📜 Rules</span><b>View</b></div>
       <div class="menu-item" onclick="contactSupport()"><span>💬 Support</span><b>Telegram</b></div>
@@ -164,14 +187,15 @@
   <nav class="bottom-nav">
     <button class="nav-btn active" onclick="openPage('homePage',this)">🏠<span>Home</span></button>
     <button class="nav-btn" onclick="openPage('earnPage',this)">🎬<span>Earn</span></button>
-    <button class="nav-btn" onclick="openPage('redeemPage',this)">💎<span>Redeem</span></button>
+    <button class="nav-btn" onclick="openPage('redeemPage',this)">💎<span>Withdraw</span></button>
+    <button class="nav-btn" onclick="openPage('historyPage',this);loadWithdrawHistory();">📋<span>History</span></button>
     <button class="nav-btn" onclick="openPage('profilePage',this)">👤<span>Profile</span></button>
   </nav>
 </div>
 
 <div class="modal" id="redeemModal">
   <div class="modal-box">
-    <h2 id="modalRewardName">Redeem</h2>
+    <h2 id="modalRewardName">Withdraw</h2>
     <p id="modalRewardCost">Cost: 0 Points</p>
     <div id="dynamicFields"></div>
     <div class="hint">⚠️ Enter correct details. Wrong UID or phone number may reject/delay your request.</div>
@@ -249,6 +273,9 @@ async function syncUser(){
   try {
     const data = await api("/user/sync", {telegram_id: telegramId, first_name: firstName, username: username, invited_by: invitedBy});
     if (data.ok && data.user) {
+      if (data.user.is_banned) {
+        alertMsg("Your account has been restricted. Contact support.");
+      }
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
@@ -265,7 +292,7 @@ function openPage(pageId,btn){
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
   if(btn) btn.classList.add("active");
   else{
-    const map={homePage:0,earnPage:1,redeemPage:2,profilePage:3};
+    const map={homePage:0,earnPage:1,redeemPage:2,historyPage:3,profilePage:4};
     document.querySelectorAll(".nav-btn")[map[pageId]].classList.add("active");
   }
   window.scrollTo({top:0,behavior:"smooth"});
@@ -308,7 +335,7 @@ async function verifyChannelJoin(){
       updateUI();
       alertMsg(data.message || "+4 Points added.");
       setAdStatus(data.message || "Channel verified.");
-      document.getElementById("verifyChannelBtn").innerText = "Claimed";
+      document.getElementById("verifyChannelBtn").innerText = data.already_rewarded ? "Claimed" : "Claimed";
       document.getElementById("verifyChannelBtn").disabled = true;
     } else {
       resetButton("verifyChannelBtn");
@@ -429,13 +456,62 @@ async function submitRedeem(){
       points = Number(data.points || 0);
       updateUI();
       closeRedeemModal();
-      alertMsg("Redeem request submitted!\nStatus: Pending");
-    } else alertMsg(data.message || "Redeem failed.");
-  } catch(e){ alertMsg("Redeem request failed. Try again."); }
+      alertMsg("Withdraw request submitted!\nStatus: Pending");
+      loadWithdrawHistory();
+    } else alertMsg(data.message || "Withdraw failed.");
+  } catch(e){ alertMsg("Withdraw request failed. Try again."); }
+}
+
+/* Withdraw History */
+async function loadWithdrawHistory(){
+  const box = document.getElementById("withdrawHistoryList");
+  if(!box) return;
+  box.innerHTML = "<p style='color:#b9b9d6;'>Loading history...</p>";
+
+  try {
+    const res = await fetch(API_BASE + "/redeem/list?telegram_id=" + encodeURIComponent(telegramId));
+    const data = await res.json();
+
+    if(!data.ok){
+      box.innerHTML = "<p style='color:#ffb4b4;'>Failed to load history.</p>";
+      return;
+    }
+
+    if(!data.requests || data.requests.length === 0){
+      box.innerHTML = "<p style='color:#b9b9d6;'>No withdraw requests yet.</p>";
+      return;
+    }
+
+    box.innerHTML = data.requests.map(function(item){
+      let statusIcon = "🕒";
+      let statusColor = "#ffdd7a";
+      let statusText = item.status || "pending";
+
+      if(statusText === "paid"){ statusIcon = "✅"; statusColor = "#67e8f9"; }
+      if(statusText === "rejected"){ statusIcon = "❌"; statusColor = "#ff8a8a"; }
+
+      return `
+        <div class="history-card">
+          <div class="history-top">
+            <b>${item.reward_name}</b>
+            <b style="color:${statusColor};">${statusIcon} ${statusText.toUpperCase()}</b>
+          </div>
+          <div class="history-details">Cost: ${item.cost_points} Points
+Type: ${item.reward_type}
+Details:
+${item.details}${item.admin_note ? "\nAdmin Note: " + item.admin_note : ""}</div>
+          <div class="history-date">${new Date(item.created_at).toLocaleString()}</div>
+        </div>
+      `;
+    }).join("");
+
+  } catch(e){
+    box.innerHTML = "<p style='color:#ffb4b4;'>Network error. Try again.</p>";
+  }
 }
 
 function showRules(){
-  alertMsg("Rewards Hub Rules:\n\n1. Earn points using available activities.\n2. Redeem requests are manually reviewed.\n3. Fake activity or duplicate accounts may be rejected.\n4. Reward delivery time: 24 - 48 hours.\n5. Referral bonus: +3 Points.\n6. Channel join reward: +4 Points.");
+  alertMsg("Rewards Hub Rules:\n\n1. Earn points using available activities.\n2. Withdraw requests are manually reviewed.\n3. If you cheat, use fake accounts, exploit ads, or submit false details, your account will be permanently banned.\n4. Reward delivery time: 24 - 48 hours.\n5. Referral bonus: +3 Points.\n6. Channel join reward: +4 Points.");
 }
 function contactSupport(){
   if(tg && tg.openTelegramLink) tg.openTelegramLink(SUPPORT_LINK);
