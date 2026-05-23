@@ -27,7 +27,10 @@
 
     .page{display:none;animation:fadeIn .22s ease}
     .page.active{display:block}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(8px)}
+      to{opacity:1;transform:translateY(0)}
+    }
 
     .hero,.page-head,.panel,.ref-card,.rules-card{
       background:rgba(21,21,39,.94);
@@ -133,7 +136,6 @@
       font-weight:900;
       background:linear-gradient(135deg,#7c3aed,#06b6d4);
     }
-
     .btn.gray{background:#24243b}
     .btn.full{width:100%;margin-top:14px}
 
@@ -269,8 +271,8 @@
     .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
   </style>
 </head>
-
 <body>
+
 <div class="app">
 
   <section class="page active" id="homePage">
@@ -439,10 +441,13 @@ if (tg) { tg.ready(); tg.expand(); }
 const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
 const BOT_USERNAME = "RewardsHubSLBot";
 
+/* IMPORTANT FIX */
 const REWARD_BLOCK_ID = "31945";
 const TASK_COOLDOWN_SECONDS = 20;
 
 let rewardTaskAd = null;
+let rewardTaskAd2 = null;
+let rewardTaskAd3 = null;
 
 const user = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 
@@ -464,7 +469,7 @@ function alertMsg(message) {
 }
 
 function logStatus(text) {
-  console.log("Task Status:", text);
+  console.log("RewardsHub:", text);
 }
 
 async function api(path, data) {
@@ -536,16 +541,15 @@ async function syncUser() {
     });
 
     if (data.ok && data.user) {
-      if (data.user.is_banned) alertMsg("Your account has been restricted.");
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
-      logStatus("Account synced.");
+      logStatus("Account synced");
     } else {
-      logStatus(data.message || "Sync failed.");
+      logStatus(data.message || "Sync failed");
     }
   } catch(e) {
-    logStatus("Backend sync failed.");
+    logStatus("Backend sync failed");
   }
 }
 
@@ -562,15 +566,27 @@ function openPage(pageId, btn) {
 
 function initRewardSystem() {
   try {
-    if (window.Adsgram) {
-      rewardTaskAd = window.Adsgram.init({ blockId: REWARD_BLOCK_ID });
-      logStatus("Reward system ready.");
-    } else {
-      logStatus("Reward system not loaded.");
+    if (!window.Adsgram) {
+      logStatus("Ads library not loaded");
+      return;
     }
+
+    /* NEVER use task-31953 here */
+    rewardTaskAd  = window.Adsgram.init({ blockId: REWARD_BLOCK_ID });
+    rewardTaskAd2 = window.Adsgram.init({ blockId: REWARD_BLOCK_ID });
+    rewardTaskAd3 = window.Adsgram.init({ blockId: REWARD_BLOCK_ID });
+
+    logStatus("Ads ready");
   } catch (e) {
-    logStatus("Reward system init failed: " + e.message);
+    logStatus("Ads init failed: " + e.message);
   }
+}
+
+function getTaskAd(taskNo) {
+  if (taskNo === 1) return rewardTaskAd;
+  if (taskNo === 2) return rewardTaskAd2;
+  if (taskNo === 3) return rewardTaskAd3;
+  return rewardTaskAd;
 }
 
 function setButtonLoading(id, text) {
@@ -630,7 +646,7 @@ async function addTaskPoint(taskNo) {
     return true;
   }
 
-  alertMsg(data.message || "Reward failed.");
+  alertMsg(data.message || "Reward failed");
   return false;
 }
 
@@ -647,8 +663,10 @@ async function watchRewardTask(taskNo) {
 
   if (!rewardTaskAd) initRewardSystem();
 
-  if (!rewardTaskAd) {
-    alertMsg("Task not ready. Try again later.");
+  const currentAd = getTaskAd(taskNo);
+
+  if (!currentAd) {
+    alertMsg("Ad not ready. Try again later.");
     return;
   }
 
@@ -656,12 +674,15 @@ async function watchRewardTask(taskNo) {
   setButtonLoading("taskBtn" + taskNo, "Opening...");
 
   try {
-    await rewardTaskAd.show();
+    await currentAd.show();
 
     const rewarded = await addTaskPoint(taskNo);
 
-    if (rewarded) startTaskCountdown(taskNo, TASK_COOLDOWN_SECONDS);
-    else resetTaskButton(taskNo);
+    if (rewarded) {
+      startTaskCountdown(taskNo, TASK_COOLDOWN_SECONDS);
+    } else {
+      resetTaskButton(taskNo);
+    }
   } catch(e) {
     resetTaskButton(taskNo);
     alertMsg("Please complete the task to earn points.");
@@ -672,7 +693,6 @@ async function watchRewardTask(taskNo) {
 
 function copyReferral() {
   const link = getReferralLink();
-
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link)
       .then(() => alertMsg("Referral link copied."))
@@ -705,11 +725,9 @@ function openWithdrawModal(name, cost, type) {
   }
 
   selectedReward = {name, cost, type};
-
   document.getElementById("modalRewardName").innerText = name;
   document.getElementById("modalRewardCost").innerText = "Cost: " + cost + " Points";
   renderWithdrawFields(type);
-
   document.getElementById("withdrawModal").classList.add("show");
 }
 
@@ -747,18 +765,14 @@ function collectWithdrawDetails() {
     const uid = document.getElementById("ffUid").value.trim();
     const name = document.getElementById("ffName").value.trim();
     const contact = document.getElementById("contact").value.trim();
-
     if (!uid || !name || !contact) return null;
-
     return "Free Fire UID: " + uid + "\nNickname: " + name + "\nContact: " + contact;
   }
 
   if (type === "Reload") {
     const num = document.getElementById("dialogNumber").value.trim();
     const name = document.getElementById("contactName").value.trim();
-
     if (!num || !name) return null;
-
     return "Dialog Number: " + num + "\nContact Name: " + name;
   }
 
@@ -766,9 +780,7 @@ function collectWithdrawDetails() {
     const num = document.getElementById("ezNumber").value.trim();
     const holder = document.getElementById("holderName").value.trim();
     const contact = document.getElementById("contact").value.trim();
-
     if (!num || !holder || !contact) return null;
-
     return "eZ Cash Number: " + num + "\nHolder Name: " + holder + "\nContact: " + contact;
   }
 
@@ -782,7 +794,6 @@ async function submitWithdraw() {
   }
 
   const details = collectWithdrawDetails();
-
   if (!details) {
     alertMsg("Please fill all required details.");
     return;
@@ -875,7 +886,7 @@ function closeRulesModal() {
 }
 
 syncUser();
-setTimeout(initRewardSystem, 1500);
+setTimeout(initRewardSystem, 1200);
 </script>
 </body>
 </html>
