@@ -29,7 +29,7 @@
     .quick-card small,.mini-card small{display:block;margin-top:6px;color:#9ea7ff}
     .promo-card{margin-top:16px;padding:18px;border-radius:26px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#22223d,#361458);border:1px solid rgba(255,255,255,.08)}
     .promo-card p{margin:0;color:#67e8f9;font-size:13px}.promo-card h3{margin:6px 0 0;font-size:16px;max-width:250px}
-    .promo-card button,.earn-card button,.modal-buttons button{border:0;border-radius:16px;padding:12px 16px;color:white;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
+    .promo-card button,.earn-card button,.modal-buttons button,.primary-btn{border:0;border-radius:16px;padding:12px 16px;color:white;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
     .title{margin:22px 4px 12px}.mini-card{padding:18px;border-radius:22px}.mini-card span{font-size:24px}
     .mini-card small,.reward-card b,.menu-item b{color:#67e8f9}
     .page-head h2{margin:0;font-size:28px}.page-head p{margin-bottom:0;color:#b9b9d6}
@@ -46,10 +46,13 @@
     .bottom-nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(448px,calc(100% - 28px));padding:10px;border-radius:28px;background:rgba(18,18,34,.96);backdrop-filter:blur(12px);display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:50}
     .nav-btn{border:0;border-radius:20px;padding:10px 6px;background:transparent;color:#8585a3;font-size:18px}.nav-btn span{display:block;margin-top:3px;font-size:11px;font-weight:700}
     .nav-btn.active{color:white;background:linear-gradient(135deg,rgba(124,58,237,.9),rgba(6,182,212,.65))}
-    .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.68);padding:20px;align-items:center;justify-content:center}.modal.show{display:flex}
-    .modal-box{width:min(440px,100%);background:#121225;border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px;color:white}
-    .modal-box h2{margin:0 0 8px}.modal-box p{color:#a5b4fc}.modal-box input{width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);outline:none;background:#1a1a2e;color:white}
-    .modal-buttons{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.cancel-btn{background:#24243b!important}
+    .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);padding:18px;align-items:center;justify-content:center}.modal.show{display:flex}
+    .modal-box{width:min(440px,100%);max-height:88vh;overflow:auto;background:#121225;border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px;color:white}
+    .modal-box h2{margin:0 0 8px}.modal-box p{color:#a5b4fc}
+    .field{margin-top:12px}.field label{display:block;font-size:13px;color:#b9b9d6;margin:0 0 6px}
+    .modal-box input{width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);outline:none;background:#1a1a2e;color:white}
+    .hint{font-size:12px;color:#ffdd7a;margin-top:12px;line-height:1.5}
+    .modal-buttons{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.cancel-btn{background:#24243b!important}
   </style>
 </head>
 
@@ -69,7 +72,7 @@
     </div>
 
     <div class="quick-grid">
-      <button onclick="openPage('earnPage')" class="quick-card"><span class="icon">🎬</span><b>Earn Points</b><small>Watch ads & collect points</small></button>
+      <button onclick="openPage('earnPage')" class="quick-card"><span class="icon">🎬</span><b>Earn Points</b><small>Ads & channel rewards</small></button>
       <button onclick="copyReferral()" class="quick-card"><span class="icon">👥</span><b>Referral</b><small>Invite friends +3 points</small></button>
     </div>
 
@@ -87,6 +90,16 @@
 
   <section class="page" id="earnPage">
     <div class="page-head"><h2>Earn Points</h2><p>Complete available activities and collect points.</p></div>
+
+    <div class="earn-card">
+      <div class="earn-left"><div class="earn-icon">📢</div><div><h3>Join Telegram Channel</h3><p>Reward: +4 Points</p></div></div>
+      <button id="joinChannelBtn" onclick="joinChannel()">Join</button>
+    </div>
+
+    <div class="earn-card">
+      <div class="earn-left"><div class="earn-icon">✅</div><div><h3>Verify Channel Join</h3><p>Claim once only</p></div></div>
+      <button id="verifyChannelBtn" onclick="verifyChannelJoin()">Verify</button>
+    </div>
 
     <div class="earn-card">
       <div class="earn-left"><div class="earn-icon">⚡</div><div><h3>Rewarded Popup</h3><p>Reward: +1 Point</p></div></div>
@@ -116,7 +129,7 @@
   </section>
 
   <section class="page" id="redeemPage">
-    <div class="page-head"><h2>Redeem Rewards</h2><p>Select reward and submit your details.</p></div>
+    <div class="page-head"><h2>Redeem Rewards</h2><p>Select reward and submit correct details.</p></div>
 
     <div class="category-title">Free Fire Top-Up</div>
     <div class="reward-card" onclick="openRedeemModal('25 Diamonds',400,'Free Fire')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
@@ -160,7 +173,8 @@
   <div class="modal-box">
     <h2 id="modalRewardName">Redeem</h2>
     <p id="modalRewardCost">Cost: 0 Points</p>
-    <input id="redeemInput" type="text" placeholder="Enter details">
+    <div id="dynamicFields"></div>
+    <div class="hint">⚠️ Enter correct details. Wrong UID or phone number may reject/delay your request.</div>
     <div class="modal-buttons">
       <button onclick="closeRedeemModal()" class="cancel-btn">Cancel</button>
       <button onclick="submitRedeem()">Submit</button>
@@ -174,6 +188,7 @@ if (tg) { tg.ready(); tg.expand(); }
 
 const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
 const BOT_USERNAME = "RewardsHubSLBot";
+const CHANNEL_USERNAME = "RewardsHubSL";
 const SUPPORT_LINK = "https://t.me/blacklionff2000";
 const AD_COOLDOWN_SECONDS = 30;
 const REWARD_FALLBACK_MS = 12000;
@@ -188,7 +203,6 @@ if (!telegramId) {
 
 let points = 0;
 let todayPoints = 0;
-
 let popupBusy = false;
 let interBusy = false;
 let inAppBusy = false;
@@ -209,9 +223,7 @@ async function api(path, data) {
 function getStartReferral() {
   try {
     const startParam = tg && tg.initDataUnsafe ? tg.initDataUnsafe.start_param : "";
-    if (startParam && startParam.startsWith("ref_")) {
-      return startParam.replace("ref_", "");
-    }
+    if (startParam && startParam.startsWith("ref_")) return startParam.replace("ref_", "");
   } catch(e) {}
   return null;
 }
@@ -235,23 +247,15 @@ async function syncUser(){
   }
 
   try {
-    const data = await api("/user/sync", {
-      telegram_id: telegramId,
-      first_name: firstName,
-      username: username,
-      invited_by: invitedBy
-    });
-
+    const data = await api("/user/sync", {telegram_id: telegramId, first_name: firstName, username: username, invited_by: invitedBy});
     if (data.ok && data.user) {
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
-      setAdStatus("Account synced. Ad system ready.");
-    } else {
-      setAdStatus(data.message || "Sync failed.");
-    }
+      setAdStatus("Account synced. Ready.");
+    } else setAdStatus(data.message || "Sync failed.");
   } catch(e) {
-    setAdStatus("Backend sync failed. Check API.");
+    setAdStatus("Backend sync failed.");
   }
 }
 
@@ -259,7 +263,7 @@ function openPage(pageId,btn){
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
   document.getElementById(pageId).classList.add("active");
   document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
-  if(btn){ btn.classList.add("active"); }
+  if(btn) btn.classList.add("active");
   else{
     const map={homePage:0,earnPage:1,redeemPage:2,profilePage:3};
     document.querySelectorAll(".nav-btn")[map[pageId]].classList.add("active");
@@ -269,251 +273,173 @@ function openPage(pageId,btn){
 
 async function addPointReward(statusText, type){
   try {
-    const data = await api("/points/add", {
-      telegram_id: telegramId,
-      points: 1,
-      type: type || "ad_reward",
-      description: statusText || "Ad reward"
-    });
-
+    const data = await api("/points/add", {telegram_id: telegramId, points: 1, type: type || "ad_reward", description: statusText || "Ad reward"});
     if (data.ok && data.user) {
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
       setAdStatus(statusText || "Reward added.");
       alertMsg("+1 Point Added");
+    } else alertMsg(data.message || "Reward failed.");
+  } catch(e) { alertMsg("Reward save failed. Try again."); }
+}
+
+function setButtonLoading(buttonId,text){ const btn=document.getElementById(buttonId); if(btn){btn.disabled=true;btn.innerText=text||"Opening...";} }
+function resetButton(buttonId){ const btn=document.getElementById(buttonId); if(btn){btn.disabled=false;btn.innerText="Start";} }
+function startCountdown(buttonId,seconds){
+  const btn=document.getElementById(buttonId); if(!btn) return;
+  let remain=seconds; btn.disabled=true; btn.innerText=remain+"s";
+  const timer=setInterval(function(){ remain--; if(remain<=0){clearInterval(timer);btn.disabled=false;btn.innerText="Start";}else btn.innerText=remain+"s"; },1000);
+}
+
+function joinChannel(){
+  const link = "https://t.me/" + CHANNEL_USERNAME;
+  if(tg && tg.openTelegramLink) tg.openTelegramLink(link);
+  else window.open(link, "_blank");
+}
+
+async function verifyChannelJoin(){
+  setButtonLoading("verifyChannelBtn","Checking...");
+  try {
+    const data = await api("/channel/verify", {telegram_id: telegramId});
+    if (data.ok && data.user) {
+      points = Number(data.user.points || 0);
+      todayPoints = Number(data.user.today_points || 0);
+      updateUI();
+      alertMsg(data.message || "+4 Points added.");
+      setAdStatus(data.message || "Channel verified.");
+      document.getElementById("verifyChannelBtn").innerText = "Claimed";
+      document.getElementById("verifyChannelBtn").disabled = true;
     } else {
-      setAdStatus(data.message || "Reward failed.");
-      alertMsg(data.message || "Reward failed.");
+      resetButton("verifyChannelBtn");
+      alertMsg(data.message || "Please join channel first.");
     }
   } catch(e) {
-    setAdStatus("Reward save failed.");
-    alertMsg("Reward save failed. Try again.");
+    resetButton("verifyChannelBtn");
+    alertMsg("Channel verify failed.");
   }
 }
 
-function setButtonLoading(buttonId,text){
-  const btn=document.getElementById(buttonId);
-  if(!btn) return;
-  btn.disabled=true;
-  btn.innerText=text || "Opening...";
-}
-function resetButton(buttonId){
-  const btn=document.getElementById(buttonId);
-  if(!btn) return;
-  btn.disabled=false;
-  btn.innerText="Start";
-}
-function startCountdown(buttonId,seconds){
-  const btn=document.getElementById(buttonId);
-  if(!btn) return;
-  let remain=seconds;
-  btn.disabled=true;
-  btn.innerText=remain+"s";
-  const timer=setInterval(function(){
-    remain--;
-    if(remain<=0){
-      clearInterval(timer);
-      btn.disabled=false;
-      btn.innerText="Start";
-    }else{
-      btn.innerText=remain+"s";
-    }
-  },1000);
-}
-
-/* 1. REWARDED POPUP - BACKEND POINTS */
+/* Ads */
 function watchPopupAd(){
   if(popupBusy){ alertMsg("Popup Ad is loading. Please wait."); return; }
-  if(typeof window.show_11025198!=="function"){
-    setAdStatus("Ad SDK not loaded.");
-    alertMsg("Ad not ready. Close app and open again.");
-    return;
-  }
-
-  popupBusy=true;
-  setButtonLoading("popupAdBtn","Opening...");
-  setAdStatus("Opening Rewarded Popup...");
-
+  if(typeof window.show_11025198!=="function"){ alertMsg("Ad not ready. Close app and open again."); return; }
+  popupBusy=true; setButtonLoading("popupAdBtn","Opening..."); setAdStatus("Opening Rewarded Popup...");
   let rewardDone=false;
-
-  async function finishPopupReward(){
-    if(rewardDone) return;
-    rewardDone=true;
-    await addPointReward("Popup Ad reward added.", "popup_ad");
-    startCountdown("popupAdBtn",AD_COOLDOWN_SECONDS);
-    popupBusy=false;
-  }
-
-  try{
-    show_11025198("pop")
-      .then(function(){ finishPopupReward(); })
-      .catch(function(){
-        if(!rewardDone){
-          setAdStatus("Popup Ad closed or not completed.");
-          resetButton("popupAdBtn");
-          popupBusy=false;
-        }
-      });
-  }catch(e){
-    setAdStatus("Popup Ad error.");
-    resetButton("popupAdBtn");
-    popupBusy=false;
-    return;
-  }
-
-  setTimeout(function(){ finishPopupReward(); }, REWARD_FALLBACK_MS);
+  async function finish(){ if(rewardDone)return; rewardDone=true; await addPointReward("Popup Ad reward added.","popup_ad"); startCountdown("popupAdBtn",AD_COOLDOWN_SECONDS); popupBusy=false; }
+  try{ show_11025198("pop").then(finish).catch(()=>{ if(!rewardDone){resetButton("popupAdBtn");popupBusy=false;} }); } catch(e){ resetButton("popupAdBtn"); popupBusy=false; return; }
+  setTimeout(finish, REWARD_FALLBACK_MS);
 }
 
-/* 2. REWARDED INTERSTITIAL - BACKEND POINTS */
 function watchInterstitialAd(){
   if(interBusy){ alertMsg("Interstitial Ad is loading. Please wait."); return; }
-  if(typeof window.show_11025198!=="function"){
-    setAdStatus("Ad SDK not loaded.");
-    alertMsg("Ad not ready. Close app and open again.");
-    return;
-  }
-
-  interBusy=true;
-  setButtonLoading("interAdBtn","Opening...");
-  setAdStatus("Opening Rewarded Interstitial...");
-
+  if(typeof window.show_11025198!=="function"){ alertMsg("Ad not ready. Close app and open again."); return; }
+  interBusy=true; setButtonLoading("interAdBtn","Opening..."); setAdStatus("Opening Rewarded Interstitial...");
   let rewardDone=false;
-
-  async function finishInterstitialReward(){
-    if(rewardDone) return;
-    rewardDone=true;
-    await addPointReward("Interstitial Ad reward added.", "interstitial_ad");
-    startCountdown("interAdBtn",AD_COOLDOWN_SECONDS);
-    interBusy=false;
-  }
-
-  try{
-    show_11025198()
-      .then(function(){ finishInterstitialReward(); })
-      .catch(function(){
-        if(!rewardDone){
-          setAdStatus("Interstitial failed. Try Popup Ad.");
-          resetButton("interAdBtn");
-          interBusy=false;
-        }
-      });
-  }catch(e){
-    setAdStatus("Interstitial error.");
-    resetButton("interAdBtn");
-    interBusy=false;
-    return;
-  }
-
-  setTimeout(function(){ finishInterstitialReward(); }, REWARD_FALLBACK_MS);
+  async function finish(){ if(rewardDone)return; rewardDone=true; await addPointReward("Interstitial Ad reward added.","interstitial_ad"); startCountdown("interAdBtn",AD_COOLDOWN_SECONDS); interBusy=false; }
+  try{ show_11025198().then(finish).catch(()=>{ if(!rewardDone){resetButton("interAdBtn");interBusy=false;} }); } catch(e){ resetButton("interAdBtn"); interBusy=false; return; }
+  setTimeout(finish, REWARD_FALLBACK_MS);
 }
 
-/* 3. EXTRA AUTO ADS - BACKEND POINTS */
 function startInAppBonusAd(autoMode){
-  if(inAppBusy){
-    if(!autoMode) alertMsg("Extra Auto Ad is loading. Please wait.");
-    return;
-  }
-  if(typeof window.show_11025198!=="function"){
-    setAdStatus("In-App SDK not loaded.");
-    if(!autoMode) alertMsg("Ad not ready. Close app and open again.");
-    return;
-  }
-
-  inAppBusy=true;
-  setButtonLoading("inAppAdBtn","Opening...");
-  setAdStatus("Opening Extra Auto Ad...");
-
+  if(inAppBusy){ if(!autoMode) alertMsg("Extra Auto Ad is loading."); return; }
+  if(typeof window.show_11025198!=="function"){ if(!autoMode) alertMsg("Ad not ready."); return; }
+  inAppBusy=true; setButtonLoading("inAppAdBtn","Opening..."); setAdStatus("Opening Extra Auto Ad...");
   let rewardDone=false;
-
-  async function finishInAppReward(){
-    if(rewardDone) return;
-    rewardDone=true;
-    await addPointReward("Extra Auto Ad reward added.", "extra_auto_ad");
-    startCountdown("inAppAdBtn",AD_COOLDOWN_SECONDS);
-    inAppBusy=false;
-  }
-
-  try{
-    show_11025198({
-      type:"inApp",
-      inAppSettings:{frequency:1,capping:0.01,interval:5,timeout:3,everyPage:false}
-    });
-  }catch(e){
-    setAdStatus("Extra Auto Ad failed.");
-    resetButton("inAppAdBtn");
-    inAppBusy=false;
-    return;
-  }
-
-  setTimeout(function(){ finishInAppReward(); }, REWARD_FALLBACK_MS);
+  async function finish(){ if(rewardDone)return; rewardDone=true; await addPointReward("Extra Auto Ad reward added.","extra_auto_ad"); startCountdown("inAppAdBtn",AD_COOLDOWN_SECONDS); inAppBusy=false; }
+  try{ show_11025198({type:"inApp",inAppSettings:{frequency:1,capping:0.01,interval:5,timeout:3,everyPage:false}}); } catch(e){ resetButton("inAppAdBtn"); inAppBusy=false; return; }
+  setTimeout(finish, REWARD_FALLBACK_MS);
 }
 
+/* Referral fixed with startapp */
 function copyReferral(){
-  const link="https://t.me/"+BOT_USERNAME+"?start=ref_"+telegramId;
+  const link="https://t.me/"+BOT_USERNAME+"?startapp=ref_"+telegramId;
   if(navigator.clipboard){
-    navigator.clipboard.writeText(link).then(function(){
-      alertMsg("Referral link copied!\nInvite friends and earn +3 points.");
-    }).catch(function(){ alertMsg("Referral Link:\n"+link); });
-  }else{ alertMsg("Referral Link:\n"+link); }
+    navigator.clipboard.writeText(link).then(()=>alertMsg("Referral link copied!\nInvite friends and earn +3 points.")).catch(()=>alertMsg("Referral Link:\n"+link));
+  }else alertMsg("Referral Link:\n"+link);
 }
 
+/* Pro Redeem */
 function openRedeemModal(name,cost,type){
-  if(points<cost){
-    alertMsg("Not enough points.\nNeed "+(cost-points)+" more points.");
-    return;
-  }
+  if(points<cost){ alertMsg("Not enough points.\nNeed "+(cost-points)+" more points."); return; }
   selectedReward={name:name,cost:cost,type:type};
-  document.getElementById("modalRewardName").innerText=name;
-  document.getElementById("modalRewardCost").innerText="Cost: "+cost+" Points";
-  const input=document.getElementById("redeemInput");
-  if(type==="Free Fire" || type==="Membership"){ input.placeholder="Enter Free Fire UID"; }
-  else{ input.placeholder="Enter phone number"; }
-  input.value="";
+  document.getElementById("modalRewardName").innerText = getRewardIcon(type) + " " + name;
+  document.getElementById("modalRewardCost").innerText = "Cost: " + cost + " Points";
+  renderRedeemFields(type);
   document.getElementById("redeemModal").classList.add("show");
+}
+function getRewardIcon(type){
+  if(type==="Free Fire" || type==="Membership") return "💎";
+  if(type==="Reload") return "📱";
+  if(type==="eZ Cash") return "💸";
+  return "🎁";
+}
+function fieldHtml(id,label,placeholder,type){
+  return '<div class="field"><label>'+label+'</label><input id="'+id+'" type="'+(type||'text')+'" placeholder="'+placeholder+'"></div>';
+}
+function renderRedeemFields(type){
+  let html = "";
+  if(type==="Free Fire" || type==="Membership"){
+    html += fieldHtml("ffUid","Free Fire UID","Enter your Free Fire UID","number");
+    html += fieldHtml("ffName","Free Fire Nickname","Enter your in-game name","text");
+    html += fieldHtml("contact","Contact Number / Telegram","07XXXXXXXX or @username","text");
+  } else if(type==="Reload"){
+    html += fieldHtml("dialogNumber","Dialog Number","07XXXXXXXX","tel");
+    html += fieldHtml("contactName","Contact Name","Enter your name","text");
+  } else if(type==="eZ Cash"){
+    html += fieldHtml("ezNumber","eZ Cash Number","07XXXXXXXX","tel");
+    html += fieldHtml("holderName","Account Holder Name","Enter holder name","text");
+    html += fieldHtml("contact","Contact Number / Telegram","07XXXXXXXX or @username","text");
+  }
+  document.getElementById("dynamicFields").innerHTML = html;
 }
 function closeRedeemModal(){ document.getElementById("redeemModal").classList.remove("show"); }
 
+function collectRedeemDetails(){
+  const type = selectedReward.type;
+  if(type==="Free Fire" || type==="Membership"){
+    const uid=document.getElementById("ffUid").value.trim();
+    const name=document.getElementById("ffName").value.trim();
+    const contact=document.getElementById("contact").value.trim();
+    if(!uid || !name || !contact) return null;
+    return "Free Fire UID: "+uid+"\nNickname: "+name+"\nContact: "+contact;
+  }
+  if(type==="Reload"){
+    const num=document.getElementById("dialogNumber").value.trim();
+    const cname=document.getElementById("contactName").value.trim();
+    if(!num || !cname) return null;
+    return "Dialog Number: "+num+"\nContact Name: "+cname;
+  }
+  if(type==="eZ Cash"){
+    const num=document.getElementById("ezNumber").value.trim();
+    const holder=document.getElementById("holderName").value.trim();
+    const contact=document.getElementById("contact").value.trim();
+    if(!num || !holder || !contact) return null;
+    return "eZ Cash Number: "+num+"\nHolder Name: "+holder+"\nContact: "+contact;
+  }
+  return null;
+}
 async function submitRedeem(){
-  const details=document.getElementById("redeemInput").value.trim();
   if(!selectedReward){ alertMsg("No reward selected."); return; }
-  if(!details){ alertMsg("Please enter required details."); return; }
-
+  const details = collectRedeemDetails();
+  if(!details){ alertMsg("Please fill all required details."); return; }
   try {
-    const data = await api("/redeem/create", {
-      telegram_id: telegramId,
-      reward_type: selectedReward.type,
-      reward_name: selectedReward.name,
-      cost_points: selectedReward.cost,
-      details: details
-    });
-
-    if (data.ok) {
+    const data = await api("/redeem/create", {telegram_id: telegramId,reward_type:selectedReward.type,reward_name:selectedReward.name,cost_points:selectedReward.cost,details:details});
+    if(data.ok){
       points = Number(data.points || 0);
       updateUI();
       closeRedeemModal();
       alertMsg("Redeem request submitted!\nStatus: Pending");
-    } else {
-      alertMsg(data.message || "Redeem failed.");
-    }
-  } catch(e) {
-    alertMsg("Redeem request failed. Try again.");
-  }
+    } else alertMsg(data.message || "Redeem failed.");
+  } catch(e){ alertMsg("Redeem request failed. Try again."); }
 }
 
 function showRules(){
-  const msg="Rewards Hub Rules:\n\n"+
-    "1. Earn points using available activities.\n"+
-    "2. Redeem requests are manually reviewed.\n"+
-    "3. Fake activity or duplicate accounts may be rejected.\n"+
-    "4. Reward delivery time: 24 - 48 hours.\n"+
-    "5. Referral bonus: +3 Points.\n"+
-    "6. Ad reward: +1 Point.";
-  alertMsg(msg);
+  alertMsg("Rewards Hub Rules:\n\n1. Earn points using available activities.\n2. Redeem requests are manually reviewed.\n3. Fake activity or duplicate accounts may be rejected.\n4. Reward delivery time: 24 - 48 hours.\n5. Referral bonus: +3 Points.\n6. Channel join reward: +4 Points.");
 }
 function contactSupport(){
-  if(tg && tg.openTelegramLink){ tg.openTelegramLink(SUPPORT_LINK); }
-  else{ window.open(SUPPORT_LINK,"_blank"); }
+  if(tg && tg.openTelegramLink) tg.openTelegramLink(SUPPORT_LINK);
+  else window.open(SUPPORT_LINK,"_blank");
 }
 
 syncUser();
