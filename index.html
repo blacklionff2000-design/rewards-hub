@@ -6,7 +6,9 @@
   <title>Rewards Hub</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
+
+  <!-- Monetag SDK -->
+  <script src="https://libtl.com/sdk.js" data-zone="11025198" data-sdk="show_11025198"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -14,23 +16,96 @@
     button{cursor:pointer;font-family:inherit}
     button:disabled{opacity:.6;cursor:not-allowed}
 
+    .loader{
+      position:fixed;
+      inset:0;
+      background:
+        radial-gradient(circle at top,#ff7a18 0,transparent 28%),
+        radial-gradient(circle at bottom,#00d4ff 0,transparent 32%),
+        #05050d;
+      z-index:999;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      transition:.35s ease;
+    }
+
+    .loader.hide{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    .loader-card{
+      width:min(360px,100%);
+      padding:26px;
+      border-radius:30px;
+      background:rgba(15,15,30,.9);
+      border:1px solid rgba(255,255,255,.12);
+      text-align:center;
+      box-shadow:0 20px 60px rgba(0,0,0,.55);
+    }
+
+    .loader-logo{
+      width:84px;
+      height:84px;
+      margin:0 auto 18px;
+      border-radius:28px;
+      display:grid;
+      place-items:center;
+      font-size:34px;
+      font-weight:900;
+      background:linear-gradient(135deg,#ff7a18,#ff003d,#06b6d4);
+      box-shadow:0 0 40px rgba(255,122,24,.35);
+    }
+
+    .loader-card h1{
+      margin:0;
+      font-size:28px;
+      letter-spacing:1px;
+    }
+
+    .loader-card p{
+      color:#b9b9d6;
+      margin:8px 0 18px;
+    }
+
+    .loading-bar{
+      height:10px;
+      background:#1c1c33;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .loading-bar span{
+      display:block;
+      height:100%;
+      width:45%;
+      background:linear-gradient(90deg,#ff7a18,#06b6d4);
+      border-radius:999px;
+      animation:loadmove 1.2s infinite ease-in-out;
+    }
+
+    @keyframes loadmove{
+      0%{transform:translateX(-100%)}
+      100%{transform:translateX(260%)}
+    }
+
     .app{
       max-width:500px;
       min-height:100vh;
       margin:auto;
       padding:16px 16px 104px;
       background:
-        radial-gradient(circle at top left,rgba(124,58,237,.34),transparent 34%),
+        radial-gradient(circle at top left,rgba(255,122,24,.18),transparent 34%),
         radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),
         #070713;
     }
 
     .page{display:none;animation:fadeIn .22s ease}
     .page.active{display:block}
-    @keyframes fadeIn{
-      from{opacity:0;transform:translateY(8px)}
-      to{opacity:1;transform:translateY(0)}
-    }
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
     .hero,.page-head,.panel,.ref-card,.rules-card{
       background:rgba(21,21,39,.94);
@@ -41,7 +116,7 @@
 
     .hero{
       padding:20px;
-      background:linear-gradient(145deg,rgba(30,23,67,.96),rgba(12,78,100,.58));
+      background:linear-gradient(145deg,rgba(67,26,20,.96),rgba(12,78,100,.58));
     }
 
     .hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
@@ -52,15 +127,27 @@
       width:58px;height:58px;border-radius:20px;
       display:grid;place-items:center;
       font-weight:900;
-      background:linear-gradient(135deg,#7c3aed,#06b6d4);
-      box-shadow:0 0 30px rgba(6,182,212,.32);
+      background:linear-gradient(135deg,#ff7a18,#06b6d4);
+      box-shadow:0 0 30px rgba(255,122,24,.32);
+    }
+
+    .badge{
+      display:inline-block;
+      margin-top:10px;
+      padding:7px 11px;
+      border-radius:999px;
+      background:rgba(255,122,24,.14);
+      color:#ffcf9b;
+      font-size:12px;
+      font-weight:800;
+      border:1px solid rgba(255,122,24,.24);
     }
 
     .balance{
       margin-top:18px;
       border-radius:26px;
       padding:24px;
-      background:linear-gradient(135deg,#7c3aed,#09b6d8);
+      background:linear-gradient(135deg,#ff7a18,#06b6d4);
     }
 
     .balance p{margin:0;opacity:.9}
@@ -93,7 +180,7 @@
 
     .section-title{
       margin:22px 4px 10px;
-      color:#a5b4fc;
+      color:#ffcf9b;
       font-weight:900;
       font-size:13px;
       text-transform:uppercase;
@@ -134,7 +221,7 @@
       min-width:92px;
       color:#fff;
       font-weight:900;
-      background:linear-gradient(135deg,#7c3aed,#06b6d4);
+      background:linear-gradient(135deg,#ff7a18,#06b6d4);
     }
     .btn.gray{background:#24243b}
     .btn.full{width:100%;margin-top:14px}
@@ -173,7 +260,7 @@
       width:78px;height:78px;border-radius:26px;
       margin:auto;
       display:grid;place-items:center;
-      background:linear-gradient(135deg,#7c3aed,#06b6d4);
+      background:linear-gradient(135deg,#ff7a18,#06b6d4);
       font-weight:900;
       font-size:26px;
     }
@@ -229,7 +316,7 @@
       font-size:17px;
     }
     .nav span{display:block;margin-top:3px;font-size:10px;font-weight:800}
-    .nav.active{color:#fff;background:linear-gradient(135deg,rgba(124,58,237,.9),rgba(6,182,212,.65))}
+    .nav.active{color:#fff;background:linear-gradient(135deg,rgba(255,122,24,.9),rgba(6,182,212,.65))}
 
     .modal{
       display:none;
@@ -271,7 +358,16 @@
     .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
   </style>
 </head>
+
 <body>
+<div class="loader" id="loader">
+  <div class="loader-card">
+    <div class="loader-logo">FF</div>
+    <h1>Rewards Hub</h1>
+    <p>Loading Free Fire rewards...</p>
+    <div class="loading-bar"><span></span></div>
+  </div>
+</div>
 
 <div class="app">
 
@@ -281,6 +377,7 @@
         <div>
           <p class="hello" id="userName">Welcome Gamer 👋</p>
           <h1>Rewards Hub</h1>
+          <span class="badge">SG Region Only</span>
         </div>
         <div class="logo">RH</div>
       </div>
@@ -293,7 +390,7 @@
 
       <div class="stats-row">
         <div class="stat"><b id="todayPoints">0</b><span>Today Points</span></div>
-        <div class="stat"><b><span id="dailyAds">0</span>/100</b><span>Today Tasks</span></div>
+        <div class="stat"><b><span id="dailyTasks">0</span>/100</b><span>Today Tasks</span></div>
       </div>
     </div>
 
@@ -308,8 +405,8 @@
 
     <div class="rules-card">
       <h3>⚠️ Quick Notice</h3>
-      <p class="danger">Cheating, fake accounts, task exploits, or false withdraw details can permanently ban your account.</p>
-      <p>Use the Profile → Rules button to read all rules before earning and withdrawing rewards.</p>
+      <p class="danger">SG Region Free Fire ID only. Wrong region or wrong game details can reject your withdraw.</p>
+      <p>Cheating, fake accounts, task exploits, or false withdraw details can permanently ban your account.</p>
     </div>
   </section>
 
@@ -342,27 +439,40 @@
       </div>
       <button class="btn" id="taskBtn3" onclick="watchRewardTask(3)">Start</button>
     </div>
+
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-icon">📢</div>
+        <div><h3>Telegram Channel</h3><p>Join and verify to claim +4 Points</p></div>
+      </div>
+      <button class="btn" onclick="joinChannel()">Join</button>
+    </div>
+
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-icon">✅</div>
+        <div><h3>Verify Channel</h3><p>Reward: +4 Points, once only</p></div>
+      </div>
+      <button class="btn" id="verifyChannelBtn" onclick="verifyChannelJoin()">Verify</button>
+    </div>
   </section>
 
   <section class="page" id="withdrawPage">
     <div class="page-head">
       <h2>Withdraw</h2>
-      <p>Select reward and submit correct details.</p>
+      <p>Free Fire SG Region only. Enter correct Game ID and Game Name.</p>
     </div>
 
-    <div class="section-title">Free Fire Top-Up</div>
-    <div class="reward-card" onclick="openWithdrawModal('25 Diamonds',400,'Free Fire')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('50 Diamonds',800,'Free Fire')"><div>💎 50 Diamonds</div><b>800 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('100 Diamonds',1600,'Free Fire')"><div>💎 100 Diamonds</div><b>1600 Points</b></div>
+    <div class="section-title">Free Fire Diamonds</div>
+    <div class="reward-card" onclick="openWithdrawModal('25 Diamonds',400,'Free Fire SG')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('50 Diamonds',800,'Free Fire SG')"><div>💎 50 Diamonds</div><b>800 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('100 Diamonds',1600,'Free Fire SG')"><div>💎 100 Diamonds</div><b>1600 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('310 Diamonds',4800,'Free Fire SG')"><div>💎 310 Diamonds</div><b>4800 Points</b></div>
 
-    <div class="section-title">Membership</div>
-    <div class="reward-card" onclick="openWithdrawModal('Weekly Lite',500,'Membership')"><div>🎟 Weekly Lite</div><b>500 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('Weekly',2500,'Membership')"><div>🔥 Weekly</div><b>2500 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('Monthly',10000,'Membership')"><div>👑 Monthly</div><b>10000 Points</b></div>
-
-    <div class="section-title">Cash / Reload</div>
-    <div class="reward-card" onclick="openWithdrawModal('Dialog Reload Rs.100',450,'Reload')"><div>📱 Dialog Reload Rs.100</div><b>450 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('eZ Cash Rs.100',530,'eZ Cash')"><div>💸 eZ Cash Rs.100</div><b>530 Points</b></div>
+    <div class="section-title">Free Fire Membership</div>
+    <div class="reward-card" onclick="openWithdrawModal('Weekly Lite',500,'Free Fire SG')"><div>🎟 Weekly Lite</div><b>500 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('Weekly Membership',2500,'Free Fire SG')"><div>🔥 Weekly Membership</div><b>2500 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('Monthly Membership',10000,'Free Fire SG')"><div>👑 Monthly Membership</div><b>10000 Points</b></div>
   </section>
 
   <section class="page" id="historyPage">
@@ -378,7 +488,7 @@
     <div class="panel profile-card">
       <div class="avatar" id="avatarText">RH</div>
       <h2 id="profileName">Rewards Hub User</h2>
-      <p>Your rewards account</p>
+      <p>Your Free Fire SG rewards account</p>
     </div>
 
     <div class="ref-card">
@@ -413,7 +523,7 @@
     <h2 id="modalRewardName">Withdraw</h2>
     <p id="modalRewardCost">Cost: 0 Points</p>
     <div id="dynamicFields"></div>
-    <div class="hint">⚠️ Enter correct details. Wrong UID or phone number may reject or delay your request.</div>
+    <div class="hint">⚠️ SG Region only. Enter correct Game ID and Game Name. Wrong details may reject your request.</div>
     <div class="modal-actions">
       <button class="btn gray" onclick="closeWithdrawModal()">Cancel</button>
       <button class="btn" onclick="submitWithdraw()">Submit</button>
@@ -424,12 +534,13 @@
 <div class="modal" id="rulesModal">
   <div class="modal-box">
     <h2>📜 Rewards Hub Rules</h2>
-    <p>1. Earn points only through available reward tasks inside the app.</p>
-    <p>2. One user can complete up to 100 reward tasks per day.</p>
-    <p>3. Withdraw requests are manually reviewed and can take 24–48 hours.</p>
-    <p>4. Wrong Free Fire UID, Dialog number, or eZ Cash details may delay or reject the request.</p>
+    <p>1. Free Fire SG Region only.</p>
+    <p>2. Withdraw requests need only Game ID and Game Name.</p>
+    <p>3. One user can complete up to 100 reward tasks per day.</p>
+    <p>4. Withdraw requests are manually reviewed and can take 24–48 hours.</p>
     <p style="color:#ff9b9b;font-weight:800;">5. If you cheat, use fake accounts, exploit tasks, spam referrals, or submit false details, your account will be permanently banned.</p>
     <p>6. Referral reward is given only when a new user joins using your referral link.</p>
+    <p>7. Channel join reward can be claimed only once.</p>
     <button class="btn full" onclick="closeRulesModal()">Close</button>
   </div>
 </div>
@@ -440,14 +551,10 @@ if (tg) { tg.ready(); tg.expand(); }
 
 const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
 const BOT_USERNAME = "RewardsHubSLBot";
+const CHANNEL_USERNAME = "RewardsHubSL";
 
-/* IMPORTANT FIX */
-const REWARD_BLOCK_ID = "31945";
 const TASK_COOLDOWN_SECONDS = 20;
-
-let rewardTaskAd = null;
-let rewardTaskAd2 = null;
-let rewardTaskAd3 = null;
+const REWARD_FALLBACK_MS = 12000;
 
 const user = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 
@@ -459,7 +566,7 @@ if (!telegramId) {
 
 let points = 0;
 let todayPoints = 0;
-let dailyAds = 0;
+let dailyTasks = 0;
 let taskBusy = false;
 let selectedReward = null;
 
@@ -510,7 +617,7 @@ function getStartReferral() {
 function updateUI() {
   document.getElementById("points").innerText = points;
   document.getElementById("todayPoints").innerText = todayPoints;
-  document.getElementById("dailyAds").innerText = dailyAds;
+  document.getElementById("dailyTasks").innerText = dailyTasks;
 
   const pp = document.getElementById("profilePoints");
   if (pp) pp.innerText = points;
@@ -544,9 +651,6 @@ async function syncUser() {
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
-      logStatus("Account synced");
-    } else {
-      logStatus(data.message || "Sync failed");
     }
   } catch(e) {
     logStatus("Backend sync failed");
@@ -562,31 +666,6 @@ function openPage(pageId, btn) {
 
   if (pageId === "profilePage") renderReferralLink();
   window.scrollTo({top:0,behavior:"smooth"});
-}
-
-function initRewardSystem() {
-  try {
-    if (!window.Adsgram) {
-      logStatus("Ads library not loaded");
-      return;
-    }
-
-    /* NEVER use task-31953 here */
-    rewardTaskAd  = window.Adsgram.init({ blockId: REWARD_BLOCK_ID });
-    rewardTaskAd2 = window.Adsgram.init({ blockId: REWARD_BLOCK_ID });
-    rewardTaskAd3 = window.Adsgram.init({ blockId: REWARD_BLOCK_ID });
-
-    logStatus("Ads ready");
-  } catch (e) {
-    logStatus("Ads init failed: " + e.message);
-  }
-}
-
-function getTaskAd(taskNo) {
-  if (taskNo === 1) return rewardTaskAd;
-  if (taskNo === 2) return rewardTaskAd2;
-  if (taskNo === 3) return rewardTaskAd3;
-  return rewardTaskAd;
 }
 
 function setButtonLoading(id, text) {
@@ -629,7 +708,7 @@ async function addTaskPoint(taskNo) {
   const data = await api("/points/add", {
     telegram_id: telegramId,
     points: 1,
-    type: "reward_task_" + taskNo,
+    type: "monetag_task_" + taskNo,
     description: "Reward Task " + taskNo + " +1 point"
   });
 
@@ -637,8 +716,8 @@ async function addTaskPoint(taskNo) {
     points = Number(data.user.points || 0);
     todayPoints = Number(data.user.today_points || 0);
 
-    if (data.daily_ads !== null && data.daily_ads !== undefined) {
-      dailyAds = Number(data.daily_ads || 0);
+    if (data.daily_tasks !== null && data.daily_tasks !== undefined) {
+      dailyTasks = Number(data.daily_tasks || 0);
     }
 
     updateUI();
@@ -656,25 +735,24 @@ async function watchRewardTask(taskNo) {
     return;
   }
 
-  if (dailyAds >= 100) {
+  if (dailyTasks >= 100) {
     alertMsg("Daily task limit reached. Try again tomorrow.");
     return;
   }
 
-  if (!rewardTaskAd) initRewardSystem();
-
-  const currentAd = getTaskAd(taskNo);
-
-  if (!currentAd) {
-    alertMsg("Ad not ready. Try again later.");
+  if (typeof window.show_11025198 !== "function") {
+    alertMsg("Reward task not ready. Close and open app again.");
     return;
   }
 
   taskBusy = true;
   setButtonLoading("taskBtn" + taskNo, "Opening...");
 
-  try {
-    await currentAd.show();
+  let rewardDone = false;
+
+  async function finishReward() {
+    if (rewardDone) return;
+    rewardDone = true;
 
     const rewarded = await addTaskPoint(taskNo);
 
@@ -683,16 +761,104 @@ async function watchRewardTask(taskNo) {
     } else {
       resetTaskButton(taskNo);
     }
-  } catch(e) {
-    resetTaskButton(taskNo);
-    alertMsg("Please complete the task to earn points.");
+
+    taskBusy = false;
   }
 
-  taskBusy = false;
+  try {
+    if (taskNo === 1) {
+      show_11025198("pop").then(finishReward).catch(function() {
+        if (!rewardDone) {
+          resetTaskButton(taskNo);
+          taskBusy = false;
+          alertMsg("Please complete the task to earn points.");
+        }
+      });
+    } else if (taskNo === 2) {
+      show_11025198().then(finishReward).catch(function() {
+        if (!rewardDone) {
+          resetTaskButton(taskNo);
+          taskBusy = false;
+          alertMsg("Please complete the task to earn points.");
+        }
+      });
+    } else {
+      show_11025198({
+        type: "inApp",
+        inAppSettings: {
+          frequency: 1,
+          capping: 0.01,
+          interval: 5,
+          timeout: 3,
+          everyPage: false
+        }
+      });
+
+      setTimeout(finishReward, REWARD_FALLBACK_MS);
+    }
+
+    if (taskNo === 1 || taskNo === 2) {
+      setTimeout(finishReward, REWARD_FALLBACK_MS);
+    }
+  } catch(e) {
+    resetTaskButton(taskNo);
+    taskBusy = false;
+    alertMsg("Task failed. Try again.");
+  }
+}
+
+function joinChannel() {
+  const link = "https://t.me/" + CHANNEL_USERNAME;
+
+  if (tg && tg.openTelegramLink) tg.openTelegramLink(link);
+  else window.open(link, "_blank");
+}
+
+async function verifyChannelJoin() {
+  const btn = document.getElementById("verifyChannelBtn");
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = "Checking...";
+  }
+
+  try {
+    const data = await api("/channel/verify", {
+      telegram_id: telegramId
+    });
+
+    if (data.ok && data.user) {
+      points = Number(data.user.points || 0);
+      todayPoints = Number(data.user.today_points || 0);
+      updateUI();
+
+      if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Claimed";
+      }
+
+      alertMsg(data.message || "+4 Points added.");
+    } else {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerText = "Verify";
+      }
+
+      alertMsg(data.message || "Please join channel first.");
+    }
+  } catch(e) {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = "Verify";
+    }
+
+    alertMsg("Channel verify failed. Try again.");
+  }
 }
 
 function copyReferral() {
   const link = getReferralLink();
+
   if (navigator.clipboard) {
     navigator.clipboard.writeText(link)
       .then(() => alertMsg("Referral link copied."))
@@ -706,7 +872,7 @@ function shareReferral() {
   const link = getReferralLink();
   const text =
     "🎁 Rewards Hub\n\n" +
-    "Complete tasks, invite friends, and withdraw Free Fire rewards.\n\n" +
+    "Complete tasks, invite friends, and withdraw Free Fire SG rewards.\n\n" +
     "Join using my referral link:\n" + link;
 
   if (tg && tg.openTelegramLink) {
@@ -725,9 +891,11 @@ function openWithdrawModal(name, cost, type) {
   }
 
   selectedReward = {name, cost, type};
+
   document.getElementById("modalRewardName").innerText = name;
   document.getElementById("modalRewardCost").innerText = "Cost: " + cost + " Points";
-  renderWithdrawFields(type);
+  renderWithdrawFields();
+
   document.getElementById("withdrawModal").classList.add("show");
 }
 
@@ -739,52 +907,21 @@ function fieldHtml(id, label, placeholder, type) {
   return '<div class="field"><label>' + label + '</label><input id="' + id + '" type="' + (type || 'text') + '" placeholder="' + placeholder + '"></div>';
 }
 
-function renderWithdrawFields(type) {
+function renderWithdrawFields() {
   let html = "";
-
-  if (type === "Free Fire" || type === "Membership") {
-    html += fieldHtml("ffUid", "Free Fire UID", "Enter Free Fire UID", "number");
-    html += fieldHtml("ffName", "Free Fire Nickname", "Enter in-game name", "text");
-    html += fieldHtml("contact", "Contact Number / Telegram", "07XXXXXXXX or @username", "text");
-  } else if (type === "Reload") {
-    html += fieldHtml("dialogNumber", "Dialog Number", "07XXXXXXXX", "tel");
-    html += fieldHtml("contactName", "Contact Name", "Enter your name", "text");
-  } else if (type === "eZ Cash") {
-    html += fieldHtml("ezNumber", "eZ Cash Number", "07XXXXXXXX", "tel");
-    html += fieldHtml("holderName", "Account Holder Name", "Enter holder name", "text");
-    html += fieldHtml("contact", "Contact Number / Telegram", "07XXXXXXXX or @username", "text");
-  }
+  html += fieldHtml("ffUid", "Free Fire Game ID", "Enter your Free Fire ID", "number");
+  html += fieldHtml("ffName", "Free Fire Game Name", "Enter your in-game name", "text");
 
   document.getElementById("dynamicFields").innerHTML = html;
 }
 
 function collectWithdrawDetails() {
-  const type = selectedReward.type;
+  const uid = document.getElementById("ffUid").value.trim();
+  const name = document.getElementById("ffName").value.trim();
 
-  if (type === "Free Fire" || type === "Membership") {
-    const uid = document.getElementById("ffUid").value.trim();
-    const name = document.getElementById("ffName").value.trim();
-    const contact = document.getElementById("contact").value.trim();
-    if (!uid || !name || !contact) return null;
-    return "Free Fire UID: " + uid + "\nNickname: " + name + "\nContact: " + contact;
-  }
+  if (!uid || !name) return null;
 
-  if (type === "Reload") {
-    const num = document.getElementById("dialogNumber").value.trim();
-    const name = document.getElementById("contactName").value.trim();
-    if (!num || !name) return null;
-    return "Dialog Number: " + num + "\nContact Name: " + name;
-  }
-
-  if (type === "eZ Cash") {
-    const num = document.getElementById("ezNumber").value.trim();
-    const holder = document.getElementById("holderName").value.trim();
-    const contact = document.getElementById("contact").value.trim();
-    if (!num || !holder || !contact) return null;
-    return "eZ Cash Number: " + num + "\nHolder Name: " + holder + "\nContact: " + contact;
-  }
-
-  return null;
+  return "Region: SG Only\nFree Fire Game ID: " + uid + "\nFree Fire Game Name: " + name;
 }
 
 async function submitWithdraw() {
@@ -794,8 +931,9 @@ async function submitWithdraw() {
   }
 
   const details = collectWithdrawDetails();
+
   if (!details) {
-    alertMsg("Please fill all required details.");
+    alertMsg("Please enter Free Fire Game ID and Game Name.");
     return;
   }
 
@@ -885,8 +1023,16 @@ function closeRulesModal() {
   document.getElementById("rulesModal").classList.remove("show");
 }
 
+function hideLoader() {
+  const loader = document.getElementById("loader");
+  if (loader) loader.classList.add("hide");
+}
+
 syncUser();
-setTimeout(initRewardSystem, 1200);
+
+setTimeout(function() {
+  hideLoader();
+}, 1800);
 </script>
 </body>
 </html>
