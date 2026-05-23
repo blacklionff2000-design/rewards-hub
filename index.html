@@ -224,6 +224,7 @@ const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : 
 if (tg) { tg.ready(); tg.expand(); }
 
 const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
+// IMPORTANT: If Telegram says "bot invalid", replace this with your exact BotFather username WITHOUT @
 const BOT_USERNAME = "RewardsHubSLBot";
 const CHANNEL_USERNAME = "RewardsHubSL";
 const AD_COOLDOWN_SECONDS = 30;
@@ -257,7 +258,8 @@ async function api(path, data) {
 }
 
 function getReferralLink() {
-  return "https://t.me/" + BOT_USERNAME + "?startapp=ref_" + telegramId;
+  // Bot link: user clicks this, bot shows Open App button with referral param.
+  return "https://t.me/" + BOT_USERNAME + "?start=ref_" + telegramId;
 }
 
 function renderReferralLink() {
@@ -267,9 +269,20 @@ function renderReferralLink() {
 
 function getStartReferral() {
   try {
+    // Referral passed from bot Web App button: APP_URL?ref=ref_USERID
+    const urlParams = new URLSearchParams(window.location.search);
+    let ref = urlParams.get("ref") || urlParams.get("startapp");
+
+    if (ref) {
+      if (ref.startsWith("ref_")) return ref.replace("ref_", "");
+      return ref;
+    }
+
+    // Referral passed by Telegram Mini App start_param
     const startParam = tg && tg.initDataUnsafe ? tg.initDataUnsafe.start_param : "";
     if (startParam && startParam.startsWith("ref_")) return startParam.replace("ref_", "");
   } catch(e) {}
+
   return null;
 }
 
