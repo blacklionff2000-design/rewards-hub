@@ -111,7 +111,7 @@
     <div class="stats-card">
       <p>Today Earned</p>
       <h2><span id="todayPoints">0</span> Points</h2>
-      <small id="adStatus">Ad system checking...</small>
+      <small id="adStatus">Syncing account...</small>
     </div>
   </section>
 
@@ -172,6 +172,7 @@
 const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 if (tg) { tg.ready(); tg.expand(); }
 
+const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
 const BOT_USERNAME = "RewardsHubSLBot";
 const SUPPORT_LINK = "https://t.me/blacklionff2000";
 const AD_COOLDOWN_SECONDS = 30;
@@ -179,8 +180,14 @@ const REWARD_FALLBACK_MS = 12000;
 
 const user = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 
-let points = Number(localStorage.getItem("rh_points") || 0);
-let todayPoints = Number(localStorage.getItem("rh_today_points") || 0);
+let telegramId = user && user.id ? String(user.id) : localStorage.getItem("rh_demo_id");
+if (!telegramId) {
+  telegramId = "demo_" + Math.floor(Math.random() * 999999999);
+  localStorage.setItem("rh_demo_id", telegramId);
+}
+
+let points = 0;
+let todayPoints = 0;
 
 let popupBusy = false;
 let interBusy = false;
@@ -189,24 +196,63 @@ let selectedReward = null;
 
 function alertMsg(message){ if(tg && tg.showAlert){ tg.showAlert(message); } else { alert(message); } }
 function setAdStatus(text){ const el=document.getElementById("adStatus"); if(el) el.innerText=text; }
+
+async function api(path, data) {
+  const res = await fetch(API_BASE + path, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(data || {})
+  });
+  return await res.json();
+}
+
+function getStartReferral() {
+  try {
+    const startParam = tg && tg.initDataUnsafe ? tg.initDataUnsafe.start_param : "";
+    if (startParam && startParam.startsWith("ref_")) {
+      return startParam.replace("ref_", "");
+    }
+  } catch(e) {}
+  return null;
+}
+
 function updateUI(){
   document.getElementById("points").innerText=points;
   document.getElementById("profilePoints").innerText=points;
   document.getElementById("todayPoints").innerText=todayPoints;
   document.getElementById("profileTodayPoints").innerText=todayPoints;
 }
-function initUser(){
+
+async function syncUser(){
+  const firstName = user && user.first_name ? user.first_name : "Gamer";
+  const username = user && user.username ? user.username : "";
+  const invitedBy = getStartReferral();
+
   if(user){
-    const name=user.first_name || "Gamer";
-    document.getElementById("userName").innerText="Welcome "+name+" 👋";
-    document.getElementById("profileName").innerText=name;
-    document.getElementById("avatarText").innerText=name.substring(0,2).toUpperCase();
+    document.getElementById("userName").innerText="Welcome "+firstName+" 👋";
+    document.getElementById("profileName").innerText=firstName;
+    document.getElementById("avatarText").innerText=firstName.substring(0,2).toUpperCase();
   }
-  updateUI();
-  setTimeout(function(){
-    if(typeof window.show_11025198==="function"){ setAdStatus("Ad system ready."); }
-    else{ setAdStatus("Ad SDK not loaded. Close and open app again."); }
-  },2500);
+
+  try {
+    const data = await api("/user/sync", {
+      telegram_id: telegramId,
+      first_name: firstName,
+      username: username,
+      invited_by: invitedBy
+    });
+
+    if (data.ok && data.user) {
+      points = Number(data.user.points || 0);
+      todayPoints = Number(data.user.today_points || 0);
+      updateUI();
+      setAdStatus("Account synced. Ad system ready.");
+    } else {
+      setAdStatus(data.message || "Sync failed.");
+    }
+  } catch(e) {
+    setAdStatus("Backend sync failed. Check API.");
+  }
 }
 
 function openPage(pageId,btn){
@@ -221,15 +267,31 @@ function openPage(pageId,btn){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function addPointReward(statusText){
-  points += 1;
-  todayPoints += 1;
-  localStorage.setItem("rh_points", points);
-  localStorage.setItem("rh_today_points", todayPoints);
-  updateUI();
-  setAdStatus(statusText || "Reward added.");
-  alertMsg("+1 Point Added");
+async function addPointReward(statusText, type){
+  try {
+    const data = await api("/points/add", {
+      telegram_id: telegramId,
+      points: 1,
+      type: type || "ad_reward",
+      description: statusText || "Ad reward"
+    });
+
+    if (data.ok && data.user) {
+      points = Number(data.user.points || 0);
+      todayPoints = Number(data.user.today_points || 0);
+      updateUI();
+      setAdStatus(statusText || "Reward added.");
+      alertMsg("+1 Point Added");
+    } else {
+      setAdStatus(data.message || "Reward failed.");
+      alertMsg(data.message || "Reward failed.");
+    }
+  } catch(e) {
+    setAdStatus("Reward save failed.");
+    alertMsg("Reward save failed. Try again.");
+  }
 }
+
 function setButtonLoading(buttonId,text){
   const btn=document.getElementById(buttonId);
   if(!btn) return;
@@ -260,7 +322,7 @@ function startCountdown(buttonId,seconds){
   },1000);
 }
 
-/* 1. REWARDED POPUP - FIXED WITH FALLBACK TIMER */
+/* 1. REWARDED POPUP - BACKEND POINTS */
 function watchPopupAd(){
   if(popupBusy){ alertMsg("Popup Ad is loading. Please wait."); return; }
   if(typeof window.show_11025198!=="function"){
@@ -275,10 +337,10 @@ function watchPopupAd(){
 
   let rewardDone=false;
 
-  function finishPopupReward(){
+  async function finishPopupReward(){
     if(rewardDone) return;
     rewardDone=true;
-    addPointReward("Popup Ad reward added.");
+    await addPointReward("Popup Ad reward added.", "popup_ad");
     startCountdown("popupAdBtn",AD_COOLDOWN_SECONDS);
     popupBusy=false;
   }
@@ -303,7 +365,7 @@ function watchPopupAd(){
   setTimeout(function(){ finishPopupReward(); }, REWARD_FALLBACK_MS);
 }
 
-/* 2. REWARDED INTERSTITIAL - FIXED WITH FALLBACK TIMER */
+/* 2. REWARDED INTERSTITIAL - BACKEND POINTS */
 function watchInterstitialAd(){
   if(interBusy){ alertMsg("Interstitial Ad is loading. Please wait."); return; }
   if(typeof window.show_11025198!=="function"){
@@ -318,10 +380,10 @@ function watchInterstitialAd(){
 
   let rewardDone=false;
 
-  function finishInterstitialReward(){
+  async function finishInterstitialReward(){
     if(rewardDone) return;
     rewardDone=true;
-    addPointReward("Interstitial Ad reward added.");
+    await addPointReward("Interstitial Ad reward added.", "interstitial_ad");
     startCountdown("interAdBtn",AD_COOLDOWN_SECONDS);
     interBusy=false;
   }
@@ -346,7 +408,7 @@ function watchInterstitialAd(){
   setTimeout(function(){ finishInterstitialReward(); }, REWARD_FALLBACK_MS);
 }
 
-/* 3. EXTRA AUTO ADS - IN-APP INTERSTITIAL + 1 POINT */
+/* 3. EXTRA AUTO ADS - BACKEND POINTS */
 function startInAppBonusAd(autoMode){
   if(inAppBusy){
     if(!autoMode) alertMsg("Extra Auto Ad is loading. Please wait.");
@@ -364,10 +426,10 @@ function startInAppBonusAd(autoMode){
 
   let rewardDone=false;
 
-  function finishInAppReward(){
+  async function finishInAppReward(){
     if(rewardDone) return;
     rewardDone=true;
-    addPointReward("Extra Auto Ad reward added.");
+    await addPointReward("Extra Auto Ad reward added.", "extra_auto_ad");
     startCountdown("inAppAdBtn",AD_COOLDOWN_SECONDS);
     inAppBusy=false;
   }
@@ -375,13 +437,7 @@ function startInAppBonusAd(autoMode){
   try{
     show_11025198({
       type:"inApp",
-      inAppSettings:{
-        frequency:1,
-        capping:0.01,
-        interval:5,
-        timeout:3,
-        everyPage:false
-      }
+      inAppSettings:{frequency:1,capping:0.01,interval:5,timeout:3,everyPage:false}
     });
   }catch(e){
     setAdStatus("Extra Auto Ad failed.");
@@ -394,7 +450,6 @@ function startInAppBonusAd(autoMode){
 }
 
 function copyReferral(){
-  const telegramId=user && user.id ? user.id : "demo";
   const link="https://t.me/"+BOT_USERNAME+"?start=ref_"+telegramId;
   if(navigator.clipboard){
     navigator.clipboard.writeText(link).then(function(){
@@ -418,21 +473,34 @@ function openRedeemModal(name,cost,type){
   document.getElementById("redeemModal").classList.add("show");
 }
 function closeRedeemModal(){ document.getElementById("redeemModal").classList.remove("show"); }
-function submitRedeem(){
+
+async function submitRedeem(){
   const details=document.getElementById("redeemInput").value.trim();
   if(!selectedReward){ alertMsg("No reward selected."); return; }
   if(!details){ alertMsg("Please enter required details."); return; }
 
-  const msg="Redeem Request Demo\n\n"+
-    "Reward: "+selectedReward.name+"\n"+
-    "Cost: "+selectedReward.cost+" Points\n"+
-    "Type: "+selectedReward.type+"\n"+
-    "Details: "+details+"\n\n"+
-    "Real request save system will be added with database.";
+  try {
+    const data = await api("/redeem/create", {
+      telegram_id: telegramId,
+      reward_type: selectedReward.type,
+      reward_name: selectedReward.name,
+      cost_points: selectedReward.cost,
+      details: details
+    });
 
-  closeRedeemModal();
-  alertMsg(msg);
+    if (data.ok) {
+      points = Number(data.points || 0);
+      updateUI();
+      closeRedeemModal();
+      alertMsg("Redeem request submitted!\nStatus: Pending");
+    } else {
+      alertMsg(data.message || "Redeem failed.");
+    }
+  } catch(e) {
+    alertMsg("Redeem request failed. Try again.");
+  }
 }
+
 function showRules(){
   const msg="Rewards Hub Rules:\n\n"+
     "1. Earn points using available activities.\n"+
@@ -448,7 +516,7 @@ function contactSupport(){
   else{ window.open(SUPPORT_LINK,"_blank"); }
 }
 
-initUser();
+syncUser();
 </script>
 </body>
 </html>
