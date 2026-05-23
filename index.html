@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>REWARDS HUB</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://libtl.com/sdk.js" data-zone="11025198" data-sdk="show_11025198"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:#070713;color:#fff;font-family:Arial,sans-serif;overflow-x:hidden}button{font-family:inherit;cursor:pointer;border:0}button:disabled{opacity:.65;cursor:not-allowed}.app{max-width:480px;min-height:100vh;margin:auto;padding:16px 16px 96px;background:radial-gradient(circle at top left,rgba(124,58,237,.35),transparent 35%),radial-gradient(circle at top right,rgba(6,182,212,.25),transparent 35%),#070713}.page{display:none}.page.active{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.hero,.head,.profile{background:linear-gradient(145deg,#15152b,#24134a);border:1px solid rgba(255,255,255,.08);border-radius:30px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}.top{display:flex;justify-content:space-between;align-items:center}.hello{margin:0;color:#b9b9d6;font-size:14px}h1{margin:7px 0 0;font-size:28px;letter-spacing:1.5px}.logo{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4)}.balance{margin-top:18px;padding:24px;border-radius:26px;background:linear-gradient(135deg,#7c3aed,#09b6d8)}.balance p{margin:0}.balance h2{margin:8px 0;font-size:38px}.grid{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}.card,.earn,.reward,.menu{background:#151527;color:#fff;border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 30px rgba(0,0,0,.25)}.card{border-radius:24px;min-height:120px;text-align:left;padding:18px}.card .ic{display:block;font-size:26px;margin-bottom:12px}.card b{display:block}.card small{color:#9ea7ff}.promo{margin-top:16px;padding:18px;border-radius:26px;display:flex;justify-content:space-between;gap:12px;align-items:center;background:linear-gradient(135deg,#22223d,#361458);border:1px solid rgba(255,255,255,.08)}.promo p{margin:0;color:#67e8f9;font-size:13px}.promo h3{margin:6px 0 0;font-size:16px}.promo button,.earn button,.modal button{border-radius:16px;padding:12px 16px;color:#fff;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}.title{margin:22px 4px 12px}.mini{padding:18px;border-radius:22px}.mini span{font-size:24px}.mini small,.reward b,.menu b{color:#67e8f9}.head h2{margin:0;font-size:28px}.head p{color:#b9b9d6;margin-bottom:0}.earn{margin-top:14px;padding:16px;border-radius:24px;display:flex;justify-content:space-between;align-items:center}.left{display:flex;gap:14px;align-items:center}.ei{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:#232342;font-size:22px}.earn h3{margin:0}.earn p{margin:5px 0 0;color:#9ea7ff}.stats{margin-top:16px;padding:24px;border-radius:26px;background:linear-gradient(135deg,#7c3aed,#06b6d4)}.stats p{margin:0}.stats h2{margin:8px 0;font-size:34px}.cat{margin:22px 4px 10px;color:#a5b4fc;font-weight:800;font-size:14px;text-transform:uppercase}.reward{margin-top:10px;padding:16px;border-radius:20px;display:flex;justify-content:space-between}.profile{text-align:center;padding:28px}.avatar{width:80px;height:80px;margin:auto;border-radius:28px;display:grid;place-items:center;font-size:26px;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4)}.menu{margin-top:10px;padding:17px;border-radius:20px;display:flex;justify-content:space-between}.nav{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);width:min(448px,calc(100% - 28px));padding:10px;border-radius:28px;background:rgba(18,18,34,.96);display:grid;grid-template-columns:repeat(4,1fr);gap:6px;border:1px solid rgba(255,255,255,.08);z-index:50}.nav button{border-radius:20px;padding:10px 6px;background:transparent;color:#8585a3;font-size:18px}.nav span{display:block;font-size:11px;font-weight:700}.nav button.active{color:#fff;background:linear-gradient(135deg,rgba(124,58,237,.9),rgba(6,182,212,.65))}.modalWrap{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.68);padding:20px;align-items:center;justify-content:center}.modalWrap.show{display:flex}.modal{width:min(440px,100%);background:#121225;border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px}.modal input{width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:#1a1a2e;color:#fff}.mBtns{margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.cancel{background:#24243b!important}
+</style>
+</head>
+<body>
+<div class="app">
+<section class="page active" id="homePage">
+<div class="hero"><div class="top"><div><p class="hello" id="userName">Welcome Gamer 👋</p><h1>REWARDS HUB</h1></div><div class="logo">RH</div></div><div class="balance"><p>Your Balance</p><h2><span id="points">0</span> Points</h2><small>Earn points and redeem Free Fire rewards</small></div></div>
+<div class="grid"><button class="card" onclick="openPage('earnPage')"><span class="ic">🎬</span><b>Earn Points</b><small>Watch ads & collect points</small></button><button class="card" onclick="copyReferral()"><span class="ic">👥</span><b>Referral</b><small>Invite friends +3 points</small></button></div>
+<div class="promo"><div><p>Free Fire Rewards</p><h3>Diamonds, Weekly, Monthly, Dialog Reload & eZ Cash</h3></div><button onclick="openPage('redeemPage')">Redeem</button></div>
+<h3 class="title">Popular Rewards</h3><div class="grid"><div class="card mini"><span>💎</span><b>25 Diamonds</b><small>400 Points</small></div><div class="card mini"><span>🎟</span><b>Weekly Lite</b><small>500 Points</small></div></div>
+</section>
+
+<section class="page" id="earnPage">
+<div class="head"><h2>Earn Points</h2><p>Complete available activities and collect points.</p></div>
+<div class="earn"><div class="left"><div class="ei">⚡</div><div><h3>Rewarded Popup</h3><p>Reward: +1 Point</p></div></div><button id="popupAdBtn" onclick="watchPopupAd()">Start</button></div>
+<div class="earn"><div class="left"><div class="ei">📺</div><div><h3>Rewarded Interstitial</h3><p>Reward: +1 Point</p></div></div><button id="interAdBtn" onclick="watchInterstitialAd()">Start</button></div>
+<div class="earn"><div class="left"><div class="ei">📢</div><div><h3>Extra Auto Ad</h3><p>Reward: +1 Point</p></div></div><button id="inAppAdBtn" onclick="startInAppBonusAd(false)">Start</button></div>
+<div class="earn"><div class="left"><div class="ei">👥</div><div><h3>Invite Friend</h3><p>Referral bonus: +3 Points</p></div></div><button onclick="copyReferral()">Copy</button></div>
+<div class="stats"><p>Today Earned</p><h2><span id="todayPoints">0</span> Points</h2><small id="adStatus">Ad system checking...</small></div>
+</section>
+
+<section class="page" id="redeemPage">
+<div class="head"><h2>Redeem Rewards</h2><p>Select reward and submit your details.</p></div>
+<div class="cat">Free Fire Top-Up</div>
+<div class="reward" onclick="openRedeemModal('25 Diamonds',400,'Free Fire')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
+<div class="reward" onclick="openRedeemModal('50 Diamonds',800,'Free Fire')"><div>💎 50 Diamonds</div><b>800 Points</b></div>
+<div class="reward" onclick="openRedeemModal('100 Diamonds',1600,'Free Fire')"><div>💎 100 Diamonds</div><b>1600 Points</b></div>
+<div class="cat">Membership</div>
+<div class="reward" onclick="openRedeemModal('Weekly Lite',500,'Membership')"><div>🎟 Weekly Lite</div><b>500 Points</b></div>
+<div class="reward" onclick="openRedeemModal('Weekly',2500,'Membership')"><div>🔥 Weekly</div><b>2500 Points</b></div>
+<div class="reward" onclick="openRedeemModal('Monthly',10000,'Membership')"><div>👑 Monthly</div><b>10000 Points</b></div>
+<div class="cat">Cash / Reload</div>
+<div class="reward" onclick="openRedeemModal('Dialog Reload Rs.100',450,'Reload')"><div>📱 Dialog Reload Rs.100</div><b>450 Points</b></div>
+<div class="reward" onclick="openRedeemModal('eZ Cash Rs.100',530,'eZ Cash')"><div>💸 eZ Cash Rs.100</div><b>530 Points</b></div>
+</section>
+
+<section class="page" id="profilePage">
+<div class="profile"><div class="avatar" id="avatarText">RH</div><h2 id="profileName">Rewards Hub User</h2><p>Your gaming rewards account</p></div>
+<div class="menu"><span>💰 Balance</span><b><span id="profilePoints">0</span> Points</b></div>
+<div class="menu"><span>🎬 Today Earned</span><b><span id="profileTodayPoints">0</span> Points</b></div>
+<div class="menu" onclick="copyReferral()"><span>👥 Referral Link</span><b>Copy</b></div>
+<div class="menu" onclick="showRules()"><span>📜 Rules</span><b>View</b></div>
+<div class="menu" onclick="contactSupport()"><span>💬 Support</span><b>Telegram</b></div>
+</section>
+
+<nav class="nav"><button class="navBtn active" onclick="openPage('homePage',this)">🏠<span>Home</span></button><button class="navBtn" onclick="openPage('earnPage',this)">🎬<span>Earn</span></button><button class="navBtn" onclick="openPage('redeemPage',this)">💎<span>Redeem</span></button><button class="navBtn" onclick="openPage('profilePage',this)">👤<span>Profile</span></button></nav>
+</div>
+
+<div class="modalWrap" id="redeemModal"><div class="modal"><h2 id="modalRewardName">Redeem</h2><p id="modalRewardCost">Cost: 0 Points</p><input id="redeemInput" type="text" placeholder="Enter details"><div class="mBtns"><button class="cancel" onclick="closeRedeemModal()">Cancel</button><button onclick="submitRedeem()">Submit</button></div></div></div>
+
+<script>
+const tg=window.Telegram&&window.Telegram.WebApp?window.Telegram.WebApp:null;if(tg){tg.ready();tg.expand();}
+const BOT_USERNAME="RewardsHubSLBot", SUPPORT_LINK="https://t.me/blacklionff2000", AD_COOLDOWN_SECONDS=30;
+const user=tg&&tg.initDataUnsafe?tg.initDataUnsafe.user:null;
+let points=Number(localStorage.getItem("rh_points")||0),todayPoints=Number(localStorage.getItem("rh_today_points")||0);
+let popupBusy=false,interBusy=false,inAppBusy=false,selectedReward=null;
+
+function alertMsg(m){tg&&tg.showAlert?tg.showAlert(m):alert(m)}
+function setAdStatus(t){let e=document.getElementById("adStatus");if(e)e.innerText=t}
+function updateUI(){points=Number(points);todayPoints=Number(todayPoints);document.getElementById("points").innerText=points;document.getElementById("profilePoints").innerText=points;document.getElementById("todayPoints").innerText=todayPoints;document.getElementById("profileTodayPoints").innerText=todayPoints}
+function initUser(){if(user){let n=user.first_name||"Gamer";document.getElementById("userName").innerText="Welcome "+n+" 👋";document.getElementById("profileName").innerText=n;document.getElementById("avatarText").innerText=n.substring(0,2).toUpperCase()}updateUI();setTimeout(()=>{typeof window.show_11025198==="function"?setAdStatus("Ad system ready."):setAdStatus("Ad SDK not loaded. Close and open app again.")},2500)}
+function openPage(id,btn){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".navBtn").forEach(b=>b.classList.remove("active"));if(btn)btn.classList.add("active");else{let map={homePage:0,earnPage:1,redeemPage:2,profilePage:3};document.querySelectorAll(".navBtn")[map[id]].classList.add("active")}scrollTo({top:0,behavior:"smooth"})}
+function addPointReward(txt){points++;todayPoints++;localStorage.setItem("rh_points",points);localStorage.setItem("rh_today_points",todayPoints);updateUI();setAdStatus(txt||"Reward added.");alertMsg("+1 Point Added")}
+function setButtonLoading(id,text){let b=document.getElementById(id);if(!b)return;b.disabled=true;b.innerText=text||"Opening..."}
+function resetButton(id){let b=document.getElementById(id);if(!b)return;b.disabled=false;b.innerText="Start"}
+function startCountdown(id,sec){let b=document.getElementById(id);if(!b)return;let r=sec;b.disabled=true;b.innerText=r+"s";let timer=setInterval(()=>{r--;if(r<=0){clearInterval(timer);b.disabled=false;b.innerText="Start"}else b.innerText=r+"s"},1000)}
+
+function watchPopupAd(){if(popupBusy)return alertMsg("Popup Ad is loading. Please wait.");if(typeof window.show_11025198!=="function")return setAdStatus("Ad SDK not loaded."),alertMsg("Ad not ready. Close app and open again.");popupBusy=true;setButtonLoading("popupAdBtn","Opening...");setAdStatus("Opening Rewarded Popup...");show_11025198("pop").then(()=>{addPointReward("Popup Ad reward added.");startCountdown("popupAdBtn",AD_COOLDOWN_SECONDS)}).catch(()=>{setAdStatus("Popup Ad not available.");alertMsg("Popup Ad not available now. Try again later.");resetButton("popupAdBtn")}).finally(()=>popupBusy=false)}
+
+function watchInterstitialAd(){if(interBusy)return alertMsg("Interstitial Ad is loading. Please wait.");if(typeof window.show_11025198!=="function")return setAdStatus("Ad SDK not loaded."),alertMsg("Ad not ready. Close app and open again.");interBusy=true;setButtonLoading("interAdBtn","Opening...");setAdStatus("Opening Rewarded Interstitial...");let finished=false;let resetTimer=setTimeout(()=>{if(finished)return;finished=true;interBusy=false;resetButton("interAdBtn");setAdStatus("Interstitial timeout. Try Popup Ad.");alertMsg("Interstitial Ad not available. Try Popup Ad.")},20000);show_11025198().then(()=>{if(finished)return;finished=true;clearTimeout(resetTimer);addPointReward("Interstitial Ad reward added.");startCountdown("interAdBtn",AD_COOLDOWN_SECONDS)}).catch(()=>{if(finished)return;finished=true;clearTimeout(resetTimer);setAdStatus("Interstitial Ad not available.");alertMsg("Interstitial Ad not available now. Try Popup Ad.");resetButton("interAdBtn")}).finally(()=>interBusy=false)}
+
+function startInAppBonusAd(autoMode){if(inAppBusy){if(!autoMode)alertMsg("Extra Auto Ad is loading. Please wait.");return}if(typeof window.show_11025198!=="function"){setAdStatus("In-App SDK not loaded.");if(!autoMode)alertMsg("Ad not ready. Close app and open again.");return}inAppBusy=true;setButtonLoading("inAppAdBtn","Opening...");setAdStatus("Opening Extra Auto Ad...");try{show_11025198({type:"inApp",inAppSettings:{frequency:1,capping:.01,interval:5,timeout:3,everyPage:false}});setTimeout(()=>{addPointReward("Extra Auto Ad reward added.");startCountdown("inAppAdBtn",AD_COOLDOWN_SECONDS);inAppBusy=false},8000)}catch(e){inAppBusy=false;resetButton("inAppAdBtn");setAdStatus("Extra Auto Ad failed.");if(!autoMode)alertMsg("Extra Auto Ad failed.")}}
+
+function copyReferral(){let id=user&&user.id?user.id:"demo",link="https://t.me/"+BOT_USERNAME+"?start=ref_"+id;if(navigator.clipboard)navigator.clipboard.writeText(link).then(()=>alertMsg("Referral link copied!\nInvite friends and earn +3 points.")).catch(()=>alertMsg("Referral Link:\n"+link));else alertMsg("Referral Link:\n"+link)}
+function openRedeemModal(name,cost,type){if(points<cost)return alertMsg("Not enough points.\nNeed "+(cost-points)+" more points.");selectedReward={name,cost,type};document.getElementById("modalRewardName").innerText=name;document.getElementById("modalRewardCost").innerText="Cost: "+cost+" Points";let input=document.getElementById("redeemInput");input.placeholder=(type==="Free Fire"||type==="Membership")?"Enter Free Fire UID":"Enter phone number";input.value="";document.getElementById("redeemModal").classList.add("show")}
+function closeRedeemModal(){document.getElementById("redeemModal").classList.remove("show")}
+function submitRedeem(){let d=document.getElementById("redeemInput").value.trim();if(!selectedReward)return alertMsg("No reward selected.");if(!d)return alertMsg("Please enter required details.");let msg="Redeem Request Demo\n\nReward: "+selectedReward.name+"\nCost: "+selectedReward.cost+" Points\nType: "+selectedReward.type+"\nDetails: "+d+"\n\nReal request save system will be added with database.";closeRedeemModal();alertMsg(msg)}
+function showRules(){alertMsg("Rewards Hub Rules:\n\n1. Earn points using available activities.\n2. Redeem requests are manually reviewed.\n3. Fake activity or duplicate accounts may be rejected.\n4. Reward delivery time: 24 - 48 hours.\n5. Referral bonus: +3 Points.\n6. Ad reward: +1 Point.")}
+function contactSupport(){tg&&tg.openTelegramLink?tg.openTelegramLink(SUPPORT_LINK):open(SUPPORT_LINK,"_blank")}
+initUser();
+</script>
+</body>
+</html>
