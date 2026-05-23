@@ -16,7 +16,7 @@
     .rh-app{max-width:480px;min-height:100vh;margin:auto;padding:16px 16px 100px;background:radial-gradient(circle at top left,rgba(124,58,237,.36),transparent 34%),radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),#070713}
     .page{display:none;animation:fadeIn .25s ease}.page.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .hero,.page-head,.profile-card,.rules-box{background:linear-gradient(145deg,#15152b,#24134a);border:1px solid rgba(255,255,255,.08);border-radius:30px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+    .hero,.page-head,.profile-card,.rules-box,.referral-box{background:linear-gradient(145deg,#15152b,#24134a);border:1px solid rgba(255,255,255,.08);border-radius:30px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
     .hero-top{display:flex;align-items:center;justify-content:space-between}.hello{margin:0;color:#b9b9d6;font-size:14px}
     .hero h1{margin:7px 0 0;font-size:28px;letter-spacing:1.5px}
     .logo{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4);box-shadow:0 0 25px rgba(6,182,212,.35)}
@@ -29,7 +29,7 @@
     .quick-card small,.mini-card small{display:block;margin-top:6px;color:#9ea7ff}
     .promo-card{margin-top:16px;padding:18px;border-radius:26px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#22223d,#361458);border:1px solid rgba(255,255,255,.08)}
     .promo-card p{margin:0;color:#67e8f9;font-size:13px}.promo-card h3{margin:6px 0 0;font-size:16px;max-width:250px}
-    .promo-card button,.earn-card button,.modal-buttons button,.primary-btn{border:0;border-radius:16px;padding:12px 16px;color:white;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
+    .promo-card button,.earn-card button,.modal-buttons button,.primary-btn,.copy-btn{border:0;border-radius:16px;padding:12px 16px;color:white;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
     .title{margin:22px 4px 12px}.mini-card{padding:18px;border-radius:22px}.mini-card span{font-size:24px}
     .mini-card small,.reward-card b,.menu-item b{color:#67e8f9}
     .page-head h2{margin:0;font-size:28px}.page-head p{margin-bottom:0;color:#b9b9d6}
@@ -57,7 +57,10 @@
     .history-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
     .history-details{margin-top:8px;color:#b9b9d6;font-size:13px;white-space:pre-line;line-height:1.55}
     .history-date{margin-top:8px;color:#8585a3;font-size:12px}
-    .rules-box{margin-top:16px}.rules-box h3{margin:0 0 10px}.rules-box p{color:#b9b9d6;line-height:1.6;font-size:14px}.danger{color:#ff9b9b!important;font-weight:700}
+    .rules-box,.referral-box{margin-top:16px}.rules-box h3,.referral-box h3{margin:0 0 10px}
+    .rules-box p,.referral-box p{color:#b9b9d6;line-height:1.6;font-size:14px}.danger{color:#ff9b9b!important;font-weight:700}
+    .ref-link{margin-top:12px;padding:14px;border-radius:16px;background:#0d0d1b;border:1px solid rgba(255,255,255,.08);color:#67e8f9;font-size:12px;word-break:break-all;line-height:1.5}
+    .ref-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
   </style>
 </head>
 
@@ -78,17 +81,17 @@
 
     <div class="quick-grid">
       <button onclick="openPage('earnPage')" class="quick-card"><span class="icon">🎬</span><b>Earn Points</b><small>Ads & channel rewards</small></button>
-      <button onclick="copyReferral()" class="quick-card"><span class="icon">👥</span><b>Referral</b><small>Invite friends +3 points</small></button>
+      <button onclick="openPage('profilePage')" class="quick-card"><span class="icon">👥</span><b>Referral</b><small>Invite friends +3 points</small></button>
     </div>
 
     <div class="promo-card">
-      <div><p>Official Channel</p><h3>Join our Telegram channel for updates and rewards</h3></div>
+      <div><p>Official Channel</p><h3>Join @RewardsHubSL for latest updates and rewards</h3></div>
       <button onclick="joinChannel()">Join</button>
     </div>
 
     <div class="promo-card">
       <div><p>Free Fire Rewards</p><h3>Diamonds, Weekly, Monthly, Dialog Reload & eZ Cash</h3></div>
-      <button onclick="openPage('redeemPage')">Redeem</button>
+      <button onclick="openPage('redeemPage')">Withdraw</button>
     </div>
 
     <h3 class="title">Popular Rewards</h3>
@@ -100,7 +103,7 @@
     <div class="rules-box">
       <h3>⚠️ Important Rules</h3>
       <p class="danger">If you cheat, use fake accounts, exploit ads, or submit false details, your account will be permanently banned.</p>
-      <p>All redeem requests are manually reviewed. Wrong Free Fire UID, Dialog number, or eZ Cash number may delay or reject your request.</p>
+      <p>All withdraw requests are manually reviewed. Wrong Free Fire UID, Dialog number, or eZ Cash number may delay or reject your request.</p>
     </div>
   </section>
 
@@ -134,7 +137,7 @@
 
     <div class="earn-card">
       <div class="earn-left"><div class="earn-icon">👥</div><div><h3>Invite Friend</h3><p>Referral bonus: +3 Points</p></div></div>
-      <button onclick="copyReferral()">Copy</button>
+      <button onclick="openPage('profilePage')">Open</button>
     </div>
 
     <div class="stats-card">
@@ -174,13 +177,23 @@
       <h2 id="profileName">Rewards Hub User</h2>
       <p>Your gaming rewards account</p>
     </div>
+
+    <div class="referral-box">
+      <h3>👥 Invite Friends & Earn</h3>
+      <p>Share your referral link with friends. When a new user opens the app using your link, you earn <b style="color:#67e8f9;">+3 Points</b>.</p>
+      <p>Rewards Hub lets users earn points by watching ads, joining tasks, inviting friends, and redeeming Free Fire diamonds, memberships, Dialog reloads, and eZ Cash rewards.</p>
+      <div class="ref-link" id="referralLinkBox">Loading referral link...</div>
+      <div class="ref-actions">
+        <button class="copy-btn" onclick="copyReferral()">Copy Link</button>
+        <button class="copy-btn" onclick="shareReferral()">Share</button>
+      </div>
+    </div>
+
     <div class="menu-list">
       <div class="menu-item"><span>💰 Balance</span><b><span id="profilePoints">0</span> Points</b></div>
       <div class="menu-item"><span>🎬 Today Earned</span><b><span id="profileTodayPoints">0</span> Points</b></div>
       <div class="menu-item" onclick="joinChannel()"><span>📢 Telegram Channel</span><b>@RewardsHubSL</b></div>
-      <div class="menu-item" onclick="copyReferral()"><span>👥 Referral Link</span><b>Copy</b></div>
       <div class="menu-item" onclick="showRules()"><span>📜 Rules</span><b>View</b></div>
-      <div class="menu-item" onclick="contactSupport()"><span>💬 Support</span><b>Telegram</b></div>
     </div>
   </section>
 
@@ -189,7 +202,7 @@
     <button class="nav-btn" onclick="openPage('earnPage',this)">🎬<span>Earn</span></button>
     <button class="nav-btn" onclick="openPage('redeemPage',this)">💎<span>Withdraw</span></button>
     <button class="nav-btn" onclick="openPage('historyPage',this);loadWithdrawHistory();">📋<span>History</span></button>
-    <button class="nav-btn" onclick="openPage('profilePage',this)">👤<span>Profile</span></button>
+    <button class="nav-btn" onclick="openPage('profilePage',this);renderReferralLink();">👤<span>Profile</span></button>
   </nav>
 </div>
 
@@ -213,7 +226,6 @@ if (tg) { tg.ready(); tg.expand(); }
 const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
 const BOT_USERNAME = "RewardsHubSLBot";
 const CHANNEL_USERNAME = "RewardsHubSL";
-const SUPPORT_LINK = "https://t.me/blacklionff2000";
 const AD_COOLDOWN_SECONDS = 30;
 const REWARD_FALLBACK_MS = 12000;
 
@@ -244,6 +256,15 @@ async function api(path, data) {
   return await res.json();
 }
 
+function getReferralLink() {
+  return "https://t.me/" + BOT_USERNAME + "?startapp=ref_" + telegramId;
+}
+
+function renderReferralLink() {
+  const box = document.getElementById("referralLinkBox");
+  if (box) box.innerText = getReferralLink();
+}
+
 function getStartReferral() {
   try {
     const startParam = tg && tg.initDataUnsafe ? tg.initDataUnsafe.start_param : "";
@@ -257,6 +278,7 @@ function updateUI(){
   document.getElementById("profilePoints").innerText=points;
   document.getElementById("todayPoints").innerText=todayPoints;
   document.getElementById("profileTodayPoints").innerText=todayPoints;
+  renderReferralLink();
 }
 
 async function syncUser(){
@@ -271,16 +293,22 @@ async function syncUser(){
   }
 
   try {
-    const data = await api("/user/sync", {telegram_id: telegramId, first_name: firstName, username: username, invited_by: invitedBy});
+    const data = await api("/user/sync", {
+      telegram_id: telegramId,
+      first_name: firstName,
+      username: username,
+      invited_by: invitedBy
+    });
+
     if (data.ok && data.user) {
-      if (data.user.is_banned) {
-        alertMsg("Your account has been restricted. Contact support.");
-      }
+      if (data.user.is_banned) alertMsg("Your account has been restricted. Contact support.");
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
       setAdStatus("Account synced. Ready.");
-    } else setAdStatus(data.message || "Sync failed.");
+    } else {
+      setAdStatus(data.message || "Sync failed.");
+    }
   } catch(e) {
     setAdStatus("Backend sync failed.");
   }
@@ -295,12 +323,19 @@ function openPage(pageId,btn){
     const map={homePage:0,earnPage:1,redeemPage:2,historyPage:3,profilePage:4};
     document.querySelectorAll(".nav-btn")[map[pageId]].classList.add("active");
   }
+  if(pageId === "profilePage") renderReferralLink();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
 async function addPointReward(statusText, type){
   try {
-    const data = await api("/points/add", {telegram_id: telegramId, points: 1, type: type || "ad_reward", description: statusText || "Ad reward"});
+    const data = await api("/points/add", {
+      telegram_id: telegramId,
+      points: 1,
+      type: type || "ad_reward",
+      description: statusText || "Ad reward"
+    });
+
     if (data.ok && data.user) {
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
@@ -308,7 +343,9 @@ async function addPointReward(statusText, type){
       setAdStatus(statusText || "Reward added.");
       alertMsg("+1 Point Added");
     } else alertMsg(data.message || "Reward failed.");
-  } catch(e) { alertMsg("Reward save failed. Try again."); }
+  } catch(e) {
+    alertMsg("Reward save failed. Try again.");
+  }
 }
 
 function setButtonLoading(buttonId,text){ const btn=document.getElementById(buttonId); if(btn){btn.disabled=true;btn.innerText=text||"Opening...";} }
@@ -335,7 +372,7 @@ async function verifyChannelJoin(){
       updateUI();
       alertMsg(data.message || "+4 Points added.");
       setAdStatus(data.message || "Channel verified.");
-      document.getElementById("verifyChannelBtn").innerText = data.already_rewarded ? "Claimed" : "Claimed";
+      document.getElementById("verifyChannelBtn").innerText = "Claimed";
       document.getElementById("verifyChannelBtn").disabled = true;
     } else {
       resetButton("verifyChannelBtn");
@@ -378,15 +415,36 @@ function startInAppBonusAd(autoMode){
   setTimeout(finish, REWARD_FALLBACK_MS);
 }
 
-/* Referral fixed with startapp */
+/* Referral link visible + copy + share */
 function copyReferral(){
-  const link="https://t.me/"+BOT_USERNAME+"?startapp=ref_"+telegramId;
+  const link = getReferralLink();
   if(navigator.clipboard){
-    navigator.clipboard.writeText(link).then(()=>alertMsg("Referral link copied!\nInvite friends and earn +3 points.")).catch(()=>alertMsg("Referral Link:\n"+link));
-  }else alertMsg("Referral Link:\n"+link);
+    navigator.clipboard.writeText(link)
+      .then(()=>alertMsg("Referral link copied!\nInvite friends and earn +3 points."))
+      .catch(()=>alertMsg("Referral Link:\n"+link));
+  } else {
+    alertMsg("Referral Link:\n"+link);
+  }
 }
 
-/* Pro Redeem */
+function shareReferral(){
+  const link = getReferralLink();
+  const text =
+    "🎁 Rewards Hub\n\n" +
+    "Watch ads, collect points, invite friends, and redeem Free Fire diamonds, memberships, Dialog reloads, and eZ Cash rewards.\n\n" +
+    "Join using my referral link:\n" + link;
+
+  if (tg && tg.openTelegramLink) {
+    const shareUrl = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(text);
+    tg.openTelegramLink(shareUrl);
+  } else if (navigator.share) {
+    navigator.share({ title: "Rewards Hub", text: text, url: link });
+  } else {
+    copyReferral();
+  }
+}
+
+/* Pro Withdraw */
 function openRedeemModal(name,cost,type){
   if(points<cost){ alertMsg("Not enough points.\nNeed "+(cost-points)+" more points."); return; }
   selectedReward={name:name,cost:cost,type:type};
@@ -451,7 +509,13 @@ async function submitRedeem(){
   const details = collectRedeemDetails();
   if(!details){ alertMsg("Please fill all required details."); return; }
   try {
-    const data = await api("/redeem/create", {telegram_id: telegramId,reward_type:selectedReward.type,reward_name:selectedReward.name,cost_points:selectedReward.cost,details:details});
+    const data = await api("/redeem/create", {
+      telegram_id: telegramId,
+      reward_type:selectedReward.type,
+      reward_name:selectedReward.name,
+      cost_points:selectedReward.cost,
+      details:details
+    });
     if(data.ok){
       points = Number(data.points || 0);
       updateUI();
@@ -483,12 +547,20 @@ async function loadWithdrawHistory(){
     }
 
     box.innerHTML = data.requests.map(function(item){
+      let statusText = String(item.status || "pending").toLowerCase();
       let statusIcon = "🕒";
       let statusColor = "#ffdd7a";
-      let statusText = item.status || "pending";
 
-      if(statusText === "paid"){ statusIcon = "✅"; statusColor = "#67e8f9"; }
-      if(statusText === "rejected"){ statusIcon = "❌"; statusColor = "#ff8a8a"; }
+      if(statusText === "paid" || statusText === "done" || statusText === "completed"){
+        statusIcon = "✅";
+        statusColor = "#67e8f9";
+        statusText = "paid";
+      }
+
+      if(statusText === "rejected"){
+        statusIcon = "❌";
+        statusColor = "#ff8a8a";
+      }
 
       return `
         <div class="history-card">
@@ -512,10 +584,6 @@ ${item.details}${item.admin_note ? "\nAdmin Note: " + item.admin_note : ""}</div
 
 function showRules(){
   alertMsg("Rewards Hub Rules:\n\n1. Earn points using available activities.\n2. Withdraw requests are manually reviewed.\n3. If you cheat, use fake accounts, exploit ads, or submit false details, your account will be permanently banned.\n4. Reward delivery time: 24 - 48 hours.\n5. Referral bonus: +3 Points.\n6. Channel join reward: +4 Points.");
-}
-function contactSupport(){
-  if(tg && tg.openTelegramLink) tg.openTelegramLink(SUPPORT_LINK);
-  else window.open(SUPPORT_LINK,"_blank");
 }
 
 syncUser();
