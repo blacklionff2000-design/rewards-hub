@@ -3,219 +3,443 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>REWARDS HUB</title>
+  <title>Rewards Hub</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://libtl.com/sdk.js" data-zone="11025198" data-sdk="show_11025198"></script>
+  <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html,body{margin:0;width:100%;min-height:100%;overflow-x:hidden;background:#070713;color:#fff;font-family:Arial,sans-serif}
     button{cursor:pointer;font-family:inherit}
-    button:disabled{opacity:.65;cursor:not-allowed}
-    .rh-app{max-width:480px;min-height:100vh;margin:auto;padding:16px 16px 100px;background:radial-gradient(circle at top left,rgba(124,58,237,.36),transparent 34%),radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),#070713}
-    .page{display:none;animation:fadeIn .25s ease}.page.active{display:block}
+    button:disabled{opacity:.6;cursor:not-allowed}
+
+    .app{
+      max-width:500px;
+      min-height:100vh;
+      margin:auto;
+      padding:16px 16px 104px;
+      background:
+        radial-gradient(circle at top left,rgba(124,58,237,.34),transparent 34%),
+        radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),
+        #070713;
+    }
+
+    .page{display:none;animation:fadeIn .22s ease}
+    .page.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .hero,.page-head,.profile-card,.rules-box,.referral-box{background:linear-gradient(145deg,#15152b,#24134a);border:1px solid rgba(255,255,255,.08);border-radius:30px;padding:18px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
-    .hero-top{display:flex;align-items:center;justify-content:space-between}.hello{margin:0;color:#b9b9d6;font-size:14px}
-    .hero h1{margin:7px 0 0;font-size:28px;letter-spacing:1.5px}
-    .logo{width:56px;height:56px;border-radius:18px;display:grid;place-items:center;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4);box-shadow:0 0 25px rgba(6,182,212,.35)}
-    .balance-box{margin-top:18px;padding:24px;border-radius:26px;background:linear-gradient(135deg,#7c3aed,#09b6d8)}
-    .balance-box p{margin:0;opacity:.9}.balance-box h2{margin:8px 0;font-size:38px}.balance-box small{color:#eef}
-    .quick-grid,.mini-rewards{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .quick-card,.mini-card,.earn-card,.reward-card,.menu-item,.history-card{border:1px solid rgba(255,255,255,.08);background:#151527;color:white;box-shadow:0 12px 30px rgba(0,0,0,.25)}
-    .quick-card{text-align:left;padding:18px;min-height:120px;border-radius:24px;border:none}
-    .quick-card .icon{display:block;font-size:26px;margin-bottom:12px}.quick-card b,.mini-card b{display:block;font-size:16px}
-    .quick-card small,.mini-card small{display:block;margin-top:6px;color:#9ea7ff}
-    .promo-card{margin-top:16px;padding:18px;border-radius:26px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#22223d,#361458);border:1px solid rgba(255,255,255,.08)}
-    .promo-card p{margin:0;color:#67e8f9;font-size:13px}.promo-card h3{margin:6px 0 0;font-size:16px;max-width:250px}
-    .promo-card button,.earn-card button,.modal-buttons button,.primary-btn,.copy-btn{border:0;border-radius:16px;padding:12px 16px;color:white;font-weight:800;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
-    .title{margin:22px 4px 12px}.mini-card{padding:18px;border-radius:22px}.mini-card span{font-size:24px}
-    .mini-card small,.reward-card b,.menu-item b{color:#67e8f9}
-    .page-head h2{margin:0;font-size:28px}.page-head p{margin-bottom:0;color:#b9b9d6}
-    .earn-card{margin-top:14px;padding:16px;border-radius:24px;display:flex;align-items:center;justify-content:space-between}
-    .earn-left{display:flex;align-items:center;gap:14px}.earn-icon{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:#232342;font-size:22px;flex-shrink:0}
-    .earn-card h3{margin:0}.earn-card p{margin:5px 0 0;color:#9ea7ff}
-    .stats-card{margin-top:16px;padding:24px;border-radius:26px;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
-    .stats-card p{margin:0}.stats-card h2{margin:8px 0;font-size:34px}
-    .category-title{margin:22px 4px 10px;color:#a5b4fc;font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.8px}
-    .reward-card{margin-top:10px;padding:16px;border-radius:20px;display:flex;align-items:center;justify-content:space-between}.reward-card div{font-weight:700}
-    .profile-card{text-align:center;padding:28px}.avatar{width:80px;height:80px;margin:auto;border-radius:28px;display:grid;place-items:center;font-size:26px;font-weight:900;background:linear-gradient(135deg,#7c3aed,#06b6d4)}
-    .profile-card h2{margin:14px 0 4px}.profile-card p{margin:0;color:#b9b9d6}.menu-list{margin-top:16px}
-    .menu-item{margin-top:10px;padding:17px;border-radius:20px;display:flex;align-items:center;justify-content:space-between}
-    .bottom-nav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(448px,calc(100% - 22px));padding:8px;border-radius:26px;background:rgba(18,18,34,.96);backdrop-filter:blur(12px);display:grid;grid-template-columns:repeat(5,1fr);gap:4px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:50}
-    .nav-btn{border:0;border-radius:18px;padding:9px 4px;background:transparent;color:#8585a3;font-size:17px}.nav-btn span{display:block;margin-top:3px;font-size:10px;font-weight:700}
-    .nav-btn.active{color:white;background:linear-gradient(135deg,rgba(124,58,237,.9),rgba(6,182,212,.65))}
-    .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);padding:18px;align-items:center;justify-content:center}.modal.show{display:flex}
-    .modal-box{width:min(440px,100%);max-height:88vh;overflow:auto;background:#121225;border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px;color:white}
-    .modal-box h2{margin:0 0 8px}.modal-box p{color:#a5b4fc}
-    .field{margin-top:12px}.field label{display:block;font-size:13px;color:#b9b9d6;margin:0 0 6px}
-    .modal-box input{width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);outline:none;background:#1a1a2e;color:white}
-    .hint{font-size:12px;color:#ffdd7a;margin-top:12px;line-height:1.5}
-    .modal-buttons{margin-top:16px;display:grid;grid-template-columns:1fr 1fr;gap:10px}.cancel-btn{background:#24243b!important}
-    .history-card{margin-top:12px;padding:16px;border-radius:20px}
-    .history-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
-    .history-details{margin-top:8px;color:#b9b9d6;font-size:13px;white-space:pre-line;line-height:1.55}
-    .history-date{margin-top:8px;color:#8585a3;font-size:12px}
-    .rules-box,.referral-box{margin-top:16px}.rules-box h3,.referral-box h3{margin:0 0 10px}
-    .rules-box p,.referral-box p{color:#b9b9d6;line-height:1.6;font-size:14px}.danger{color:#ff9b9b!important;font-weight:700}
-    .ref-link{margin-top:12px;padding:14px;border-radius:16px;background:#0d0d1b;border:1px solid rgba(255,255,255,.08);color:#67e8f9;font-size:12px;word-break:break-all;line-height:1.5}
+
+    .hero,.page-head,.panel,.ref-card,.rules-card{
+      background:rgba(21,21,39,.94);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:28px;
+      box-shadow:0 18px 48px rgba(0,0,0,.35);
+    }
+
+    .hero{
+      padding:20px;
+      background:linear-gradient(145deg,rgba(30,23,67,.96),rgba(12,78,100,.58));
+    }
+
+    .hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .hello{margin:0;color:#b9b9d6;font-size:13px}
+    .hero h1{margin:7px 0 0;font-size:30px;letter-spacing:1px}
+
+    .logo{
+      width:58px;height:58px;border-radius:20px;
+      display:grid;place-items:center;
+      font-weight:900;
+      background:linear-gradient(135deg,#7c3aed,#06b6d4);
+      box-shadow:0 0 30px rgba(6,182,212,.32);
+    }
+
+    .balance{
+      margin-top:18px;
+      border-radius:26px;
+      padding:24px;
+      background:linear-gradient(135deg,#7c3aed,#09b6d8);
+    }
+
+    .balance p{margin:0;opacity:.9}
+    .balance h2{font-size:40px;margin:8px 0}
+    .balance small{color:#eef}
+
+    .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+    .stat{padding:14px;border-radius:20px;background:rgba(255,255,255,.09)}
+    .stat b{display:block;font-size:20px}
+    .stat span{font-size:12px;color:#d6d6ff}
+
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+    .quick{
+      min-height:116px;
+      border:0;
+      border-radius:24px;
+      background:#151527;
+      color:#fff;
+      text-align:left;
+      padding:18px;
+      box-shadow:0 12px 30px rgba(0,0,0,.22);
+    }
+    .quick span{display:block;font-size:26px;margin-bottom:12px}
+    .quick b{display:block}
+    .quick small{display:block;color:#9ea7ff;margin-top:6px}
+
+    .page-head{padding:18px;margin-bottom:14px}
+    .page-head h2{margin:0;font-size:28px}
+    .page-head p{color:#b9b9d6;margin-bottom:0}
+
+    .section-title{
+      margin:22px 4px 10px;
+      color:#a5b4fc;
+      font-weight:900;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.9px;
+    }
+
+    .task-card,.reward-card,.history-card,.menu-item{
+      background:#151527;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 12px 30px rgba(0,0,0,.23);
+    }
+
+    .task-card{
+      margin-top:12px;
+      padding:16px;
+      border-radius:24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    .task-left{display:flex;align-items:center;gap:14px}
+    .task-icon{
+      width:54px;height:54px;border-radius:18px;
+      display:grid;place-items:center;
+      background:#232342;
+      font-size:24px;
+    }
+
+    .task-card h3{margin:0}
+    .task-card p{margin:5px 0 0;color:#9ea7ff;font-size:14px}
+
+    .btn{
+      border:0;
+      border-radius:16px;
+      padding:12px 16px;
+      min-width:92px;
+      color:#fff;
+      font-weight:900;
+      background:linear-gradient(135deg,#7c3aed,#06b6d4);
+    }
+
+    .btn.gray{background:#24243b}
+    .btn.full{width:100%;margin-top:14px}
+
+    .reward-card{
+      margin-top:10px;
+      padding:16px;
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .reward-card b{color:#67e8f9}
+
+    .ref-card,.rules-card{padding:18px;margin-top:16px}
+    .ref-card h3,.rules-card h3{margin:0 0 10px}
+    .ref-card p,.rules-card p{font-size:14px;line-height:1.6;color:#b9b9d6}
+    .danger{color:#ff9b9b!important;font-weight:800}
+
+    .ref-link{
+      margin-top:12px;
+      padding:14px;
+      border-radius:16px;
+      background:#0d0d1b;
+      border:1px solid rgba(255,255,255,.08);
+      color:#67e8f9;
+      font-size:12px;
+      word-break:break-all;
+      line-height:1.5;
+    }
+
     .ref-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+
+    .profile-card{padding:24px;text-align:center}
+    .avatar{
+      width:78px;height:78px;border-radius:26px;
+      margin:auto;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,#7c3aed,#06b6d4);
+      font-weight:900;
+      font-size:26px;
+    }
+    .profile-card h2{margin:14px 0 4px}
+    .profile-card p{margin:0;color:#b9b9d6}
+
+    .menu-list{margin-top:16px}
+    .menu-item{
+      margin-top:10px;
+      padding:17px;
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .menu-item b{color:#67e8f9}
+
+    .history-card{margin-top:12px;padding:16px;border-radius:20px}
+    .history-top{display:flex;justify-content:space-between;gap:10px}
+    .history-details{
+      margin-top:8px;
+      color:#b9b9d6;
+      font-size:13px;
+      white-space:pre-line;
+      line-height:1.55;
+    }
+    .history-date{margin-top:8px;color:#8585a3;font-size:12px}
+
+    .bottom-nav{
+      position:fixed;
+      left:50%;
+      bottom:12px;
+      transform:translateX(-50%);
+      width:min(468px,calc(100% - 22px));
+      padding:8px;
+      border-radius:26px;
+      background:rgba(18,18,34,.96);
+      backdrop-filter:blur(12px);
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:4px;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 20px 50px rgba(0,0,0,.5);
+      z-index:50;
+    }
+
+    .nav{
+      border:0;
+      border-radius:18px;
+      padding:9px 4px;
+      background:transparent;
+      color:#8585a3;
+      font-size:17px;
+    }
+    .nav span{display:block;margin-top:3px;font-size:10px;font-weight:800}
+    .nav.active{color:#fff;background:linear-gradient(135deg,rgba(124,58,237,.9),rgba(6,182,212,.65))}
+
+    .modal{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:100;
+      background:rgba(0,0,0,.72);
+      padding:18px;
+      align-items:center;
+      justify-content:center;
+    }
+    .modal.show{display:flex}
+
+    .modal-box{
+      width:min(440px,100%);
+      max-height:88vh;
+      overflow:auto;
+      background:#121225;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:26px;
+      padding:22px;
+      color:#fff;
+    }
+
+    .modal-box h2{margin:0 0 8px}
+    .modal-box p{color:#a5b4fc}
+    .field{margin-top:12px}
+    .field label{display:block;font-size:13px;color:#b9b9d6;margin:0 0 6px}
+    .modal-box input{
+      width:100%;
+      padding:15px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      outline:none;
+      background:#1a1a2e;
+      color:#fff;
+    }
+    .hint{font-size:12px;color:#ffdd7a;margin-top:12px;line-height:1.5}
+    .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
   </style>
 </head>
 
 <body>
-<div class="rh-app">
+<div class="app">
+
   <section class="page active" id="homePage">
     <div class="hero">
       <div class="hero-top">
-        <div><p class="hello" id="userName">Welcome Gamer 👋</p><h1>REWARDS HUB</h1></div>
+        <div>
+          <p class="hello" id="userName">Welcome Gamer 👋</p>
+          <h1>Rewards Hub</h1>
+        </div>
         <div class="logo">RH</div>
       </div>
-      <div class="balance-box">
+
+      <div class="balance">
         <p>Your Balance</p>
         <h2><span id="points">0</span> Points</h2>
-        <small>Earn points and redeem Free Fire rewards</small>
+        <small>Earn points and withdraw Free Fire rewards</small>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat"><b id="todayPoints">0</b><span>Today Points</span></div>
+        <div class="stat"><b><span id="dailyAds">0</span>/100</b><span>Today Tasks</span></div>
       </div>
     </div>
 
-    <div class="quick-grid">
-      <button onclick="openPage('earnPage')" class="quick-card"><span class="icon">🎬</span><b>Earn Points</b><small>Ads & channel rewards</small></button>
-      <button onclick="openPage('profilePage')" class="quick-card"><span class="icon">👥</span><b>Referral</b><small>Invite friends +3 points</small></button>
+    <div class="grid">
+      <button class="quick" onclick="openPage('earnPage')">
+        <span>🎬</span><b>Earn Points</b><small>Complete tasks daily</small>
+      </button>
+      <button class="quick" onclick="openPage('profilePage')">
+        <span>👥</span><b>Referral</b><small>Invite friends +3 points</small>
+      </button>
     </div>
 
-    <div class="promo-card">
-      <div><p>Official Channel</p><h3>Join @RewardsHubSL for latest updates and rewards</h3></div>
-      <button onclick="joinChannel()">Join</button>
-    </div>
-
-    <div class="promo-card">
-      <div><p>Free Fire Rewards</p><h3>Diamonds, Weekly, Monthly, Dialog Reload & eZ Cash</h3></div>
-      <button onclick="openPage('redeemPage')">Withdraw</button>
-    </div>
-
-    <h3 class="title">Popular Rewards</h3>
-    <div class="mini-rewards">
-      <div class="mini-card"><span>💎</span><b>25 Diamonds</b><small>400 Points</small></div>
-      <div class="mini-card"><span>🎟</span><b>Weekly Lite</b><small>500 Points</small></div>
-    </div>
-
-    <div class="rules-box">
-      <h3>⚠️ Important Rules</h3>
-      <p class="danger">If you cheat, use fake accounts, exploit ads, or submit false details, your account will be permanently banned.</p>
-      <p>All withdraw requests are manually reviewed. Wrong Free Fire UID, Dialog number, or eZ Cash number may delay or reject your request.</p>
+    <div class="rules-card">
+      <h3>⚠️ Quick Notice</h3>
+      <p class="danger">Cheating, fake accounts, task exploits, or false withdraw details can permanently ban your account.</p>
+      <p>Use the Profile → Rules button to read all rules before earning and withdrawing rewards.</p>
     </div>
   </section>
 
   <section class="page" id="earnPage">
-    <div class="page-head"><h2>Earn Points</h2><p>Complete available activities and collect points.</p></div>
-
-    <div class="earn-card">
-      <div class="earn-left"><div class="earn-icon">📢</div><div><h3>Join Telegram Channel</h3><p>Reward: +4 Points</p></div></div>
-      <button id="joinChannelBtn" onclick="joinChannel()">Join</button>
+    <div class="page-head">
+      <h2>Earn Points</h2>
+      <p>Complete reward tasks and collect points. Daily task limit: 100.</p>
     </div>
 
-    <div class="earn-card">
-      <div class="earn-left"><div class="earn-icon">✅</div><div><h3>Verify Channel Join</h3><p>Claim once only</p></div></div>
-      <button id="verifyChannelBtn" onclick="verifyChannelJoin()">Verify</button>
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-icon">🎬</div>
+        <div><h3>Reward Task 01</h3><p>Reward: +1 Point</p></div>
+      </div>
+      <button class="btn" id="adTaskBtn1" onclick="watchRewardTask(1)">Start</button>
     </div>
 
-    <div class="earn-card">
-      <div class="earn-left"><div class="earn-icon">⚡</div><div><h3>Rewarded Popup</h3><p>Reward: +1 Point</p></div></div>
-      <button id="popupAdBtn" onclick="watchPopupAd()">Start</button>
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-icon">🎁</div>
+        <div><h3>Reward Task 02</h3><p>Reward: +1 Point</p></div>
+      </div>
+      <button class="btn" id="adTaskBtn2" onclick="watchRewardTask(2)">Start</button>
     </div>
 
-    <div class="earn-card">
-      <div class="earn-left"><div class="earn-icon">📺</div><div><h3>Rewarded Interstitial</h3><p>Reward: +1 Point</p></div></div>
-      <button id="interAdBtn" onclick="watchInterstitialAd()">Start</button>
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-icon">⚡</div>
+        <div><h3>Reward Task 03</h3><p>Reward: +1 Point</p></div>
+      </div>
+      <button class="btn" id="adTaskBtn3" onclick="watchRewardTask(3)">Start</button>
     </div>
 
-    <div class="earn-card">
-      <div class="earn-left"><div class="earn-icon">📢</div><div><h3>Extra Auto Ad</h3><p>Reward: +1 Point</p></div></div>
-      <button id="inAppAdBtn" onclick="startInAppBonusAd(false)">Start</button>
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-icon">✅</div>
+        <div><h3>Join Channel</h3><p>Reward: +4 Points, once only</p></div>
+      </div>
+      <button class="btn" id="verifyChannelBtn" onclick="verifyChannelJoin()">Verify</button>
     </div>
 
-    <div class="earn-card">
-      <div class="earn-left"><div class="earn-icon">👥</div><div><h3>Invite Friend</h3><p>Referral bonus: +3 Points</p></div></div>
-      <button onclick="openPage('profilePage')">Open</button>
-    </div>
-
-    <div class="stats-card">
-      <p>Today Earned</p>
-      <h2><span id="todayPoints">0</span> Points</h2>
-      <small id="adStatus">Syncing account...</small>
-    </div>
+    <button class="btn full gray" onclick="joinChannel()">Open Telegram Channel</button>
   </section>
 
-  <section class="page" id="redeemPage">
-    <div class="page-head"><h2>Withdraw Rewards</h2><p>Select reward and submit correct details.</p></div>
+  <section class="page" id="withdrawPage">
+    <div class="page-head">
+      <h2>Withdraw</h2>
+      <p>Select reward and submit correct details.</p>
+    </div>
 
-    <div class="category-title">Free Fire Top-Up</div>
-    <div class="reward-card" onclick="openRedeemModal('25 Diamonds',400,'Free Fire')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
-    <div class="reward-card" onclick="openRedeemModal('50 Diamonds',800,'Free Fire')"><div>💎 50 Diamonds</div><b>800 Points</b></div>
-    <div class="reward-card" onclick="openRedeemModal('100 Diamonds',1600,'Free Fire')"><div>💎 100 Diamonds</div><b>1600 Points</b></div>
+    <div class="section-title">Free Fire Top-Up</div>
+    <div class="reward-card" onclick="openWithdrawModal('25 Diamonds',400,'Free Fire')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('50 Diamonds',800,'Free Fire')"><div>💎 50 Diamonds</div><b>800 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('100 Diamonds',1600,'Free Fire')"><div>💎 100 Diamonds</div><b>1600 Points</b></div>
 
-    <div class="category-title">Membership</div>
-    <div class="reward-card" onclick="openRedeemModal('Weekly Lite',500,'Membership')"><div>🎟 Weekly Lite</div><b>500 Points</b></div>
-    <div class="reward-card" onclick="openRedeemModal('Weekly',2500,'Membership')"><div>🔥 Weekly</div><b>2500 Points</b></div>
-    <div class="reward-card" onclick="openRedeemModal('Monthly',10000,'Membership')"><div>👑 Monthly</div><b>10000 Points</b></div>
+    <div class="section-title">Membership</div>
+    <div class="reward-card" onclick="openWithdrawModal('Weekly Lite',500,'Membership')"><div>🎟 Weekly Lite</div><b>500 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('Weekly',2500,'Membership')"><div>🔥 Weekly</div><b>2500 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('Monthly',10000,'Membership')"><div>👑 Monthly</div><b>10000 Points</b></div>
 
-    <div class="category-title">Cash / Reload</div>
-    <div class="reward-card" onclick="openRedeemModal('Dialog Reload Rs.100',450,'Reload')"><div>📱 Dialog Reload Rs.100</div><b>450 Points</b></div>
-    <div class="reward-card" onclick="openRedeemModal('eZ Cash Rs.100',530,'eZ Cash')"><div>💸 eZ Cash Rs.100</div><b>530 Points</b></div>
+    <div class="section-title">Cash / Reload</div>
+    <div class="reward-card" onclick="openWithdrawModal('Dialog Reload Rs.100',450,'Reload')"><div>📱 Dialog Reload Rs.100</div><b>450 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('eZ Cash Rs.100',530,'eZ Cash')"><div>💸 eZ Cash Rs.100</div><b>530 Points</b></div>
   </section>
 
   <section class="page" id="historyPage">
-    <div class="page-head"><h2>Withdraw History</h2><p>Check pending, paid, and rejected requests.</p></div>
-    <button class="primary-btn" onclick="loadWithdrawHistory()" style="width:100%;margin-top:14px;">Refresh History</button>
+    <div class="page-head">
+      <h2>Withdraw History</h2>
+      <p>Check pending, paid, and rejected requests.</p>
+    </div>
+    <button class="btn full" onclick="loadWithdrawHistory()">Refresh History</button>
     <div id="withdrawHistoryList" style="margin-top:16px;"></div>
   </section>
 
   <section class="page" id="profilePage">
-    <div class="profile-card">
+    <div class="panel profile-card">
       <div class="avatar" id="avatarText">RH</div>
       <h2 id="profileName">Rewards Hub User</h2>
-      <p>Your gaming rewards account</p>
+      <p>Your rewards account</p>
     </div>
 
-    <div class="referral-box">
-      <h3>👥 Invite Friends & Earn</h3>
-      <p>Share your referral link with friends. When a new user opens the app using your link, you earn <b style="color:#67e8f9;">+3 Points</b>.</p>
-      <p>Rewards Hub lets users earn points by watching ads, joining tasks, inviting friends, and redeeming Free Fire diamonds, memberships, Dialog reloads, and eZ Cash rewards.</p>
+    <div class="ref-card">
+      <h3>👥 Your Referral Link</h3>
+      <p>Invite friends and earn <b style="color:#67e8f9;">+3 Points</b> when a new user joins using your link.</p>
       <div class="ref-link" id="referralLinkBox">Loading referral link...</div>
       <div class="ref-actions">
-        <button class="copy-btn" onclick="copyReferral()">Copy Link</button>
-        <button class="copy-btn" onclick="shareReferral()">Share</button>
+        <button class="btn" onclick="copyReferral()">Copy Link</button>
+        <button class="btn" onclick="shareReferral()">Share</button>
       </div>
     </div>
 
     <div class="menu-list">
       <div class="menu-item"><span>💰 Balance</span><b><span id="profilePoints">0</span> Points</b></div>
       <div class="menu-item"><span>🎬 Today Earned</span><b><span id="profileTodayPoints">0</span> Points</b></div>
-      <div class="menu-item" onclick="joinChannel()"><span>📢 Telegram Channel</span><b>@RewardsHubSL</b></div>
-      <div class="menu-item" onclick="showRules()"><span>📜 Rules</span><b>View</b></div>
+      <div class="menu-item" onclick="showRulesModal()"><span>📜 App Rules</span><b>View</b></div>
     </div>
   </section>
 
-  <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="openPage('homePage',this)">🏠<span>Home</span></button>
-    <button class="nav-btn" onclick="openPage('earnPage',this)">🎬<span>Earn</span></button>
-    <button class="nav-btn" onclick="openPage('redeemPage',this)">💎<span>Withdraw</span></button>
-    <button class="nav-btn" onclick="openPage('historyPage',this);loadWithdrawHistory();">📋<span>History</span></button>
-    <button class="nav-btn" onclick="openPage('profilePage',this);renderReferralLink();">👤<span>Profile</span></button>
-  </nav>
 </div>
 
-<div class="modal" id="redeemModal">
+<nav class="bottom-nav">
+  <button class="nav active" onclick="openPage('homePage',this)">🏠<span>Home</span></button>
+  <button class="nav" onclick="openPage('earnPage',this)">🎬<span>Earn</span></button>
+  <button class="nav" onclick="openPage('withdrawPage',this)">💎<span>Withdraw</span></button>
+  <button class="nav" onclick="openPage('historyPage',this);loadWithdrawHistory();">📋<span>History</span></button>
+  <button class="nav" onclick="openPage('profilePage',this);renderReferralLink();">👤<span>Profile</span></button>
+</nav>
+
+<div class="modal" id="withdrawModal">
   <div class="modal-box">
     <h2 id="modalRewardName">Withdraw</h2>
     <p id="modalRewardCost">Cost: 0 Points</p>
     <div id="dynamicFields"></div>
-    <div class="hint">⚠️ Enter correct details. Wrong UID or phone number may reject/delay your request.</div>
-    <div class="modal-buttons">
-      <button onclick="closeRedeemModal()" class="cancel-btn">Cancel</button>
-      <button onclick="submitRedeem()">Submit</button>
+    <div class="hint">⚠️ Enter correct details. Wrong UID or phone number may reject or delay your request.</div>
+    <div class="modal-actions">
+      <button class="btn gray" onclick="closeWithdrawModal()">Cancel</button>
+      <button class="btn" onclick="submitWithdraw()">Submit</button>
     </div>
+  </div>
+</div>
+
+<div class="modal" id="rulesModal">
+  <div class="modal-box">
+    <h2>📜 Rewards Hub Rules</h2>
+    <p>1. Earn points only through available reward tasks and official tasks inside the app.</p>
+    <p>2. One user can complete up to 100 reward tasks per day.</p>
+    <p>3. Withdraw requests are manually reviewed and can take 24–48 hours.</p>
+    <p>4. Wrong Free Fire UID, Dialog number, or eZ Cash details may delay or reject the request.</p>
+    <p style="color:#ff9b9b;font-weight:800;">5. If you cheat, use fake accounts, exploit tasks, spam referrals, or submit false details, your account will be permanently banned.</p>
+    <p>6. Referral reward is given only when a new user joins using your referral link.</p>
+    <p>7. Channel join reward can be claimed only once.</p>
+    <button class="btn full" onclick="closeRulesModal()">Close</button>
   </div>
 </div>
 
@@ -224,11 +448,15 @@ const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : 
 if (tg) { tg.ready(); tg.expand(); }
 
 const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
-// IMPORTANT: If Telegram says "bot invalid", replace this with your exact BotFather username WITHOUT @
 const BOT_USERNAME = "RewardsHubSLBot";
 const CHANNEL_USERNAME = "RewardsHubSL";
-const AD_COOLDOWN_SECONDS = 30;
-const REWARD_FALLBACK_MS = 12000;
+
+const REWARD_TASK_BLOCK_ID = "task-31953";
+const INTERSTITIAL_BLOCK_ID = "int-31952";
+const TASK_COOLDOWN_SECONDS = 20;
+
+let rewardTaskAd = null;
+let interstitialAd = null;
 
 const user = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 
@@ -240,13 +468,18 @@ if (!telegramId) {
 
 let points = 0;
 let todayPoints = 0;
-let popupBusy = false;
-let interBusy = false;
-let inAppBusy = false;
+let dailyAds = 0;
+let taskBusy = false;
 let selectedReward = null;
 
-function alertMsg(message){ if(tg && tg.showAlert){ tg.showAlert(message); } else { alert(message); } }
-function setAdStatus(text){ const el=document.getElementById("adStatus"); if(el) el.innerText=text; }
+function alertMsg(message) {
+  if (tg && tg.showAlert) tg.showAlert(message);
+  else alert(message);
+}
+
+function logStatus(text) {
+  console.log("Task Status:", text);
+}
 
 async function api(path, data) {
   const res = await fetch(API_BASE + path, {
@@ -258,7 +491,6 @@ async function api(path, data) {
 }
 
 function getReferralLink() {
-  // Bot link: user clicks this, bot shows Open App button with referral param.
   return "https://t.me/" + BOT_USERNAME + "?start=ref_" + telegramId;
 }
 
@@ -269,7 +501,6 @@ function renderReferralLink() {
 
 function getStartReferral() {
   try {
-    // Referral passed from bot Web App button: APP_URL?ref=ref_USERID
     const urlParams = new URLSearchParams(window.location.search);
     let ref = urlParams.get("ref") || urlParams.get("startapp");
 
@@ -278,7 +509,6 @@ function getStartReferral() {
       return ref;
     }
 
-    // Referral passed by Telegram Mini App start_param
     const startParam = tg && tg.initDataUnsafe ? tg.initDataUnsafe.start_param : "";
     if (startParam && startParam.startsWith("ref_")) return startParam.replace("ref_", "");
   } catch(e) {}
@@ -286,23 +516,29 @@ function getStartReferral() {
   return null;
 }
 
-function updateUI(){
-  document.getElementById("points").innerText=points;
-  document.getElementById("profilePoints").innerText=points;
-  document.getElementById("todayPoints").innerText=todayPoints;
-  document.getElementById("profileTodayPoints").innerText=todayPoints;
+function updateUI() {
+  document.getElementById("points").innerText = points;
+  document.getElementById("todayPoints").innerText = todayPoints;
+  document.getElementById("dailyAds").innerText = dailyAds;
+
+  const pp = document.getElementById("profilePoints");
+  if (pp) pp.innerText = points;
+
+  const pt = document.getElementById("profileTodayPoints");
+  if (pt) pt.innerText = todayPoints;
+
   renderReferralLink();
 }
 
-async function syncUser(){
+async function syncUser() {
   const firstName = user && user.first_name ? user.first_name : "Gamer";
   const username = user && user.username ? user.username : "";
   const invitedBy = getStartReferral();
 
-  if(user){
-    document.getElementById("userName").innerText="Welcome "+firstName+" 👋";
-    document.getElementById("profileName").innerText=firstName;
-    document.getElementById("avatarText").innerText=firstName.substring(0,2).toUpperCase();
+  if (user) {
+    document.getElementById("userName").innerText = "Welcome " + firstName + " 👋";
+    document.getElementById("profileName").innerText = firstName;
+    document.getElementById("avatarText").innerText = firstName.substring(0,2).toUpperCase();
   }
 
   try {
@@ -314,272 +550,370 @@ async function syncUser(){
     });
 
     if (data.ok && data.user) {
-      if (data.user.is_banned) alertMsg("Your account has been restricted. Contact support.");
+      if (data.user.is_banned) alertMsg("Your account has been restricted.");
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
-      setAdStatus("Account synced. Ready.");
+      logStatus("Account synced.");
     } else {
-      setAdStatus(data.message || "Sync failed.");
+      logStatus(data.message || "Sync failed.");
     }
   } catch(e) {
-    setAdStatus("Backend sync failed.");
+    logStatus("Backend sync failed.");
   }
 }
 
-function openPage(pageId,btn){
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+function openPage(pageId, btn) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(pageId).classList.add("active");
-  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
-  if(btn) btn.classList.add("active");
-  else{
-    const map={homePage:0,earnPage:1,redeemPage:2,historyPage:3,profilePage:4};
-    document.querySelectorAll(".nav-btn")[map[pageId]].classList.add("active");
-  }
-  if(pageId === "profilePage") renderReferralLink();
+
+  document.querySelectorAll(".nav").forEach(b => b.classList.remove("active"));
+  if (btn) btn.classList.add("active");
+
+  if (pageId === "profilePage") renderReferralLink();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-async function addPointReward(statusText, type){
+function initRewardSystem() {
   try {
-    const data = await api("/points/add", {
-      telegram_id: telegramId,
-      points: 1,
-      type: type || "ad_reward",
-      description: statusText || "Ad reward"
-    });
-
-    if (data.ok && data.user) {
-      points = Number(data.user.points || 0);
-      todayPoints = Number(data.user.today_points || 0);
-      updateUI();
-      setAdStatus(statusText || "Reward added.");
-      alertMsg("+1 Point Added");
-    } else alertMsg(data.message || "Reward failed.");
-  } catch(e) {
-    alertMsg("Reward save failed. Try again.");
+    if (window.Adsgram) {
+      rewardTaskAd = window.Adsgram.init({ blockId: REWARD_TASK_BLOCK_ID });
+      interstitialAd = window.Adsgram.init({ blockId: INTERSTITIAL_BLOCK_ID });
+      logStatus("Reward system ready.");
+    } else {
+      logStatus("Reward system not loaded.");
+    }
+  } catch (e) {
+    logStatus("Reward system init failed.");
   }
 }
 
-function setButtonLoading(buttonId,text){ const btn=document.getElementById(buttonId); if(btn){btn.disabled=true;btn.innerText=text||"Opening...";} }
-function resetButton(buttonId){ const btn=document.getElementById(buttonId); if(btn){btn.disabled=false;btn.innerText="Start";} }
-function startCountdown(buttonId,seconds){
-  const btn=document.getElementById(buttonId); if(!btn) return;
-  let remain=seconds; btn.disabled=true; btn.innerText=remain+"s";
-  const timer=setInterval(function(){ remain--; if(remain<=0){clearInterval(timer);btn.disabled=false;btn.innerText="Start";}else btn.innerText=remain+"s"; },1000);
+function setButtonLoading(id, text) {
+  const btn = document.getElementById(id);
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = text || "Opening...";
+  }
 }
 
-function joinChannel(){
+function resetTaskButton(taskNo) {
+  const btn = document.getElementById("adTaskBtn" + taskNo);
+  if (btn) {
+    btn.disabled = false;
+    btn.innerText = "Start";
+  }
+}
+
+function startTaskCountdown(taskNo, seconds) {
+  const btn = document.getElementById("adTaskBtn" + taskNo);
+  if (!btn) return;
+
+  let remain = seconds;
+  btn.disabled = true;
+  btn.innerText = remain + "s";
+
+  const timer = setInterval(function() {
+    remain--;
+    if (remain <= 0) {
+      clearInterval(timer);
+      btn.disabled = false;
+      btn.innerText = "Start";
+    } else {
+      btn.innerText = remain + "s";
+    }
+  }, 1000);
+}
+
+async function addTaskPoint(taskNo) {
+  const data = await api("/points/add", {
+    telegram_id: telegramId,
+    points: 1,
+    type: "adsgram_task_" + taskNo,
+    description: "Reward Task " + taskNo + " +1 point"
+  });
+
+  if (data.ok && data.user) {
+    points = Number(data.user.points || 0);
+    todayPoints = Number(data.user.today_points || 0);
+
+    if (data.daily_ads !== null && data.daily_ads !== undefined) {
+      dailyAds = Number(data.daily_ads || 0);
+    }
+
+    updateUI();
+    alertMsg("+1 Point Added");
+    logStatus("Task " + taskNo + " completed.");
+    return true;
+  }
+
+  alertMsg(data.message || "Reward failed.");
+  logStatus(data.message || "Reward failed.");
+  return false;
+}
+
+async function watchRewardTask(taskNo) {
+  if (taskBusy) {
+    alertMsg("Task is loading. Please wait.");
+    return;
+  }
+
+  if (dailyAds >= 100) {
+    alertMsg("Daily task limit reached. Try again tomorrow.");
+    return;
+  }
+
+  if (!rewardTaskAd) initRewardSystem();
+
+  if (!rewardTaskAd) {
+    alertMsg("Task not ready. Try again later.");
+    return;
+  }
+
+  taskBusy = true;
+  setButtonLoading("adTaskBtn" + taskNo, "Opening...");
+  logStatus("Opening task " + taskNo + "...");
+
+  try {
+    await rewardTaskAd.show();
+
+    const rewarded = await addTaskPoint(taskNo);
+
+    if (rewarded) startTaskCountdown(taskNo, TASK_COOLDOWN_SECONDS);
+    else resetTaskButton(taskNo);
+  } catch(e) {
+    resetTaskButton(taskNo);
+    logStatus("Task not completed.");
+    alertMsg("Please complete the task to earn points.");
+  }
+
+  taskBusy = false;
+}
+
+function joinChannel() {
   const link = "https://t.me/" + CHANNEL_USERNAME;
-  if(tg && tg.openTelegramLink) tg.openTelegramLink(link);
+
+  if (tg && tg.openTelegramLink) tg.openTelegramLink(link);
   else window.open(link, "_blank");
 }
 
-async function verifyChannelJoin(){
-  setButtonLoading("verifyChannelBtn","Checking...");
+async function verifyChannelJoin() {
+  const btn = document.getElementById("verifyChannelBtn");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = "Checking...";
+  }
+
   try {
     const data = await api("/channel/verify", {telegram_id: telegramId});
+
     if (data.ok && data.user) {
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
       updateUI();
       alertMsg(data.message || "+4 Points added.");
-      setAdStatus(data.message || "Channel verified.");
-      document.getElementById("verifyChannelBtn").innerText = "Claimed";
-      document.getElementById("verifyChannelBtn").disabled = true;
+
+      if (btn) {
+        btn.innerText = "Claimed";
+        btn.disabled = true;
+      }
     } else {
-      resetButton("verifyChannelBtn");
+      if (btn) {
+        btn.innerText = "Verify";
+        btn.disabled = false;
+      }
       alertMsg(data.message || "Please join channel first.");
     }
   } catch(e) {
-    resetButton("verifyChannelBtn");
+    if (btn) {
+      btn.innerText = "Verify";
+      btn.disabled = false;
+    }
     alertMsg("Channel verify failed.");
   }
 }
 
-/* Ads */
-function watchPopupAd(){
-  if(popupBusy){ alertMsg("Popup Ad is loading. Please wait."); return; }
-  if(typeof window.show_11025198!=="function"){ alertMsg("Ad not ready. Close app and open again."); return; }
-  popupBusy=true; setButtonLoading("popupAdBtn","Opening..."); setAdStatus("Opening Rewarded Popup...");
-  let rewardDone=false;
-  async function finish(){ if(rewardDone)return; rewardDone=true; await addPointReward("Popup Ad reward added.","popup_ad"); startCountdown("popupAdBtn",AD_COOLDOWN_SECONDS); popupBusy=false; }
-  try{ show_11025198("pop").then(finish).catch(()=>{ if(!rewardDone){resetButton("popupAdBtn");popupBusy=false;} }); } catch(e){ resetButton("popupAdBtn"); popupBusy=false; return; }
-  setTimeout(finish, REWARD_FALLBACK_MS);
-}
-
-function watchInterstitialAd(){
-  if(interBusy){ alertMsg("Interstitial Ad is loading. Please wait."); return; }
-  if(typeof window.show_11025198!=="function"){ alertMsg("Ad not ready. Close app and open again."); return; }
-  interBusy=true; setButtonLoading("interAdBtn","Opening..."); setAdStatus("Opening Rewarded Interstitial...");
-  let rewardDone=false;
-  async function finish(){ if(rewardDone)return; rewardDone=true; await addPointReward("Interstitial Ad reward added.","interstitial_ad"); startCountdown("interAdBtn",AD_COOLDOWN_SECONDS); interBusy=false; }
-  try{ show_11025198().then(finish).catch(()=>{ if(!rewardDone){resetButton("interAdBtn");interBusy=false;} }); } catch(e){ resetButton("interAdBtn"); interBusy=false; return; }
-  setTimeout(finish, REWARD_FALLBACK_MS);
-}
-
-function startInAppBonusAd(autoMode){
-  if(inAppBusy){ if(!autoMode) alertMsg("Extra Auto Ad is loading."); return; }
-  if(typeof window.show_11025198!=="function"){ if(!autoMode) alertMsg("Ad not ready."); return; }
-  inAppBusy=true; setButtonLoading("inAppAdBtn","Opening..."); setAdStatus("Opening Extra Auto Ad...");
-  let rewardDone=false;
-  async function finish(){ if(rewardDone)return; rewardDone=true; await addPointReward("Extra Auto Ad reward added.","extra_auto_ad"); startCountdown("inAppAdBtn",AD_COOLDOWN_SECONDS); inAppBusy=false; }
-  try{ show_11025198({type:"inApp",inAppSettings:{frequency:1,capping:0.01,interval:5,timeout:3,everyPage:false}}); } catch(e){ resetButton("inAppAdBtn"); inAppBusy=false; return; }
-  setTimeout(finish, REWARD_FALLBACK_MS);
-}
-
-/* Referral link visible + copy + share */
-function copyReferral(){
+function copyReferral() {
   const link = getReferralLink();
-  if(navigator.clipboard){
+
+  if (navigator.clipboard) {
     navigator.clipboard.writeText(link)
-      .then(()=>alertMsg("Referral link copied!\nInvite friends and earn +3 points."))
-      .catch(()=>alertMsg("Referral Link:\n"+link));
+      .then(() => alertMsg("Referral link copied."))
+      .catch(() => alertMsg(link));
   } else {
-    alertMsg("Referral Link:\n"+link);
+    alertMsg(link);
   }
 }
 
-function shareReferral(){
+function shareReferral() {
   const link = getReferralLink();
   const text =
     "🎁 Rewards Hub\n\n" +
-    "Watch ads, collect points, invite friends, and redeem Free Fire diamonds, memberships, Dialog reloads, and eZ Cash rewards.\n\n" +
+    "Complete tasks, invite friends, and withdraw Free Fire rewards.\n\n" +
     "Join using my referral link:\n" + link;
 
   if (tg && tg.openTelegramLink) {
-    const shareUrl = "https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(text);
-    tg.openTelegramLink(shareUrl);
+    tg.openTelegramLink("https://t.me/share/url?url=" + encodeURIComponent(link) + "&text=" + encodeURIComponent(text));
   } else if (navigator.share) {
-    navigator.share({ title: "Rewards Hub", text: text, url: link });
+    navigator.share({title:"Rewards Hub", text:text, url:link});
   } else {
     copyReferral();
   }
 }
 
-/* Pro Withdraw */
-function openRedeemModal(name,cost,type){
-  if(points<cost){ alertMsg("Not enough points.\nNeed "+(cost-points)+" more points."); return; }
-  selectedReward={name:name,cost:cost,type:type};
-  document.getElementById("modalRewardName").innerText = getRewardIcon(type) + " " + name;
-  document.getElementById("modalRewardCost").innerText = "Cost: " + cost + " Points";
-  renderRedeemFields(type);
-  document.getElementById("redeemModal").classList.add("show");
-}
-function getRewardIcon(type){
-  if(type==="Free Fire" || type==="Membership") return "💎";
-  if(type==="Reload") return "📱";
-  if(type==="eZ Cash") return "💸";
-  return "🎁";
-}
-function fieldHtml(id,label,placeholder,type){
-  return '<div class="field"><label>'+label+'</label><input id="'+id+'" type="'+(type||'text')+'" placeholder="'+placeholder+'"></div>';
-}
-function renderRedeemFields(type){
-  let html = "";
-  if(type==="Free Fire" || type==="Membership"){
-    html += fieldHtml("ffUid","Free Fire UID","Enter your Free Fire UID","number");
-    html += fieldHtml("ffName","Free Fire Nickname","Enter your in-game name","text");
-    html += fieldHtml("contact","Contact Number / Telegram","07XXXXXXXX or @username","text");
-  } else if(type==="Reload"){
-    html += fieldHtml("dialogNumber","Dialog Number","07XXXXXXXX","tel");
-    html += fieldHtml("contactName","Contact Name","Enter your name","text");
-  } else if(type==="eZ Cash"){
-    html += fieldHtml("ezNumber","eZ Cash Number","07XXXXXXXX","tel");
-    html += fieldHtml("holderName","Account Holder Name","Enter holder name","text");
-    html += fieldHtml("contact","Contact Number / Telegram","07XXXXXXXX or @username","text");
+function openWithdrawModal(name, cost, type) {
+  if (points < cost) {
+    alertMsg("Not enough points. Need " + (cost - points) + " more points.");
+    return;
   }
+
+  selectedReward = {name, cost, type};
+
+  document.getElementById("modalRewardName").innerText = name;
+  document.getElementById("modalRewardCost").innerText = "Cost: " + cost + " Points";
+  renderWithdrawFields(type);
+
+  document.getElementById("withdrawModal").classList.add("show");
+}
+
+function closeWithdrawModal() {
+  document.getElementById("withdrawModal").classList.remove("show");
+}
+
+function fieldHtml(id, label, placeholder, type) {
+  return '<div class="field"><label>' + label + '</label><input id="' + id + '" type="' + (type || 'text') + '" placeholder="' + placeholder + '"></div>';
+}
+
+function renderWithdrawFields(type) {
+  let html = "";
+
+  if (type === "Free Fire" || type === "Membership") {
+    html += fieldHtml("ffUid", "Free Fire UID", "Enter Free Fire UID", "number");
+    html += fieldHtml("ffName", "Free Fire Nickname", "Enter in-game name", "text");
+    html += fieldHtml("contact", "Contact Number / Telegram", "07XXXXXXXX or @username", "text");
+  } else if (type === "Reload") {
+    html += fieldHtml("dialogNumber", "Dialog Number", "07XXXXXXXX", "tel");
+    html += fieldHtml("contactName", "Contact Name", "Enter your name", "text");
+  } else if (type === "eZ Cash") {
+    html += fieldHtml("ezNumber", "eZ Cash Number", "07XXXXXXXX", "tel");
+    html += fieldHtml("holderName", "Account Holder Name", "Enter holder name", "text");
+    html += fieldHtml("contact", "Contact Number / Telegram", "07XXXXXXXX or @username", "text");
+  }
+
   document.getElementById("dynamicFields").innerHTML = html;
 }
-function closeRedeemModal(){ document.getElementById("redeemModal").classList.remove("show"); }
 
-function collectRedeemDetails(){
+function collectWithdrawDetails() {
   const type = selectedReward.type;
-  if(type==="Free Fire" || type==="Membership"){
-    const uid=document.getElementById("ffUid").value.trim();
-    const name=document.getElementById("ffName").value.trim();
-    const contact=document.getElementById("contact").value.trim();
-    if(!uid || !name || !contact) return null;
-    return "Free Fire UID: "+uid+"\nNickname: "+name+"\nContact: "+contact;
+
+  if (type === "Free Fire" || type === "Membership") {
+    const uid = document.getElementById("ffUid").value.trim();
+    const name = document.getElementById("ffName").value.trim();
+    const contact = document.getElementById("contact").value.trim();
+
+    if (!uid || !name || !contact) return null;
+
+    return "Free Fire UID: " + uid + "\nNickname: " + name + "\nContact: " + contact;
   }
-  if(type==="Reload"){
-    const num=document.getElementById("dialogNumber").value.trim();
-    const cname=document.getElementById("contactName").value.trim();
-    if(!num || !cname) return null;
-    return "Dialog Number: "+num+"\nContact Name: "+cname;
+
+  if (type === "Reload") {
+    const num = document.getElementById("dialogNumber").value.trim();
+    const name = document.getElementById("contactName").value.trim();
+
+    if (!num || !name) return null;
+
+    return "Dialog Number: " + num + "\nContact Name: " + name;
   }
-  if(type==="eZ Cash"){
-    const num=document.getElementById("ezNumber").value.trim();
-    const holder=document.getElementById("holderName").value.trim();
-    const contact=document.getElementById("contact").value.trim();
-    if(!num || !holder || !contact) return null;
-    return "eZ Cash Number: "+num+"\nHolder Name: "+holder+"\nContact: "+contact;
+
+  if (type === "eZ Cash") {
+    const num = document.getElementById("ezNumber").value.trim();
+    const holder = document.getElementById("holderName").value.trim();
+    const contact = document.getElementById("contact").value.trim();
+
+    if (!num || !holder || !contact) return null;
+
+    return "eZ Cash Number: " + num + "\nHolder Name: " + holder + "\nContact: " + contact;
   }
+
   return null;
 }
-async function submitRedeem(){
-  if(!selectedReward){ alertMsg("No reward selected."); return; }
-  const details = collectRedeemDetails();
-  if(!details){ alertMsg("Please fill all required details."); return; }
+
+async function submitWithdraw() {
+  if (!selectedReward) {
+    alertMsg("No reward selected.");
+    return;
+  }
+
+  const details = collectWithdrawDetails();
+
+  if (!details) {
+    alertMsg("Please fill all required details.");
+    return;
+  }
+
   try {
     const data = await api("/redeem/create", {
       telegram_id: telegramId,
-      reward_type:selectedReward.type,
-      reward_name:selectedReward.name,
-      cost_points:selectedReward.cost,
-      details:details
+      reward_type: selectedReward.type,
+      reward_name: selectedReward.name,
+      cost_points: selectedReward.cost,
+      details: details
     });
-    if(data.ok){
+
+    if (data.ok) {
       points = Number(data.points || 0);
       updateUI();
-      closeRedeemModal();
-      alertMsg("Withdraw request submitted!\nStatus: Pending");
+      closeWithdrawModal();
+      alertMsg("Withdraw request submitted. Status: Pending");
       loadWithdrawHistory();
-    } else alertMsg(data.message || "Withdraw failed.");
-  } catch(e){ alertMsg("Withdraw request failed. Try again."); }
+    } else {
+      alertMsg(data.message || "Withdraw failed.");
+    }
+  } catch(e) {
+    alertMsg("Withdraw request failed. Try again.");
+  }
 }
 
-/* Withdraw History */
-async function loadWithdrawHistory(){
+async function loadWithdrawHistory() {
   const box = document.getElementById("withdrawHistoryList");
-  if(!box) return;
+  if (!box) return;
+
   box.innerHTML = "<p style='color:#b9b9d6;'>Loading history...</p>";
 
   try {
     const res = await fetch(API_BASE + "/redeem/list?telegram_id=" + encodeURIComponent(telegramId));
     const data = await res.json();
 
-    if(!data.ok){
+    if (!data.ok) {
       box.innerHTML = "<p style='color:#ffb4b4;'>Failed to load history.</p>";
       return;
     }
 
-    if(!data.requests || data.requests.length === 0){
+    if (!data.requests || data.requests.length === 0) {
       box.innerHTML = "<p style='color:#b9b9d6;'>No withdraw requests yet.</p>";
       return;
     }
 
-    box.innerHTML = data.requests.map(function(item){
-      let statusText = String(item.status || "pending").toLowerCase();
-      let statusIcon = "🕒";
-      let statusColor = "#ffdd7a";
+    box.innerHTML = data.requests.map(function(item) {
+      let status = String(item.status || "pending").toLowerCase();
+      let icon = "🕒";
+      let color = "#ffdd7a";
 
-      if(statusText === "paid" || statusText === "done" || statusText === "completed"){
-        statusIcon = "✅";
-        statusColor = "#67e8f9";
-        statusText = "paid";
+      if (status === "paid" || status === "done" || status === "completed") {
+        icon = "✅";
+        color = "#67e8f9";
+        status = "paid";
       }
 
-      if(statusText === "rejected"){
-        statusIcon = "❌";
-        statusColor = "#ff8a8a";
+      if (status === "rejected") {
+        icon = "❌";
+        color = "#ff8a8a";
       }
 
       return `
         <div class="history-card">
           <div class="history-top">
             <b>${item.reward_name}</b>
-            <b style="color:${statusColor};">${statusIcon} ${statusText.toUpperCase()}</b>
+            <b style="color:${color};">${icon} ${status.toUpperCase()}</b>
           </div>
           <div class="history-details">Cost: ${item.cost_points} Points
 Type: ${item.reward_type}
@@ -589,17 +923,21 @@ ${item.details}${item.admin_note ? "\nAdmin Note: " + item.admin_note : ""}</div
         </div>
       `;
     }).join("");
-
-  } catch(e){
+  } catch(e) {
     box.innerHTML = "<p style='color:#ffb4b4;'>Network error. Try again.</p>";
   }
 }
 
-function showRules(){
-  alertMsg("Rewards Hub Rules:\n\n1. Earn points using available activities.\n2. Withdraw requests are manually reviewed.\n3. If you cheat, use fake accounts, exploit ads, or submit false details, your account will be permanently banned.\n4. Reward delivery time: 24 - 48 hours.\n5. Referral bonus: +3 Points.\n6. Channel join reward: +4 Points.");
+function showRulesModal() {
+  document.getElementById("rulesModal").classList.add("show");
+}
+
+function closeRulesModal() {
+  document.getElementById("rulesModal").classList.remove("show");
 }
 
 syncUser();
+setTimeout(initRewardSystem, 1500);
 </script>
 </body>
 </html>
