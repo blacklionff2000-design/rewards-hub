@@ -14,52 +14,28 @@
     button{cursor:pointer;font-family:inherit}
     button:disabled{opacity:.6;cursor:not-allowed}
 
-    .loader{
-      position:fixed;inset:0;
-      background:radial-gradient(circle at top,#ff7a18 0,transparent 28%),radial-gradient(circle at bottom,#00d4ff 0,transparent 32%),#05050d;
-      z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;transition:.35s ease;
-    }
+    .loader{position:fixed;inset:0;background:radial-gradient(circle at top,#ff7a18 0,transparent 28%),radial-gradient(circle at bottom,#00d4ff 0,transparent 32%),#05050d;z-index:999;display:flex;align-items:center;justify-content:center;padding:24px;transition:.35s ease}
     .loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-    .loader-card{
-      width:min(360px,100%);padding:26px;border-radius:30px;background:rgba(15,15,30,.9);
-      border:1px solid rgba(255,255,255,.12);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.55);
-    }
-    .loader-logo{
-      width:84px;height:84px;margin:0 auto 18px;border-radius:28px;display:grid;place-items:center;
-      font-size:34px;font-weight:900;background:linear-gradient(135deg,#ff7a18,#ff003d,#06b6d4);
-      box-shadow:0 0 40px rgba(255,122,24,.35);
-    }
+    .loader-card{width:min(360px,100%);padding:26px;border-radius:30px;background:rgba(15,15,30,.9);border:1px solid rgba(255,255,255,.12);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.55)}
+    .loader-logo{width:84px;height:84px;margin:0 auto 18px;border-radius:28px;display:grid;place-items:center;font-size:34px;font-weight:900;background:linear-gradient(135deg,#ff7a18,#ff003d,#06b6d4);box-shadow:0 0 40px rgba(255,122,24,.35)}
     .loader-card h1{margin:0;font-size:28px;letter-spacing:1px}
     .loader-card p{color:#b9b9d6;margin:8px 0 18px}
     .loading-bar{height:10px;background:#1c1c33;border-radius:999px;overflow:hidden}
     .loading-bar span{display:block;height:100%;width:45%;background:linear-gradient(90deg,#ff7a18,#06b6d4);border-radius:999px;animation:loadmove 1.2s infinite ease-in-out}
     @keyframes loadmove{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
 
-    .app{
-      max-width:500px;min-height:100vh;margin:auto;padding:16px 16px 104px;
-      background:radial-gradient(circle at top left,rgba(255,122,24,.18),transparent 34%),radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),#070713;
-    }
-
+    .app{max-width:500px;min-height:100vh;margin:auto;padding:16px 16px 104px;background:radial-gradient(circle at top left,rgba(255,122,24,.18),transparent 34%),radial-gradient(circle at top right,rgba(6,182,212,.24),transparent 36%),#070713}
     .page{display:none;animation:fadeIn .22s ease}
     .page.active{display:block}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-    .hero,.page-head,.panel,.ref-card,.rules-card{
-      background:rgba(21,21,39,.94);border:1px solid rgba(255,255,255,.08);
-      border-radius:28px;box-shadow:0 18px 48px rgba(0,0,0,.35);
-    }
+    .hero,.page-head,.panel,.ref-card,.rules-card{background:rgba(21,21,39,.94);border:1px solid rgba(255,255,255,.08);border-radius:28px;box-shadow:0 18px 48px rgba(0,0,0,.35)}
     .hero{padding:20px;background:linear-gradient(145deg,rgba(67,26,20,.96),rgba(12,78,100,.58))}
     .hero-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
     .hello{margin:0;color:#b9b9d6;font-size:13px}
     .hero h1{margin:7px 0 0;font-size:30px;letter-spacing:1px}
-    .logo{
-      width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-weight:900;
-      background:linear-gradient(135deg,#ff7a18,#06b6d4);box-shadow:0 0 30px rgba(255,122,24,.32);
-    }
-    .badge{
-      display:inline-block;margin-top:10px;padding:7px 11px;border-radius:999px;background:rgba(255,122,24,.14);
-      color:#ffcf9b;font-size:12px;font-weight:800;border:1px solid rgba(255,122,24,.24);
-    }
+    .logo{width:58px;height:58px;border-radius:20px;display:grid;place-items:center;font-weight:900;background:linear-gradient(135deg,#ff7a18,#06b6d4);box-shadow:0 0 30px rgba(255,122,24,.32)}
+    .badge{display:inline-block;margin-top:10px;padding:7px 11px;border-radius:999px;background:rgba(255,122,24,.14);color:#ffcf9b;font-size:12px;font-weight:800;border:1px solid rgba(255,122,24,.24)}
 
     .balance{margin-top:18px;border-radius:26px;padding:24px;background:linear-gradient(135deg,#ff7a18,#06b6d4)}
     .balance p{margin:0;opacity:.9}
@@ -72,10 +48,7 @@
     .stat span{font-size:12px;color:#d6d6ff}
 
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
-    .quick{
-      min-height:116px;border:0;border-radius:24px;background:#151527;color:#fff;text-align:left;
-      padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.22);
-    }
+    .quick{min-height:116px;border:0;border-radius:24px;background:#151527;color:#fff;text-align:left;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.22)}
     .quick span{display:block;font-size:26px;margin-bottom:12px}
     .quick b{display:block}
     .quick small{display:block;color:#9ea7ff;margin-top:6px}
@@ -83,31 +56,20 @@
     .page-head{padding:18px;margin-bottom:14px}
     .page-head h2{margin:0;font-size:28px}
     .page-head p{color:#b9b9d6;margin-bottom:0}
-
     .section-title{margin:22px 4px 10px;color:#ffcf9b;font-weight:900;font-size:13px;text-transform:uppercase;letter-spacing:.9px}
 
-    .task-card,.reward-card,.history-card,.menu-item,.ref-user{
-      background:#151527;border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 30px rgba(0,0,0,.23);
-    }
-
-    .task-card{
-      margin-top:12px;padding:16px;border-radius:24px;display:flex;align-items:center;justify-content:space-between;gap:12px;
-    }
+    .task-card,.reward-card,.history-card,.menu-item,.ref-user{background:#151527;border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 30px rgba(0,0,0,.23)}
+    .task-card{margin-top:12px;padding:16px;border-radius:24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
     .task-left{display:flex;align-items:center;gap:14px}
     .task-icon{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:#232342;font-size:24px}
     .task-card h3{margin:0}
     .task-card p{margin:5px 0 0;color:#9ea7ff;font-size:14px}
 
-    .btn{
-      border:0;border-radius:16px;padding:12px 16px;min-width:92px;color:#fff;font-weight:900;
-      background:linear-gradient(135deg,#ff7a18,#06b6d4);
-    }
+    .btn{border:0;border-radius:16px;padding:12px 16px;min-width:92px;color:#fff;font-weight:900;background:linear-gradient(135deg,#ff7a18,#06b6d4)}
     .btn.gray{background:#24243b}
     .btn.full{width:100%;margin-top:14px}
 
-    .reward-card{
-      margin-top:10px;padding:16px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;
-    }
+    .reward-card{margin-top:10px;padding:16px;border-radius:20px;display:flex;align-items:center;justify-content:space-between}
     .reward-card b{color:#67e8f9}
 
     .ref-card,.rules-card{padding:18px;margin-top:16px}
@@ -115,39 +77,24 @@
     .ref-card p,.rules-card p{font-size:14px;line-height:1.6;color:#b9b9d6}
     .danger{color:#ff9b9b!important;font-weight:800}
 
-    .ref-link{
-      margin-top:12px;padding:14px;border-radius:16px;background:#0d0d1b;border:1px solid rgba(255,255,255,.08);
-      color:#67e8f9;font-size:12px;word-break:break-all;line-height:1.5;
-    }
+    .ref-link{margin-top:12px;padding:14px;border-radius:16px;background:#0d0d1b;border:1px solid rgba(255,255,255,.08);color:#67e8f9;font-size:12px;word-break:break-all;line-height:1.5}
     .ref-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-
-    .ref-stats{
-      display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;
-    }
-    .ref-stat{
-      background:#0d0d1b;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px;
-    }
+    .ref-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+    .ref-stat{background:#0d0d1b;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:14px}
     .ref-stat b{display:block;font-size:22px;color:#67e8f9}
     .ref-stat span{font-size:12px;color:#b9b9d6}
-    .ref-user{
-      margin-top:10px;padding:13px;border-radius:18px;display:flex;align-items:center;justify-content:space-between;
-    }
+    .ref-user{margin-top:10px;padding:13px;border-radius:18px;display:flex;align-items:center;justify-content:space-between}
     .ref-user-name{font-weight:900}
     .ref-user small{color:#b9b9d6}
     .ref-empty{color:#b9b9d6;font-size:13px;margin-top:12px}
 
     .profile-card{padding:24px;text-align:center}
-    .avatar{
-      width:78px;height:78px;border-radius:26px;margin:auto;display:grid;place-items:center;
-      background:linear-gradient(135deg,#ff7a18,#06b6d4);font-weight:900;font-size:26px;
-    }
+    .avatar{width:78px;height:78px;border-radius:26px;margin:auto;display:grid;place-items:center;background:linear-gradient(135deg,#ff7a18,#06b6d4);font-weight:900;font-size:26px}
     .profile-card h2{margin:14px 0 4px}
     .profile-card p{margin:0;color:#b9b9d6}
 
     .menu-list{margin-top:16px}
-    .menu-item{
-      margin-top:10px;padding:17px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;
-    }
+    .menu-item{margin-top:10px;padding:17px;border-radius:20px;display:flex;align-items:center;justify-content:space-between}
     .menu-item b{color:#67e8f9}
 
     .history-card{margin-top:12px;padding:16px;border-radius:20px}
@@ -155,33 +102,19 @@
     .history-details{margin-top:8px;color:#b9b9d6;font-size:13px;white-space:pre-line;line-height:1.55}
     .history-date{margin-top:8px;color:#8585a3;font-size:12px}
 
-    .bottom-nav{
-      position:fixed;left:50%;bottom:12px;transform:translateX(-50%);
-      width:min(468px,calc(100% - 22px));padding:8px;border-radius:26px;
-      background:rgba(18,18,34,.96);backdrop-filter:blur(12px);display:grid;grid-template-columns:repeat(5,1fr);
-      gap:4px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:50;
-    }
+    .bottom-nav{position:fixed;left:50%;bottom:12px;transform:translateX(-50%);width:min(468px,calc(100% - 22px));padding:8px;border-radius:26px;background:rgba(18,18,34,.96);backdrop-filter:blur(12px);display:grid;grid-template-columns:repeat(5,1fr);gap:4px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 50px rgba(0,0,0,.5);z-index:50}
     .nav{border:0;border-radius:18px;padding:9px 4px;background:transparent;color:#8585a3;font-size:17px}
     .nav span{display:block;margin-top:3px;font-size:10px;font-weight:800}
     .nav.active{color:#fff;background:linear-gradient(135deg,rgba(255,122,24,.9),rgba(6,182,212,.65))}
 
-    .modal{
-      display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);
-      padding:18px;align-items:center;justify-content:center;
-    }
+    .modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.72);padding:18px;align-items:center;justify-content:center}
     .modal.show{display:flex}
-    .modal-box{
-      width:min(440px,100%);max-height:88vh;overflow:auto;background:#121225;
-      border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px;color:#fff;
-    }
+    .modal-box{width:min(440px,100%);max-height:88vh;overflow:auto;background:#121225;border:1px solid rgba(255,255,255,.08);border-radius:26px;padding:22px;color:#fff}
     .modal-box h2{margin:0 0 8px}
     .modal-box p{color:#a5b4fc}
     .field{margin-top:12px}
     .field label{display:block;font-size:13px;color:#b9b9d6;margin:0 0 6px}
-    .modal-box input{
-      width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);
-      outline:none;background:#1a1a2e;color:#fff;
-    }
+    .modal-box input{width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);outline:none;background:#1a1a2e;color:#fff}
     .hint{font-size:12px;color:#ffdd7a;margin-top:12px;line-height:1.5}
     .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
   </style>
@@ -198,7 +131,6 @@
 </div>
 
 <div class="app">
-
   <section class="page active" id="homePage">
     <div class="hero">
       <div class="hero-top">
@@ -223,12 +155,8 @@
     </div>
 
     <div class="grid">
-      <button class="quick" onclick="openPage('earnPage')">
-        <span>🎬</span><b>Earn Points</b><small>Complete tasks daily</small>
-      </button>
-      <button class="quick" onclick="openPage('profilePage')">
-        <span>👥</span><b>Referral</b><small>Invite friends +3 points</small>
-      </button>
+      <button class="quick" onclick="openPage('earnPage')"><span>🎬</span><b>Earn Points</b><small>Complete tasks daily</small></button>
+      <button class="quick" onclick="openPage('profilePage')"><span>👥</span><b>Referral</b><small>Invite friends + commission</small></button>
     </div>
 
     <div class="rules-card">
@@ -241,7 +169,15 @@
   <section class="page" id="earnPage">
     <div class="page-head">
       <h2>Earn Points</h2>
-      <p>Complete reward tasks and collect points. Daily task limit: 100.</p>
+      <p>Complete reward tasks and collect points.</p>
+    </div>
+
+    <div class="task-card">
+      <div class="task-left">
+        <div class="task-icon">🎁</div>
+        <div><h3>Daily Bonus</h3><p>Watch task and claim +3 Points once per day</p></div>
+      </div>
+      <button class="btn" id="dailyBonusBtn" onclick="watchDailyBonusAd()">Claim</button>
     </div>
 
     <div class="task-card">
@@ -321,7 +257,7 @@
 
     <div class="ref-card">
       <h3>👥 Your Referral Link</h3>
-      <p>Invite friends and earn <b style="color:#67e8f9;">+3 Points</b> when a new user joins using your link.</p>
+      <p>Invite friends and earn referral bonus plus 5% commission when your referrals earn points.</p>
       <div class="ref-link" id="referralLinkBox">Loading referral link...</div>
       <div class="ref-actions">
         <button class="btn" onclick="copyReferral()">Copy Link</button>
@@ -334,13 +270,30 @@
           <span>Total Referrals</span>
         </div>
         <div class="ref-stat">
+          <b>5%</b>
+          <span>Referral Commission</span>
+        </div>
+      </div>
+
+      <div class="ref-stats">
+        <div class="ref-stat">
+          <b id="commissionPending">0.00</b>
+          <span>Pending Commission</span>
+        </div>
+        <div class="ref-stat">
           <b>+3</b>
-          <span>Points per referral</span>
+          <span>Referral Join Bonus</span>
         </div>
       </div>
 
       <button class="btn full gray" onclick="loadReferrals()">Refresh Referrals</button>
       <div id="referralUsersList"></div>
+    </div>
+
+    <div class="ref-card">
+      <h3>🔥 Referral Commission History</h3>
+      <p>When your referrals earn points, you receive 5% commission as a system bonus.</p>
+      <div id="commissionHistoryList"><p class="ref-empty">Loading commission history...</p></div>
     </div>
 
     <div class="menu-list">
@@ -349,15 +302,14 @@
       <div class="menu-item" onclick="showRulesModal()"><span>📜 App Rules</span><b>View</b></div>
     </div>
   </section>
-
 </div>
 
 <nav class="bottom-nav">
   <button class="nav active" onclick="openPage('homePage',this)">🏠<span>Home</span></button>
-  <button class="nav" onclick="openPage('earnPage',this)">🎬<span>Earn</span></button>
+  <button class="nav" onclick="openPage('earnPage',this);loadDailyBonusStatus();">🎬<span>Earn</span></button>
   <button class="nav" onclick="openPage('withdrawPage',this)">💎<span>Withdraw</span></button>
   <button class="nav" onclick="openPage('historyPage',this);loadWithdrawHistory();">📋<span>History</span></button>
-  <button class="nav" onclick="openPage('profilePage',this);renderReferralLink();loadReferrals();">👤<span>Profile</span></button>
+  <button class="nav" onclick="openPage('profilePage',this);renderReferralLink();loadReferrals();loadCommissionHistory();">👤<span>Profile</span></button>
 </nav>
 
 <div class="modal" id="withdrawModal">
@@ -378,11 +330,10 @@
     <h2>📜 Rewards Hub Rules</h2>
     <p>1. Free Fire SG Region only.</p>
     <p>2. Withdraw requests need only Game ID and Game Name.</p>
-    <p>3. One user can complete up to 100 reward tasks per day.</p>
-    <p>4. Withdraw requests are manually reviewed and can take 24–48 hours.</p>
-    <p style="color:#ff9b9b;font-weight:800;">5. If you cheat, use fake accounts, exploit tasks, spam referrals, or submit false details, your account will be permanently banned.</p>
-    <p>6. Referral reward is given only when a new user joins using your referral link.</p>
-    <p>7. Channel join reward can be claimed only once.</p>
+    <p>3. Daily bonus can be claimed once per day.</p>
+    <p>4. Referrers earn 5% commission when referrals earn points.</p>
+    <p>5. Withdraw needs at least 2 referrals.</p>
+    <p style="color:#ff9b9b;font-weight:800;">6. If you cheat, use fake accounts, exploit tasks, spam referrals, or submit false details, your account will be permanently banned.</p>
     <button class="btn full" onclick="closeRulesModal()">Close</button>
   </div>
 </div>
@@ -411,6 +362,8 @@ let todayPoints = 0;
 let dailyTasks = 0;
 let taskBusy = false;
 let selectedReward = null;
+let referralCommissionPending = 0;
+let dailyBonusClaimed = false;
 
 function alertMsg(message) {
   if (tg && tg.showAlert) tg.showAlert(message);
@@ -467,6 +420,9 @@ function updateUI() {
   const pt = document.getElementById("profileTodayPoints");
   if (pt) pt.innerText = todayPoints;
 
+  const cp = document.getElementById("commissionPending");
+  if (cp) cp.innerText = Number(referralCommissionPending || 0).toFixed(2);
+
   renderReferralLink();
 }
 
@@ -492,8 +448,11 @@ async function syncUser() {
     if (data.ok && data.user) {
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
+      referralCommissionPending = Number(data.user.referral_commission_pending || 0);
       updateUI();
       loadReferrals();
+      loadDailyBonusStatus();
+      loadCommissionHistory();
     }
   } catch(e) {
     logStatus("Backend sync failed");
@@ -506,11 +465,6 @@ function openPage(pageId, btn) {
 
   document.querySelectorAll(".nav").forEach(b => b.classList.remove("active"));
   if (btn) btn.classList.add("active");
-
-  if (pageId === "profilePage") {
-    renderReferralLink();
-    loadReferrals();
-  }
 
   window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -562,6 +516,7 @@ async function addTaskPoint(taskNo) {
   if (data.ok && data.user) {
     points = Number(data.user.points || 0);
     todayPoints = Number(data.user.today_points || 0);
+    referralCommissionPending = Number(data.user.referral_commission_pending || referralCommissionPending || 0);
 
     if (data.daily_tasks !== null && data.daily_tasks !== undefined) {
       dailyTasks = Number(data.daily_tasks || 0);
@@ -603,11 +558,8 @@ async function watchRewardTask(taskNo) {
 
     const rewarded = await addTaskPoint(taskNo);
 
-    if (rewarded) {
-      startTaskCountdown(taskNo, TASK_COOLDOWN_SECONDS);
-    } else {
-      resetTaskButton(taskNo);
-    }
+    if (rewarded) startTaskCountdown(taskNo, TASK_COOLDOWN_SECONDS);
+    else resetTaskButton(taskNo);
 
     taskBusy = false;
   }
@@ -640,13 +592,10 @@ async function watchRewardTask(taskNo) {
           everyPage: false
         }
       });
-
       setTimeout(finishReward, REWARD_FALLBACK_MS);
     }
 
-    if (taskNo === 1 || taskNo === 2) {
-      setTimeout(finishReward, REWARD_FALLBACK_MS);
-    }
+    if (taskNo === 1 || taskNo === 2) setTimeout(finishReward, REWARD_FALLBACK_MS);
   } catch(e) {
     resetTaskButton(taskNo);
     taskBusy = false;
@@ -654,9 +603,100 @@ async function watchRewardTask(taskNo) {
   }
 }
 
+async function loadDailyBonusStatus() {
+  const btn = document.getElementById("dailyBonusBtn");
+  if (!btn) return;
+
+  try {
+    const res = await fetch(API_BASE + "/daily/status?telegram_id=" + encodeURIComponent(telegramId));
+    const data = await res.json();
+
+    if (data.ok && data.claimed) {
+      dailyBonusClaimed = true;
+      btn.disabled = true;
+      btn.innerText = "Claimed";
+    } else {
+      dailyBonusClaimed = false;
+      btn.disabled = false;
+      btn.innerText = "Claim";
+    }
+  } catch {
+    btn.innerText = "Claim";
+  }
+}
+
+async function watchDailyBonusAd() {
+  const btn = document.getElementById("dailyBonusBtn");
+
+  if (dailyBonusClaimed) {
+    alertMsg("Daily bonus already claimed. Come back tomorrow.");
+    return;
+  }
+
+  if (typeof window.show_11025198 !== "function") {
+    alertMsg("Bonus task not ready. Close and open app again.");
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerText = "Opening...";
+
+  let done = false;
+
+  async function claimNow() {
+    if (done) return;
+    done = true;
+
+    btn.innerText = "Claiming...";
+
+    try {
+      const data = await api("/daily/claim", { telegram_id: telegramId });
+
+      if (data.ok && data.user) {
+        points = Number(data.user.points || 0);
+        todayPoints = Number(data.user.today_points || 0);
+        referralCommissionPending = Number(data.user.referral_commission_pending || referralCommissionPending || 0);
+
+        dailyBonusClaimed = true;
+        updateUI();
+
+        btn.disabled = true;
+        btn.innerText = "Claimed";
+
+        alertMsg(data.message || "+3 Daily Bonus added.");
+      } else {
+        btn.disabled = false;
+        btn.innerText = "Claim";
+        alertMsg(data.message || "Daily bonus claim failed.");
+      }
+    } catch {
+      btn.disabled = false;
+      btn.innerText = "Claim";
+      alertMsg("Daily bonus claim failed. Try again.");
+    }
+  }
+
+  try {
+    show_11025198("pop")
+      .then(claimNow)
+      .catch(function () {
+        if (!done) {
+          btn.disabled = false;
+          btn.innerText = "Claim";
+          alertMsg("Please complete the bonus task to claim.");
+        }
+      });
+
+    setTimeout(claimNow, 12000);
+  } catch {
+    btn.disabled = false;
+    btn.innerText = "Claim";
+    alertMsg("Bonus task failed. Try again.");
+  }
+}
+
 function joinChannel() {
   const link = "https://t.me/" + CHANNEL_USERNAME;
-
   if (tg && tg.openTelegramLink) tg.openTelegramLink(link);
   else window.open(link, "_blank");
 }
@@ -670,13 +710,12 @@ async function verifyChannelJoin() {
   }
 
   try {
-    const data = await api("/channel/verify", {
-      telegram_id: telegramId
-    });
+    const data = await api("/channel/verify", { telegram_id: telegramId });
 
     if (data.ok && data.user) {
       points = Number(data.user.points || 0);
       todayPoints = Number(data.user.today_points || 0);
+      referralCommissionPending = Number(data.user.referral_commission_pending || referralCommissionPending || 0);
       updateUI();
 
       if (btn) {
@@ -690,15 +729,13 @@ async function verifyChannelJoin() {
         btn.disabled = false;
         btn.innerText = "Verify";
       }
-
       alertMsg(data.message || "Please join channel first.");
     }
-  } catch(e) {
+  } catch {
     if (btn) {
       btn.disabled = false;
       btn.innerText = "Verify";
     }
-
     alertMsg("Channel verify failed. Try again.");
   }
 }
@@ -728,7 +765,7 @@ async function loadReferrals() {
       return;
     }
 
-    listBox.innerHTML = data.referrals.map(function(ref, index) {
+    listBox.innerHTML = data.referrals.map(function(ref) {
       const dateText = ref.joined_at ? new Date(ref.joined_at).toLocaleDateString() : "Joined";
       return `
         <div class="ref-user">
@@ -740,9 +777,49 @@ async function loadReferrals() {
         </div>
       `;
     }).join("");
-  } catch(e) {
+  } catch {
     countBox.innerText = "0";
     listBox.innerHTML = "<p class='ref-empty'>Network error. Try again.</p>";
+  }
+}
+
+async function loadCommissionHistory() {
+  const box = document.getElementById("commissionHistoryList");
+  if (!box) return;
+
+  box.innerHTML = "<p class='ref-empty'>Loading commission history...</p>";
+
+  try {
+    const res = await fetch(API_BASE + "/history?telegram_id=" + encodeURIComponent(telegramId));
+    const data = await res.json();
+
+    if (!data.ok || !data.history) {
+      box.innerHTML = "<p class='ref-empty'>Commission history load failed.</p>";
+      return;
+    }
+
+    const commissions = data.history.filter(function (item) {
+      return item.type === "referral_commission";
+    });
+
+    if (commissions.length === 0) {
+      box.innerHTML = "<p class='ref-empty'>No referral commission earned yet.</p>";
+      return;
+    }
+
+    box.innerHTML = commissions.slice(0, 10).map(function (item) {
+      return `
+        <div class="ref-user">
+          <div>
+            <div class="ref-user-name">🔥 5% Commission Bonus</div>
+            <small>${new Date(item.created_at).toLocaleString()}</small>
+          </div>
+          <b style="color:#67e8f9;">+${item.points}</b>
+        </div>
+      `;
+    }).join("");
+  } catch {
+    box.innerHTML = "<p class='ref-empty'>Network error. Try again.</p>";
   }
 }
 
@@ -845,7 +922,7 @@ async function submitWithdraw() {
     } else {
       alertMsg(data.message || "Withdraw failed.");
     }
-  } catch(e) {
+  } catch {
     alertMsg("Withdraw request failed. Try again.");
   }
 }
@@ -900,7 +977,7 @@ ${item.details}${item.admin_note ? "\nAdmin Note: " + item.admin_note : ""}</div
         </div>
       `;
     }).join("");
-  } catch(e) {
+  } catch {
     box.innerHTML = "<p style='color:#ffb4b4;'>Network error. Try again.</p>";
   }
 }
