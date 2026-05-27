@@ -175,9 +175,12 @@
     <div class="task-card">
       <div class="task-left">
         <div class="task-icon">🎁</div>
-        <div><h3>Daily Bonus</h3><p>Watch task and claim +3 Points once per day</p></div>
+        <div>
+          <h3>Daily Bonus</h3>
+          <p id="dailyBonusText">Open task link, wait 8s and claim +3 Points</p>
+        </div>
       </div>
-      <button class="btn" id="dailyBonusBtn" onclick="watchDailyBonusAd()">Claim</button>
+      <button class="btn" id="dailyBonusBtn" onclick="startDailyBonusTask()">Start</button>
     </div>
 
     <div class="task-card">
@@ -348,6 +351,11 @@ const CHANNEL_USERNAME = "RewardsHubSL";
 
 const TASK_COOLDOWN_SECONDS = 20;
 const REWARD_FALLBACK_MS = 12000;
+const DAILY_BONUS_DIRECT_LINK = "https://www.effectivecpmnetwork.com/surkwf3kv2?key=62fd150b32ee1955d34cf4d31ebb869a";
+const DAILY_BONUS_WAIT_SECONDS = 8;
+
+let dailyBonusTimer = null;
+let dailyBonusResetTimer = null;
 
 const user = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 
@@ -603,8 +611,73 @@ async function watchRewardTask(taskNo) {
   }
 }
 
+function formatTimeLeft(seconds) {
+  seconds = Math.max(0, Number(seconds || 0));
+
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+
+  if (h > 0) return h + "h " + m + "m " + s + "s";
+  if (m > 0) return m + "m " + s + "s";
+  return s + "s";
+}
+
+function setDailyBonusClaimed(secondsRemaining) {
+  const btn = document.getElementById("dailyBonusBtn");
+  const text = document.getElementById("dailyBonusText");
+
+  if (!btn) return;
+
+  dailyBonusClaimed = true;
+  btn.disabled = true;
+
+  if (dailyBonusResetTimer) {
+    clearInterval(dailyBonusResetTimer);
+    dailyBonusResetTimer = null;
+  }
+
+  let remain = Number(secondsRemaining || 0);
+
+  function updateResetText() {
+    if (remain <= 0) {
+      btn.disabled = false;
+      btn.innerText = "Start";
+      btn.onclick = function () {
+        startDailyBonusTask();
+      };
+
+      if (text) {
+        text.innerText = "Open task link, wait 8s and claim +3 Points";
+      }
+
+      dailyBonusClaimed = false;
+
+      if (dailyBonusResetTimer) {
+        clearInterval(dailyBonusResetTimer);
+        dailyBonusResetTimer = null;
+      }
+
+      return;
+    }
+
+    btn.innerText = "Claimed";
+
+    if (text) {
+      text.innerText = "Next claim in " + formatTimeLeft(remain);
+    }
+
+    remain--;
+  }
+
+  updateResetText();
+  dailyBonusResetTimer = setInterval(updateResetText, 1000);
+}
+
 async function loadDailyBonusStatus() {
   const btn = document.getElementById("dailyBonusBtn");
+  const text = document.getElementById("dailyBonusText");
+
   if (!btn) return;
 
   try {
@@ -612,86 +685,161 @@ async function loadDailyBonusStatus() {
     const data = await res.json();
 
     if (data.ok && data.claimed) {
-      dailyBonusClaimed = true;
-      btn.disabled = true;
-      btn.innerText = "Claimed";
+      setDailyBonusClaimed(Number(data.seconds_remaining || 0));
     } else {
       dailyBonusClaimed = false;
       btn.disabled = false;
-      btn.innerText = "Claim";
+      btn.innerText = "Start";
+      btn.onclick = function () {
+        startDailyBonusTask();
+      };
+
+      if (text) {
+        text.innerText = "Open task link, wait 8s and claim +3 Points";
+      }
     }
-  } catch {
-    btn.innerText = "Claim";
+  } catch (e) {
+    btn.disabled = false;
+    btn.innerText = "Start";
+    btn.onclick = function () {
+      startDailyBonusTask();
+    };
+
+    if (text) {
+      text.innerText = "Open task link, wait 8s and claim +3 Points";
+    }
   }
 }
 
-async function watchDailyBonusAd() {
+function openDailyBonusLink() {
+  if (tg && tg.openLink) {
+    tg.openLink(DAILY_BONUS_DIRECT_LINK);
+  } else {
+    window.open(DAILY_BONUS_DIRECT_LINK, "_blank");
+  }
+}
+
+function startDailyBonusTask() {
   const btn = document.getElementById("dailyBonusBtn");
+  const text = document.getElementById("dailyBonusText");
+
+  if (!btn) return;
 
   if (dailyBonusClaimed) {
     alertMsg("Daily bonus already claimed. Come back tomorrow.");
     return;
   }
 
-  if (typeof window.show_11025198 !== "function") {
-    alertMsg("Bonus task not ready. Close and open app again.");
-    return;
+  if (dailyBonusTimer) {
+    clearInterval(dailyBonusTimer);
+    dailyBonusTimer = null;
   }
 
+  openDailyBonusLink();
+
+  let remain = DAILY_BONUS_WAIT_SECONDS;
+
   btn.disabled = true;
-  btn.innerText = "Opening...";
+  btn.innerText = remain + "s";
 
-  let done = false;
+  if (text) {
+    text.innerText = "Please wait " + remain + " seconds, then claim your bonus.";
+  }
 
-  async function claimNow() {
-    if (done) return;
-    done = true;
+  dailyBonusTimer = setInterval(function () {
+    remain--;
 
-    btn.innerText = "Claiming...";
+    if (remain <= 0) {
+      clearInterval(dailyBonusTimer);
+      dailyBonusTimer = null;
 
-    try {
-      const data = await api("/daily/claim", { telegram_id: telegramId });
-
-      if (data.ok && data.user) {
-        points = Number(data.user.points || 0);
-        todayPoints = Number(data.user.today_points || 0);
-        referralCommissionPending = Number(data.user.referral_commission_pending || referralCommissionPending || 0);
-
-        dailyBonusClaimed = true;
-        updateUI();
-
-        btn.disabled = true;
-        btn.innerText = "Claimed";
-
-        alertMsg(data.message || "+3 Daily Bonus added.");
-      } else {
-        btn.disabled = false;
-        btn.innerText = "Claim";
-        alertMsg(data.message || "Daily bonus claim failed.");
-      }
-    } catch {
       btn.disabled = false;
       btn.innerText = "Claim";
-      alertMsg("Daily bonus claim failed. Try again.");
+      btn.onclick = function () {
+        claimDailyBonusNow();
+      };
+
+      if (text) {
+        text.innerText = "Task completed. Claim your +3 Points bonus.";
+      }
+    } else {
+      btn.innerText = remain + "s";
+
+      if (text) {
+        text.innerText = "Please wait " + remain + " seconds, then claim your bonus.";
+      }
     }
+  }, 1000);
+}
+
+async function claimDailyBonusNow() {
+  const btn = document.getElementById("dailyBonusBtn");
+  const text = document.getElementById("dailyBonusText");
+
+  if (!btn) return;
+
+  btn.disabled = true;
+  btn.innerText = "Claiming...";
+
+  if (text) {
+    text.innerText = "Claiming daily bonus...";
   }
 
   try {
-    show_11025198("pop")
-      .then(claimNow)
-      .catch(function () {
-        if (!done) {
-          btn.disabled = false;
-          btn.innerText = "Claim";
-          alertMsg("Please complete the bonus task to claim.");
-        }
-      });
+    const data = await api("/daily/claim", {
+      telegram_id: telegramId
+    });
 
-    setTimeout(claimNow, 12000);
-  } catch {
+    if (data.ok && data.user) {
+      points = Number(data.user.points || 0);
+      todayPoints = Number(data.user.today_points || 0);
+      referralCommissionPending = Number(data.user.referral_commission_pending || referralCommissionPending || 0);
+
+      dailyBonusClaimed = true;
+      updateUI();
+
+      alertMsg(data.message || "+3 Daily Bonus added.");
+
+      btn.onclick = function () {
+        startDailyBonusTask();
+      };
+
+      setDailyBonusClaimed(Number(data.seconds_remaining || 0));
+      return;
+    }
+
+    if (data.claimed && data.seconds_remaining !== undefined) {
+      alertMsg(data.message || "Daily bonus already claimed.");
+      btn.onclick = function () {
+        startDailyBonusTask();
+      };
+      setDailyBonusClaimed(Number(data.seconds_remaining || 0));
+      return;
+    }
+
     btn.disabled = false;
     btn.innerText = "Claim";
-    alertMsg("Bonus task failed. Try again.");
+    btn.onclick = function () {
+      claimDailyBonusNow();
+    };
+
+    if (text) {
+      text.innerText = "Claim failed. Try again.";
+    }
+
+    alertMsg(data.message || "Daily bonus claim failed.");
+  } catch (e) {
+    btn.disabled = false;
+    btn.innerText = "Claim";
+    btn.onclick = function () {
+      claimDailyBonusNow();
+    };
+
+    if (text) {
+      text.innerText = "Daily bonus claim failed. Try again.";
+    }
+
+    alertMsg("Daily bonus claim failed. Try again.");
   }
 }
 
