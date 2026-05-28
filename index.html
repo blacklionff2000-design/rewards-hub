@@ -262,9 +262,9 @@
     <div class="reward-card" onclick="openWithdrawModal('Weekly Membership',2500,'Free Fire SG')"><div>🔥 Weekly Membership<br><small>Game ID + Game Name</small></div><b>2500 Points</b></div>
     <div class="reward-card" onclick="openWithdrawModal('Monthly Membership',10000,'Free Fire SG')"><div>👑 Monthly Membership<br><small>Game ID + Game Name</small></div><b>10000 Points</b></div>
 
-    <div class="section-title">Dialog Reload</div>
+ <div class="section-title">Dialog Reload</div>
 <div class="reward-card" onclick="openWithdrawModal('Dialog Reload Rs.50',300,'Dialog Reload')">
-  <div>📱 Dialog Reload Rs.50<br><small>Dialog Number</small></div>
+  <div>📱 Dialog Reload Rs.50<br><small>Dialog Number only</small></div>
   <b>300 Points</b>
 </div>
 
@@ -1140,10 +1140,10 @@ function renderWithdrawFields() {
     html += `<div class="hint">⚠️ Free Fire SG Region only. Enter correct Game ID and Game Name.</div>`;
   }
 
- if (selectedReward.type === "Dialog Reload") {
-  html += fieldHtml("phoneNumber", "Dialog Number", "Enter your Dialog number", "tel");
-  html += `<div class="hint">⚠️ Dialog Reload Rs.50 request requires Dialog number only. Wrong number can reject your request.</div>`;
- }
+  if (selectedReward.type === "Dialog Reload") {
+    html += fieldHtml("dialogNumber", "Dialog Number", "Enter your Dialog mobile number", "tel");
+    html += `<div class="hint">⚠️ Dialog Reload Rs.50 request requires Dialog number only. Wrong number can reject your request.</div>`;
+  }
 
   if (selectedReward.type === "eZ Cash") {
     html += fieldHtml("ezCashNumber", "eZ Cash Number", "Enter your eZ Cash number", "tel");
@@ -1165,13 +1165,13 @@ function collectWithdrawDetails() {
     return "Reward Type: Free Fire SG\nFree Fire Game ID: " + uid + "\nFree Fire Game Name: " + name;
   }
 
- if (selectedReward.type === "Dialog Reload") {
-  const number = document.getElementById("phoneNumber").value.trim();
+  if (selectedReward.type === "Dialog Reload") {
+    const number = document.getElementById("dialogNumber").value.trim();
 
-  if (!number) return null;
+    if (!number) return null;
 
-  return "Reward Type: Dialog Reload\nReload Amount: Rs.50\nDialog Number: " + number;
- }
+    return "Reward Type: Dialog Reload\nReload Amount: Rs.50\nDialog Number: " + number;
+  }
 
   if (selectedReward.type === "eZ Cash") {
     const ezNumber = document.getElementById("ezCashNumber").value.trim();
