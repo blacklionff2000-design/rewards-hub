@@ -1140,10 +1140,10 @@ function renderWithdrawFields() {
     html += `<div class="hint">⚠️ Free Fire SG Region only. Enter correct Game ID and Game Name.</div>`;
   }
 
-  if (selectedReward.type === "Mobile Reload") {
-    html += fieldHtml("phoneNumber", "Reload Number", "Enter your reload number", "tel");
-    html += `<div class="hint">⚠️ Reload Rs.50 request requires reload number only. Wrong number can reject your request.</div>`;
-  }
+ if (selectedReward.type === "Dialog Reload") {
+  html += fieldHtml("phoneNumber", "Dialog Number", "Enter your Dialog number", "tel");
+  html += `<div class="hint">⚠️ Dialog Reload Rs.50 request requires Dialog number only. Wrong number can reject your request.</div>`;
+ }
 
   if (selectedReward.type === "eZ Cash") {
     html += fieldHtml("ezCashNumber", "eZ Cash Number", "Enter your eZ Cash number", "tel");
