@@ -1165,13 +1165,13 @@ function collectWithdrawDetails() {
     return "Reward Type: Free Fire SG\nFree Fire Game ID: " + uid + "\nFree Fire Game Name: " + name;
   }
 
-  if (selectedReward.type === "Mobile Reload") {
-    const number = document.getElementById("phoneNumber").value.trim();
+ if (selectedReward.type === "Dialog Reload") {
+  const number = document.getElementById("phoneNumber").value.trim();
 
-    if (!number) return null;
+  if (!number) return null;
 
-    return "Reward Type: Mobile Reload\nReload Amount: Rs.50\nReload Number: " + number;
-  }
+  return "Reward Type: Dialog Reload\nReload Amount: Rs.50\nDialog Number: " + number;
+ }
 
   if (selectedReward.type === "eZ Cash") {
     const ezNumber = document.getElementById("ezCashNumber").value.trim();
