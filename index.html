@@ -6,7 +6,6 @@
   <title>Rewards Hub</title>
 
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <script src="https://libtl.com/sdk.js" data-zone="11025198" data-sdk="show_11025198"></script>
 
   <style>
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -69,8 +68,9 @@
     .btn.gray{background:#24243b}
     .btn.full{width:100%;margin-top:14px}
 
-    .reward-card{margin-top:10px;padding:16px;border-radius:20px;display:flex;align-items:center;justify-content:space-between}
-    .reward-card b{color:#67e8f9}
+    .reward-card{margin-top:10px;padding:16px;border-radius:20px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .reward-card b{color:#67e8f9;white-space:nowrap}
+    .reward-card small{font-size:12px;color:#b9b9d6}
 
     .ref-card,.rules-card{padding:18px;margin-top:16px}
     .ref-card h3,.rules-card h3{margin:0 0 10px}
@@ -117,6 +117,18 @@
     .modal-box input{width:100%;padding:15px;border-radius:16px;border:1px solid rgba(255,255,255,.12);outline:none;background:#1a1a2e;color:#fff}
     .hint{font-size:12px;color:#ffdd7a;margin-top:12px;line-height:1.5}
     .modal-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+
+    .warning-box{
+      background:rgba(255,122,24,.12);
+      border:1px solid rgba(255,122,24,.35);
+      border-left:5px solid #ff7a18;
+      border-radius:18px;
+      padding:14px;
+      margin-top:14px;
+      color:#ffddb8;
+      line-height:1.55;
+      font-size:13px;
+    }
   </style>
 </head>
 
@@ -145,31 +157,36 @@
       <div class="balance">
         <p>Your Balance</p>
         <h2><span id="points">0</span> Points</h2>
-        <small>Earn points and withdraw Free Fire rewards</small>
+        <small>Earn points and withdraw rewards</small>
       </div>
 
       <div class="stats-row">
         <div class="stat"><b id="todayPoints">0</b><span>Today Points</span></div>
-        <div class="stat"><b><span id="dailyTasks">0</span>/100</b><span>Today Tasks</span></div>
+        <div class="stat"><b><span id="hourlyTasks">0</span>/20</b><span>This Hour Ads</span></div>
       </div>
     </div>
 
     <div class="grid">
-      <button class="quick" onclick="openPage('earnPage')"><span>🎬</span><b>Earn Points</b><small>Complete tasks daily</small></button>
+      <button class="quick" onclick="openPage('earnPage')"><span>🎬</span><b>Earn Points</b><small>Complete sponsor tasks</small></button>
       <button class="quick" onclick="openPage('profilePage')"><span>👥</span><b>Referral</b><small>Invite friends + commission</small></button>
     </div>
 
     <div class="rules-card">
       <h3>⚠️ Quick Notice</h3>
-      <p class="danger">SG Region Free Fire ID only. Wrong region or wrong game details can reject your withdraw.</p>
-      <p>Cheating, fake accounts, task exploits, or false withdraw details can permanently ban your account.</p>
+      <p class="danger">Withdraw requires at least 2 referrals.</p>
+      <p>Fake accounts, spam referrals, VPN abuse, or fake point attempts can permanently restrict your account.</p>
     </div>
   </section>
 
   <section class="page" id="earnPage">
     <div class="page-head">
       <h2>Earn Points</h2>
-      <p>Complete reward tasks and collect points.</p>
+      <p>Open sponsor links, wait for the timer, then claim points.</p>
+    </div>
+
+    <div class="warning-box">
+      ⚠️ <b>Important Warning:</b><br>
+      Please wait until the sponsor page fully loads. Do not close it early. Fake point attempts can get your account banned.
     </div>
 
     <div class="task-card">
@@ -177,7 +194,7 @@
         <div class="task-icon">🎁</div>
         <div>
           <h3>Daily Bonus</h3>
-          <p id="dailyBonusText">Open task link, wait 8s and claim +3 Points</p>
+          <p id="dailyBonusText">Open sponsor link, wait 8s and claim +3 Points</p>
         </div>
       </div>
       <button class="btn" id="dailyBonusBtn" onclick="startDailyBonusTask()">Start</button>
@@ -186,25 +203,23 @@
     <div class="task-card">
       <div class="task-left">
         <div class="task-icon">🎬</div>
-        <div><h3>Reward Task 01</h3><p>Reward: +1 Point</p></div>
+        <div>
+          <h3>Sponsor Task</h3>
+          <p id="sponsorTaskText">Open sponsor link, wait 8s and claim +1 Point</p>
+        </div>
       </div>
-      <button class="btn" id="taskBtn1" onclick="watchRewardTask(1)">Start</button>
+      <button class="btn" id="sponsorTaskBtn" onclick="startSponsorTask()">Start</button>
     </div>
 
     <div class="task-card">
       <div class="task-left">
-        <div class="task-icon">🎁</div>
-        <div><h3>Reward Task 02</h3><p>Reward: +1 Point</p></div>
+        <div class="task-icon">⏳</div>
+        <div>
+          <h3>Hourly Limit</h3>
+          <p id="hourlyLimitText">Loading hourly task status...</p>
+        </div>
       </div>
-      <button class="btn" id="taskBtn2" onclick="watchRewardTask(2)">Start</button>
-    </div>
-
-    <div class="task-card">
-      <div class="task-left">
-        <div class="task-icon">⚡</div>
-        <div><h3>Reward Task 03</h3><p>Reward: +1 Point</p></div>
-      </div>
-      <button class="btn" id="taskBtn3" onclick="watchRewardTask(3)">Start</button>
+      <button class="btn gray" onclick="loadHourlyTaskStatus()">Refresh</button>
     </div>
 
     <div class="task-card">
@@ -227,19 +242,37 @@
   <section class="page" id="withdrawPage">
     <div class="page-head">
       <h2>Withdraw</h2>
-      <p>Free Fire SG Region only. Enter correct Game ID and Game Name.</p>
+      <p>Free Fire SG rewards, Reload, and eZ Cash withdraw options. Minimum 2 referrals required.</p>
     </div>
 
-    <div class="section-title">Free Fire Diamonds</div>
-    <div class="reward-card" onclick="openWithdrawModal('25 Diamonds',400,'Free Fire SG')"><div>💎 25 Diamonds</div><b>400 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('50 Diamonds',800,'Free Fire SG')"><div>💎 50 Diamonds</div><b>800 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('100 Diamonds',1600,'Free Fire SG')"><div>💎 100 Diamonds</div><b>1600 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('310 Diamonds',4800,'Free Fire SG')"><div>💎 310 Diamonds</div><b>4800 Points</b></div>
+    <div class="warning-box">
+      ⚠️ <b>Withdraw Rule:</b><br>
+      You must have at least 2 referrals before submitting any withdraw request.
+      Use correct details only. Wrong details can reject your request.
+    </div>
 
-    <div class="section-title">Free Fire Membership</div>
-    <div class="reward-card" onclick="openWithdrawModal('Weekly Lite',500,'Free Fire SG')"><div>🎟 Weekly Lite</div><b>500 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('Weekly Membership',2500,'Free Fire SG')"><div>🔥 Weekly Membership</div><b>2500 Points</b></div>
-    <div class="reward-card" onclick="openWithdrawModal('Monthly Membership',10000,'Free Fire SG')"><div>👑 Monthly Membership</div><b>10000 Points</b></div>
+    <div class="section-title">Free Fire Diamonds - SG Region</div>
+    <div class="reward-card" onclick="openWithdrawModal('25 Diamonds',400,'Free Fire SG')"><div>💎 25 Diamonds<br><small>Game ID + Game Name</small></div><b>400 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('50 Diamonds',800,'Free Fire SG')"><div>💎 50 Diamonds<br><small>Game ID + Game Name</small></div><b>800 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('100 Diamonds',1600,'Free Fire SG')"><div>💎 100 Diamonds<br><small>Game ID + Game Name</small></div><b>1600 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('310 Diamonds',4800,'Free Fire SG')"><div>💎 310 Diamonds<br><small>Game ID + Game Name</small></div><b>4800 Points</b></div>
+
+    <div class="section-title">Free Fire Membership - SG Region</div>
+    <div class="reward-card" onclick="openWithdrawModal('Weekly Lite',500,'Free Fire SG')"><div>🎟 Weekly Lite<br><small>Game ID + Game Name</small></div><b>500 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('Weekly Membership',2500,'Free Fire SG')"><div>🔥 Weekly Membership<br><small>Game ID + Game Name</small></div><b>2500 Points</b></div>
+    <div class="reward-card" onclick="openWithdrawModal('Monthly Membership',10000,'Free Fire SG')"><div>👑 Monthly Membership<br><small>Game ID + Game Name</small></div><b>10000 Points</b></div>
+
+    <div class="section-title">Dialog Reload</div>
+<div class="reward-card" onclick="openWithdrawModal('Dialog Reload Rs.50',300,'Dialog Reload')">
+  <div>📱 Dialog Reload Rs.50<br><small>Dialog Number </small></div>
+  <b>300 Points</b>
+</div>
+
+    <div class="section-title">eZ Cash</div>
+    <div class="reward-card" onclick="openWithdrawModal('eZ Cash Rs.50',350,'eZ Cash')">
+      <div>💸 eZ Cash Rs.50<br><small>eZ Cash Number only</small></div>
+      <b>350 Points</b>
+    </div>
   </section>
 
   <section class="page" id="historyPage">
@@ -255,12 +288,12 @@
     <div class="panel profile-card">
       <div class="avatar" id="avatarText">RH</div>
       <h2 id="profileName">Rewards Hub User</h2>
-      <p>Your Free Fire SG rewards account</p>
+      <p>Your rewards account</p>
     </div>
 
     <div class="ref-card">
       <h3>👥 Your Referral Link</h3>
-      <p>Invite friends and earn referral bonus plus 5% commission when your referrals earn points.</p>
+      <p>Invite friends and earn referral bonus plus 20% commission when your referrals earn points.</p>
       <div class="ref-link" id="referralLinkBox">Loading referral link...</div>
       <div class="ref-actions">
         <button class="btn" onclick="copyReferral()">Copy Link</button>
@@ -268,25 +301,13 @@
       </div>
 
       <div class="ref-stats">
-        <div class="ref-stat">
-          <b id="referralCount">0</b>
-          <span>Total Referrals</span>
-        </div>
-        <div class="ref-stat">
-          <b>5%</b>
-          <span>Referral Commission</span>
-        </div>
+        <div class="ref-stat"><b id="referralCount">0</b><span>Total Referrals</span></div>
+        <div class="ref-stat"><b>20%</b><span>Referral Commission</span></div>
       </div>
 
       <div class="ref-stats">
-        <div class="ref-stat">
-          <b id="commissionPending">0.00</b>
-          <span>Pending Commission</span>
-        </div>
-        <div class="ref-stat">
-          <b>+3</b>
-          <span>Referral Join Bonus</span>
-        </div>
+        <div class="ref-stat"><b id="commissionPending">0.00</b><span>Pending Commission</span></div>
+        <div class="ref-stat"><b>+3</b><span>Referral Join Bonus</span></div>
       </div>
 
       <button class="btn full gray" onclick="loadReferrals()">Refresh Referrals</button>
@@ -295,7 +316,7 @@
 
     <div class="ref-card">
       <h3>🔥 Referral Commission History</h3>
-      <p>When your referrals earn points, you receive 5% commission as a system bonus.</p>
+      <p>When your referrals earn points, you receive 20% commission as a system bonus.</p>
       <div id="commissionHistoryList"><p class="ref-empty">Loading commission history...</p></div>
     </div>
 
@@ -309,18 +330,33 @@
 
 <nav class="bottom-nav">
   <button class="nav active" onclick="openPage('homePage',this)">🏠<span>Home</span></button>
-  <button class="nav" onclick="openPage('earnPage',this);loadDailyBonusStatus();">🎬<span>Earn</span></button>
+  <button class="nav" onclick="openPage('earnPage',this);loadHourlyTaskStatus();loadDailyBonusStatus();">🎬<span>Earn</span></button>
   <button class="nav" onclick="openPage('withdrawPage',this)">💎<span>Withdraw</span></button>
   <button class="nav" onclick="openPage('historyPage',this);loadWithdrawHistory();">📋<span>History</span></button>
   <button class="nav" onclick="openPage('profilePage',this);renderReferralLink();loadReferrals();loadCommissionHistory();">👤<span>Profile</span></button>
 </nav>
+
+<div class="modal" id="adWarningModal">
+  <div class="modal-box">
+    <h2>⚠️ Sponsor Task Warning</h2>
+    <p style="color:#ffddb8;">
+      Please wait until the sponsor page fully loads. Do not close it early.
+      Fake point attempts can get your account banned.
+    </p>
+    <p>After viewing the sponsor page, return to the app and wait for the timer to finish before claiming your points.</p>
+    <div class="modal-actions">
+      <button class="btn gray" onclick="closeAdWarning()">Cancel</button>
+      <button class="btn" id="adWarningOpenBtn">I Understand</button>
+    </div>
+  </div>
+</div>
 
 <div class="modal" id="withdrawModal">
   <div class="modal-box">
     <h2 id="modalRewardName">Withdraw</h2>
     <p id="modalRewardCost">Cost: 0 Points</p>
     <div id="dynamicFields"></div>
-    <div class="hint">⚠️ SG Region only. Enter correct Game ID and Game Name. Wrong details may reject your request.</div>
+    <div class="hint">⚠️ Minimum 2 referrals required. Enter correct details only.</div>
     <div class="modal-actions">
       <button class="btn gray" onclick="closeWithdrawModal()">Cancel</button>
       <button class="btn" onclick="submitWithdraw()">Submit</button>
@@ -331,12 +367,13 @@
 <div class="modal" id="rulesModal">
   <div class="modal-box">
     <h2>📜 Rewards Hub Rules</h2>
-    <p>1. Free Fire SG Region only.</p>
-    <p>2. Withdraw requests need only Game ID and Game Name.</p>
-    <p>3. Daily bonus can be claimed once per day.</p>
-    <p>4. Referrers earn 5% commission when referrals earn points.</p>
-    <p>5. Withdraw needs at least 2 referrals.</p>
-    <p style="color:#ff9b9b;font-weight:800;">6. If you cheat, use fake accounts, exploit tasks, spam referrals, or submit false details, your account will be permanently banned.</p>
+    <p>1. Withdraw requests need at least 2 referrals.</p>
+    <p>2. Free Fire withdraw needs Game ID and Game Name.</p>
+    <p>3. Reload withdraw needs reload number only.</p>
+    <p>4. eZ Cash withdraw needs eZ Cash number only.</p>
+    <p>5. Sponsor task pages must be opened and loaded properly before claiming.</p>
+    <p>6. Referrers earn 20% commission when referrals earn points.</p>
+    <p style="color:#ff9b9b;font-weight:800;">7. Fake points, fake accounts, spam referrals, VPN abuse, task exploits, or false withdraw details can get your account banned.</p>
     <button class="btn full" onclick="closeRulesModal()">Close</button>
   </div>
 </div>
@@ -349,13 +386,25 @@ const API_BASE = "https://rewards-hub-api.blacklionff2000.workers.dev";
 const BOT_USERNAME = "RewardsHubSLBot";
 const CHANNEL_USERNAME = "RewardsHubSL";
 
-const TASK_COOLDOWN_SECONDS = 20;
-const REWARD_FALLBACK_MS = 12000;
-const DAILY_BONUS_DIRECT_LINK = "https://www.effectivecpmnetwork.com/surkwf3kv2?key=62fd150b32ee1955d34cf4d31ebb869a";
+const TASK_WAIT_SECONDS = 8;
 const DAILY_BONUS_WAIT_SECONDS = 8;
 
-let dailyBonusTimer = null;
-let dailyBonusResetTimer = null;
+const ADS_LINKS = [
+  "https://www.effectivecpmnetwork.com/fnetnnu2ce?key=6bb05c5234b12a5668ee97b2b268d11e",
+  "https://www.effectivecpmnetwork.com/kpy8rsa81j?key=90ed912037faf825d7a78e3d19da8b08",
+  "https://www.effectivecpmnetwork.com/cbq3w0ka?key=62d82b83c962e148fffd397d19f1805e",
+  "https://www.effectivecpmnetwork.com/mqcmu01z?key=27ec46d07d847c82315c31932f6e8677",
+  "https://www.effectivecpmnetwork.com/fsw2utr26z?key=d64730d193b91e1263609ac75920a120",
+  "https://www.effectivecpmnetwork.com/imj3a8y4?key=7314886f7d32d8dc5c3759e4926750ab",
+  "https://www.effectivecpmnetwork.com/d7vsn9hp7?key=5a7450afb4e5120ec84ca2676cc250c4",
+  "https://www.effectivecpmnetwork.com/pzepdgh3q?key=07947526390fc1738b5c36ee84c40288",
+  "https://www.effectivecpmnetwork.com/viz4u6ambx?key=be5daf4d237aa4969ed6b30790d4c4b1",
+  "https://www.effectivecpmnetwork.com/yrv63g1cn8?key=6cfd735e0599e004cda1fe35a12c4463",
+  "https://www.effectivecpmnetwork.com/wsv2u1jp?key=98e305ed458707613af05377c57b47bc",
+  "https://www.effectivecpmnetwork.com/hrxnm2is?key=539d894491e228f662ecf4af5a0392b4"
+];
+
+const DAILY_BONUS_DIRECT_LINK = "https://www.effectivecpmnetwork.com/surkwf3kv2?key=62fd150b32ee1955d34cf4d31ebb869a";
 
 const user = tg && tg.initDataUnsafe ? tg.initDataUnsafe.user : null;
 
@@ -367,19 +416,26 @@ if (!telegramId) {
 
 let points = 0;
 let todayPoints = 0;
-let dailyTasks = 0;
-let taskBusy = false;
+let hourlyTasks = 0;
+let hourlyLimit = 20;
+let hourlySecondsRemaining = 0;
+
+let sponsorTaskBusy = false;
+let sponsorTaskReadyToClaim = false;
+let sponsorTaskTimer = null;
+let hourlyResetTimer = null;
+
+let dailyBonusClaimed = false;
+let dailyBonusTimer = null;
+let dailyBonusResetTimer = null;
+
 let selectedReward = null;
 let referralCommissionPending = 0;
-let dailyBonusClaimed = false;
+let pendingAdAction = null;
 
 function alertMsg(message) {
   if (tg && tg.showAlert) tg.showAlert(message);
   else alert(message);
-}
-
-function logStatus(text) {
-  console.log("RewardsHub:", text);
 }
 
 async function api(path, data) {
@@ -389,6 +445,71 @@ async function api(path, data) {
     body: JSON.stringify(data || {})
   });
   return await res.json();
+}
+
+function getRandomAdLink() {
+  return ADS_LINKS[Math.floor(Math.random() * ADS_LINKS.length)];
+}
+
+function openAdLink(url) {
+  try {
+    if (tg && typeof tg.openLink === "function") {
+      tg.openLink(url, { try_instant_view: false });
+      return true;
+    }
+  } catch(e) {}
+
+  try {
+    const a = document.createElement("a");
+    a.href = url;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    return true;
+  } catch(e) {}
+
+  try {
+    window.open(url, "_blank");
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+function showAdWarning(callback) {
+  pendingAdAction = callback;
+  const modal = document.getElementById("adWarningModal");
+  const btn = document.getElementById("adWarningOpenBtn");
+
+  if (btn) {
+    btn.onclick = function () {
+      closeAdWarning();
+      if (typeof pendingAdAction === "function") {
+        const action = pendingAdAction;
+        pendingAdAction = null;
+        action();
+      }
+    };
+  }
+
+  if (modal) modal.classList.add("show");
+}
+
+function closeAdWarning() {
+  const modal = document.getElementById("adWarningModal");
+  if (modal) modal.classList.remove("show");
+}
+
+function formatTimeLeft(seconds) {
+  seconds = Math.max(0, Number(seconds || 0));
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+  if (h > 0) return h + "h " + m + "m " + s + "s";
+  if (m > 0) return m + "m " + s + "s";
+  return s + "s";
 }
 
 function getReferralLink() {
@@ -413,14 +534,13 @@ function getStartReferral() {
     const startParam = tg && tg.initDataUnsafe ? tg.initDataUnsafe.start_param : "";
     if (startParam && startParam.startsWith("ref_")) return startParam.replace("ref_", "");
   } catch(e) {}
-
   return null;
 }
 
 function updateUI() {
   document.getElementById("points").innerText = points;
   document.getElementById("todayPoints").innerText = todayPoints;
-  document.getElementById("dailyTasks").innerText = dailyTasks;
+  document.getElementById("hourlyTasks").innerText = hourlyTasks;
 
   const pp = document.getElementById("profilePoints");
   if (pp) pp.innerText = points;
@@ -458,12 +578,13 @@ async function syncUser() {
       todayPoints = Number(data.user.today_points || 0);
       referralCommissionPending = Number(data.user.referral_commission_pending || 0);
       updateUI();
-      loadReferrals();
+      loadHourlyTaskStatus();
       loadDailyBonusStatus();
+      loadReferrals();
       loadCommissionHistory();
     }
   } catch(e) {
-    logStatus("Backend sync failed");
+    console.log("sync failed", e);
   }
 }
 
@@ -477,150 +598,193 @@ function openPage(pageId, btn) {
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function setButtonLoading(id, text) {
-  const btn = document.getElementById(id);
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = text || "Opening...";
+function updateHourlyLimitText() {
+  const text = document.getElementById("hourlyLimitText");
+  if (!text) return;
+
+  const remaining = Math.max(0, hourlyLimit - hourlyTasks);
+
+  if (remaining <= 0) {
+    text.innerText = "Hourly limit reached. Next reset in " + formatTimeLeft(hourlySecondsRemaining);
+  } else {
+    text.innerText = remaining + " sponsor tasks remaining this hour.";
   }
 }
 
-function resetTaskButton(taskNo) {
-  const btn = document.getElementById("taskBtn" + taskNo);
-  if (btn) {
-    btn.disabled = false;
-    btn.innerText = "Start";
-  }
-}
+function startHourlyCountdown(seconds) {
+  if (hourlyResetTimer) clearInterval(hourlyResetTimer);
 
-function startTaskCountdown(taskNo, seconds) {
-  const btn = document.getElementById("taskBtn" + taskNo);
-  if (!btn) return;
+  hourlySecondsRemaining = Number(seconds || 0);
 
-  let remain = seconds;
-  btn.disabled = true;
-  btn.innerText = remain + "s";
+  hourlyResetTimer = setInterval(function () {
+    if (hourlySecondsRemaining > 0) hourlySecondsRemaining--;
 
-  const timer = setInterval(function() {
-    remain--;
-    if (remain <= 0) {
-      clearInterval(timer);
-      btn.disabled = false;
-      btn.innerText = "Start";
-    } else {
-      btn.innerText = remain + "s";
+    updateHourlyLimitText();
+
+    if (hourlySecondsRemaining <= 0) {
+      clearInterval(hourlyResetTimer);
+      hourlyResetTimer = null;
+      loadHourlyTaskStatus();
     }
   }, 1000);
 }
 
-async function addTaskPoint(taskNo) {
-  const data = await api("/points/add", {
-    telegram_id: telegramId,
-    points: 1,
-    type: "monetag_task_" + taskNo,
-    description: "Reward Task " + taskNo + " +1 point"
-  });
+async function loadHourlyTaskStatus() {
+  try {
+    const res = await fetch(API_BASE + "/task/status?telegram_id=" + encodeURIComponent(telegramId));
+    const data = await res.json();
 
-  if (data.ok && data.user) {
-    points = Number(data.user.points || 0);
-    todayPoints = Number(data.user.today_points || 0);
-    referralCommissionPending = Number(data.user.referral_commission_pending || referralCommissionPending || 0);
+    if (data.ok) {
+      hourlyTasks = Number(data.hourly_tasks || 0);
+      hourlyLimit = Number(data.hourly_limit || 20);
+      hourlySecondsRemaining = Number(data.seconds_remaining || 0);
+      updateUI();
+      updateHourlyLimitText();
+      startHourlyCountdown(hourlySecondsRemaining);
 
-    if (data.daily_tasks !== null && data.daily_tasks !== undefined) {
-      dailyTasks = Number(data.daily_tasks || 0);
+      const btn = document.getElementById("sponsorTaskBtn");
+      if (btn && hourlyTasks >= hourlyLimit) {
+        btn.disabled = true;
+        btn.innerText = "Locked";
+      } else if (btn && !sponsorTaskBusy && !sponsorTaskReadyToClaim) {
+        btn.disabled = false;
+        btn.innerText = "Start";
+      }
     }
-
-    updateUI();
-    alertMsg("+1 Point Added");
-    return true;
+  } catch(e) {
+    console.log("hourly status failed", e);
   }
-
-  alertMsg(data.message || "Reward failed");
-  return false;
 }
 
-async function watchRewardTask(taskNo) {
-  if (taskBusy) {
-    alertMsg("Task is loading. Please wait.");
+function startSponsorTask() {
+  const btn = document.getElementById("sponsorTaskBtn");
+  const text = document.getElementById("sponsorTaskText");
+
+  if (!btn) return;
+
+  if (hourlyTasks >= hourlyLimit) {
+    alertMsg("Hourly ads limit reached. Please come back next hour.");
     return;
   }
 
-  if (dailyTasks >= 100) {
-    alertMsg("Daily task limit reached. Try again tomorrow.");
+  if (sponsorTaskBusy) {
+    alertMsg("Task is already running. Please wait.");
     return;
   }
 
-  if (typeof window.show_11025198 !== "function") {
-    alertMsg("Reward task not ready. Close and open app again.");
+  showAdWarning(function () {
+    const adUrl = getRandomAdLink();
+    const opened = openAdLink(adUrl);
+
+    if (!opened) {
+      alertMsg("Sponsor link failed to open. Please try again.");
+      return;
+    }
+
+    sponsorTaskBusy = true;
+    sponsorTaskReadyToClaim = false;
+
+    let remain = TASK_WAIT_SECONDS;
+
+    btn.disabled = true;
+    btn.innerText = remain + "s";
+    if (text) {
+      text.innerText = "Please wait until the sponsor page fully loads. Do not close it early. Timer: " + remain + "s";
+    }
+
+    if (sponsorTaskTimer) clearInterval(sponsorTaskTimer);
+
+    sponsorTaskTimer = setInterval(function () {
+      remain--;
+
+      if (remain <= 0) {
+        clearInterval(sponsorTaskTimer);
+        sponsorTaskTimer = null;
+
+        sponsorTaskBusy = false;
+        sponsorTaskReadyToClaim = true;
+
+        btn.disabled = false;
+        btn.innerText = "Claim";
+        btn.onclick = claimSponsorTask;
+
+        if (text) {
+          text.innerText = "Sponsor task ready. Claim your +1 Point.";
+        }
+      } else {
+        btn.innerText = remain + "s";
+        if (text) {
+          text.innerText = "Please wait until the sponsor page fully loads. Do not close it early. Timer: " + remain + "s";
+        }
+      }
+    }, 1000);
+  });
+}
+
+async function claimSponsorTask() {
+  const btn = document.getElementById("sponsorTaskBtn");
+  const text = document.getElementById("sponsorTaskText");
+
+  if (!sponsorTaskReadyToClaim) {
+    alertMsg("Please open the sponsor task first.");
     return;
   }
 
-  taskBusy = true;
-  setButtonLoading("taskBtn" + taskNo, "Opening...");
-
-  let rewardDone = false;
-
-  async function finishReward() {
-    if (rewardDone) return;
-    rewardDone = true;
-
-    const rewarded = await addTaskPoint(taskNo);
-
-    if (rewarded) startTaskCountdown(taskNo, TASK_COOLDOWN_SECONDS);
-    else resetTaskButton(taskNo);
-
-    taskBusy = false;
-  }
+  btn.disabled = true;
+  btn.innerText = "Claiming...";
+  if (text) text.innerText = "Claiming your reward...";
 
   try {
-    if (taskNo === 1) {
-      show_11025198("pop").then(finishReward).catch(function() {
-        if (!rewardDone) {
-          resetTaskButton(taskNo);
-          taskBusy = false;
-          alertMsg("Please complete the task to earn points.");
-        }
-      });
-    } else if (taskNo === 2) {
-      show_11025198().then(finishReward).catch(function() {
-        if (!rewardDone) {
-          resetTaskButton(taskNo);
-          taskBusy = false;
-          alertMsg("Please complete the task to earn points.");
-        }
-      });
-    } else {
-      show_11025198({
-        type: "inApp",
-        inAppSettings: {
-          frequency: 1,
-          capping: 0.01,
-          interval: 5,
-          timeout: 3,
-          everyPage: false
-        }
-      });
-      setTimeout(finishReward, REWARD_FALLBACK_MS);
+    const data = await api("/points/add", {
+      telegram_id: telegramId,
+      points: 1,
+      type: "direct_task_" + Date.now(),
+      description: "Sponsor task +1 point"
+    });
+
+    if (data.ok && data.user) {
+      points = Number(data.user.points || 0);
+      todayPoints = Number(data.user.today_points || 0);
+      referralCommissionPending = Number(data.user.referral_commission_pending || referralCommissionPending || 0);
+      hourlyTasks = Number(data.hourly_tasks || hourlyTasks + 1);
+      hourlyLimit = Number(data.hourly_limit || hourlyLimit);
+      hourlySecondsRemaining = Number(data.seconds_remaining || hourlySecondsRemaining);
+
+      sponsorTaskReadyToClaim = false;
+
+      updateUI();
+      updateHourlyLimitText();
+      alertMsg("+1 Point Added");
+
+      btn.onclick = startSponsorTask;
+
+      if (hourlyTasks >= hourlyLimit) {
+        btn.disabled = true;
+        btn.innerText = "Locked";
+        if (text) text.innerText = "Hourly limit reached. Come back next hour.";
+      } else {
+        btn.disabled = false;
+        btn.innerText = "Start";
+        if (text) text.innerText = "Open sponsor link, wait 8s and claim +1 Point";
+      }
+
+      loadCommissionHistory();
+      return;
     }
 
-    if (taskNo === 1 || taskNo === 2) setTimeout(finishReward, REWARD_FALLBACK_MS);
+    if (data.seconds_remaining !== undefined) {
+      hourlySecondsRemaining = Number(data.seconds_remaining || 0);
+      startHourlyCountdown(hourlySecondsRemaining);
+    }
+
+    btn.disabled = false;
+    btn.innerText = "Claim";
+    alertMsg(data.message || "Reward failed.");
   } catch(e) {
-    resetTaskButton(taskNo);
-    taskBusy = false;
-    alertMsg("Task failed. Try again.");
+    btn.disabled = false;
+    btn.innerText = "Claim";
+    alertMsg("Reward failed. Try again.");
   }
-}
-
-function formatTimeLeft(seconds) {
-  seconds = Math.max(0, Number(seconds || 0));
-
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
-
-  if (h > 0) return h + "h " + m + "m " + s + "s";
-  if (m > 0) return m + "m " + s + "s";
-  return s + "s";
 }
 
 function setDailyBonusClaimed(secondsRemaining) {
@@ -632,10 +796,7 @@ function setDailyBonusClaimed(secondsRemaining) {
   dailyBonusClaimed = true;
   btn.disabled = true;
 
-  if (dailyBonusResetTimer) {
-    clearInterval(dailyBonusResetTimer);
-    dailyBonusResetTimer = null;
-  }
+  if (dailyBonusResetTimer) clearInterval(dailyBonusResetTimer);
 
   let remain = Number(secondsRemaining || 0);
 
@@ -643,30 +804,18 @@ function setDailyBonusClaimed(secondsRemaining) {
     if (remain <= 0) {
       btn.disabled = false;
       btn.innerText = "Start";
-      btn.onclick = function () {
-        startDailyBonusTask();
-      };
+      btn.onclick = startDailyBonusTask;
 
-      if (text) {
-        text.innerText = "Open task link, wait 8s and claim +3 Points";
-      }
+      if (text) text.innerText = "Open sponsor link, wait 8s and claim +3 Points";
 
       dailyBonusClaimed = false;
-
-      if (dailyBonusResetTimer) {
-        clearInterval(dailyBonusResetTimer);
-        dailyBonusResetTimer = null;
-      }
-
+      clearInterval(dailyBonusResetTimer);
+      dailyBonusResetTimer = null;
       return;
     }
 
     btn.innerText = "Claimed";
-
-    if (text) {
-      text.innerText = "Next claim in " + formatTimeLeft(remain);
-    }
-
+    if (text) text.innerText = "Next claim in " + formatTimeLeft(remain);
     remain--;
   }
 
@@ -690,32 +839,12 @@ async function loadDailyBonusStatus() {
       dailyBonusClaimed = false;
       btn.disabled = false;
       btn.innerText = "Start";
-      btn.onclick = function () {
-        startDailyBonusTask();
-      };
-
-      if (text) {
-        text.innerText = "Open task link, wait 8s and claim +3 Points";
-      }
+      btn.onclick = startDailyBonusTask;
+      if (text) text.innerText = "Open sponsor link, wait 8s and claim +3 Points";
     }
-  } catch (e) {
+  } catch(e) {
     btn.disabled = false;
     btn.innerText = "Start";
-    btn.onclick = function () {
-      startDailyBonusTask();
-    };
-
-    if (text) {
-      text.innerText = "Open task link, wait 8s and claim +3 Points";
-    }
-  }
-}
-
-function openDailyBonusLink() {
-  if (tg && tg.openLink) {
-    tg.openLink(DAILY_BONUS_DIRECT_LINK);
-  } else {
-    window.open(DAILY_BONUS_DIRECT_LINK, "_blank");
   }
 }
 
@@ -730,65 +859,56 @@ function startDailyBonusTask() {
     return;
   }
 
-  if (dailyBonusTimer) {
-    clearInterval(dailyBonusTimer);
-    dailyBonusTimer = null;
-  }
+  showAdWarning(function () {
+    const opened = openAdLink(DAILY_BONUS_DIRECT_LINK);
 
-  openDailyBonusLink();
-
-  let remain = DAILY_BONUS_WAIT_SECONDS;
-
-  btn.disabled = true;
-  btn.innerText = remain + "s";
-
-  if (text) {
-    text.innerText = "Please wait " + remain + " seconds, then claim your bonus.";
-  }
-
-  dailyBonusTimer = setInterval(function () {
-    remain--;
-
-    if (remain <= 0) {
-      clearInterval(dailyBonusTimer);
-      dailyBonusTimer = null;
-
-      btn.disabled = false;
-      btn.innerText = "Claim";
-      btn.onclick = function () {
-        claimDailyBonusNow();
-      };
-
-      if (text) {
-        text.innerText = "Task completed. Claim your +3 Points bonus.";
-      }
-    } else {
-      btn.innerText = remain + "s";
-
-      if (text) {
-        text.innerText = "Please wait " + remain + " seconds, then claim your bonus.";
-      }
+    if (!opened) {
+      alertMsg("Sponsor link failed to open. Please try again.");
+      return;
     }
-  }, 1000);
+
+    let remain = DAILY_BONUS_WAIT_SECONDS;
+
+    btn.disabled = true;
+    btn.innerText = remain + "s";
+    if (text) {
+      text.innerText = "Please wait until the sponsor page fully loads. Do not close it early. Timer: " + remain + "s";
+    }
+
+    if (dailyBonusTimer) clearInterval(dailyBonusTimer);
+
+    dailyBonusTimer = setInterval(function () {
+      remain--;
+
+      if (remain <= 0) {
+        clearInterval(dailyBonusTimer);
+        dailyBonusTimer = null;
+
+        btn.disabled = false;
+        btn.innerText = "Claim";
+        btn.onclick = claimDailyBonusNow;
+
+        if (text) text.innerText = "Daily bonus ready. Claim your +3 Points.";
+      } else {
+        btn.innerText = remain + "s";
+        if (text) {
+          text.innerText = "Please wait until the sponsor page fully loads. Do not close it early. Timer: " + remain + "s";
+        }
+      }
+    }, 1000);
+  });
 }
 
 async function claimDailyBonusNow() {
   const btn = document.getElementById("dailyBonusBtn");
   const text = document.getElementById("dailyBonusText");
 
-  if (!btn) return;
-
   btn.disabled = true;
   btn.innerText = "Claiming...";
-
-  if (text) {
-    text.innerText = "Claiming daily bonus...";
-  }
+  if (text) text.innerText = "Claiming daily bonus...";
 
   try {
-    const data = await api("/daily/claim", {
-      telegram_id: telegramId
-    });
+    const data = await api("/daily/claim", { telegram_id: telegramId });
 
     if (data.ok && data.user) {
       points = Number(data.user.points || 0);
@@ -799,46 +919,29 @@ async function claimDailyBonusNow() {
       updateUI();
 
       alertMsg(data.message || "+3 Daily Bonus added.");
-
-      btn.onclick = function () {
-        startDailyBonusTask();
-      };
-
+      btn.onclick = startDailyBonusTask;
       setDailyBonusClaimed(Number(data.seconds_remaining || 0));
+      loadCommissionHistory();
       return;
     }
 
     if (data.claimed && data.seconds_remaining !== undefined) {
       alertMsg(data.message || "Daily bonus already claimed.");
-      btn.onclick = function () {
-        startDailyBonusTask();
-      };
+      btn.onclick = startDailyBonusTask;
       setDailyBonusClaimed(Number(data.seconds_remaining || 0));
       return;
     }
 
     btn.disabled = false;
     btn.innerText = "Claim";
-    btn.onclick = function () {
-      claimDailyBonusNow();
-    };
-
-    if (text) {
-      text.innerText = "Claim failed. Try again.";
-    }
-
+    btn.onclick = claimDailyBonusNow;
+    if (text) text.innerText = "Claim failed. Try again.";
     alertMsg(data.message || "Daily bonus claim failed.");
-  } catch (e) {
+  } catch(e) {
     btn.disabled = false;
     btn.innerText = "Claim";
-    btn.onclick = function () {
-      claimDailyBonusNow();
-    };
-
-    if (text) {
-      text.innerText = "Daily bonus claim failed. Try again.";
-    }
-
+    btn.onclick = claimDailyBonusNow;
+    if (text) text.innerText = "Daily bonus claim failed. Try again.";
     alertMsg("Daily bonus claim failed. Try again.");
   }
 }
@@ -872,6 +975,7 @@ async function verifyChannelJoin() {
       }
 
       alertMsg(data.message || "+4 Points added.");
+      loadCommissionHistory();
     } else {
       if (btn) {
         btn.disabled = false;
@@ -959,7 +1063,7 @@ async function loadCommissionHistory() {
       return `
         <div class="ref-user">
           <div>
-            <div class="ref-user-name">🔥 5% Commission Bonus</div>
+            <div class="ref-user-name">🔥 20% Commission Bonus</div>
             <small>${new Date(item.created_at).toLocaleString()}</small>
           </div>
           <b style="color:#67e8f9;">+${item.points}</b>
@@ -987,7 +1091,7 @@ function shareReferral() {
   const link = getReferralLink();
   const text =
     "🎁 Rewards Hub\n\n" +
-    "Complete tasks, invite friends, and withdraw Free Fire SG rewards.\n\n" +
+    "Complete sponsor tasks, invite friends, and withdraw rewards.\n\n" +
     "Join using my referral link:\n" + link;
 
   if (tg && tg.openTelegramLink) {
@@ -1024,19 +1128,60 @@ function fieldHtml(id, label, placeholder, type) {
 
 function renderWithdrawFields() {
   let html = "";
-  html += fieldHtml("ffUid", "Free Fire Game ID", "Enter your Free Fire ID", "number");
-  html += fieldHtml("ffName", "Free Fire Game Name", "Enter your in-game name", "text");
+
+  if (!selectedReward) {
+    document.getElementById("dynamicFields").innerHTML = "";
+    return;
+  }
+
+  if (selectedReward.type === "Free Fire SG") {
+    html += fieldHtml("ffUid", "Free Fire Game ID", "Enter your Free Fire ID", "number");
+    html += fieldHtml("ffName", "Free Fire Game Name", "Enter your in-game name", "text");
+    html += `<div class="hint">⚠️ Free Fire SG Region only. Enter correct Game ID and Game Name.</div>`;
+  }
+
+  if (selectedReward.type === "Mobile Reload") {
+    html += fieldHtml("phoneNumber", "Reload Number", "Enter your reload number", "tel");
+    html += `<div class="hint">⚠️ Reload Rs.50 request requires reload number only. Wrong number can reject your request.</div>`;
+  }
+
+  if (selectedReward.type === "eZ Cash") {
+    html += fieldHtml("ezCashNumber", "eZ Cash Number", "Enter your eZ Cash number", "tel");
+    html += `<div class="hint">⚠️ eZ Cash Rs.50 request requires eZ Cash number only. Wrong number can reject your request.</div>`;
+  }
 
   document.getElementById("dynamicFields").innerHTML = html;
 }
 
 function collectWithdrawDetails() {
-  const uid = document.getElementById("ffUid").value.trim();
-  const name = document.getElementById("ffName").value.trim();
+  if (!selectedReward) return null;
 
-  if (!uid || !name) return null;
+  if (selectedReward.type === "Free Fire SG") {
+    const uid = document.getElementById("ffUid").value.trim();
+    const name = document.getElementById("ffName").value.trim();
 
-  return "Region: SG Only\nFree Fire Game ID: " + uid + "\nFree Fire Game Name: " + name;
+    if (!uid || !name) return null;
+
+    return "Reward Type: Free Fire SG\nFree Fire Game ID: " + uid + "\nFree Fire Game Name: " + name;
+  }
+
+  if (selectedReward.type === "Mobile Reload") {
+    const number = document.getElementById("phoneNumber").value.trim();
+
+    if (!number) return null;
+
+    return "Reward Type: Mobile Reload\nReload Amount: Rs.50\nReload Number: " + number;
+  }
+
+  if (selectedReward.type === "eZ Cash") {
+    const ezNumber = document.getElementById("ezCashNumber").value.trim();
+
+    if (!ezNumber) return null;
+
+    return "Reward Type: eZ Cash\nAmount: Rs.50\neZ Cash Number: " + ezNumber;
+  }
+
+  return null;
 }
 
 async function submitWithdraw() {
@@ -1048,7 +1193,7 @@ async function submitWithdraw() {
   const details = collectWithdrawDetails();
 
   if (!details) {
-    alertMsg("Please enter Free Fire Game ID and Game Name.");
+    alertMsg("Please enter the required withdraw details correctly.");
     return;
   }
 
